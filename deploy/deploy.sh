@@ -14,7 +14,7 @@ if [[ "${1:-}" == "--target" && -n "${2:-}" ]]; then TARGET="$2"; fi
 cd "$ROOT"
 
 echo "== stage 1: gate"
-bash check.sh
+python3 check.py
 
 echo "== stage 2: build environment"
 python3 init_venv.py

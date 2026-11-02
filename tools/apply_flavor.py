@@ -45,7 +45,7 @@ def main(argv: list[str]) -> int:
     print(f"flavor applied: {flavor}")
     for rel in copied:
         print(f"  + {rel}")
-    print("next: python3 init_venv.py && bash check.sh")
+    print("next: python3 init_venv.py && python3 check.py")
     return 0
 
 

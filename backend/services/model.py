@@ -32,8 +32,7 @@ def build_model(store: Store, settings: Settings) -> dict:
                 "status": status,
                 "status_label": STATUS_LABELS.get(status),
                 "items": [
-                    {"name": i.name, "have": i.have, "need": i.need}
-                    for i in kit.items
+                    {"name": i.name, "have": i.have, "need": i.need} for i in kit.items
                 ],
                 "missing": missing_items(kit),
             }

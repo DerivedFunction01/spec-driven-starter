@@ -1,0 +1,71 @@
+# Project metadata and tool configuration: the one tooling seam.
+#
+# The backend is a source tree, not a distributable package: it is
+# imported as the top-level ``backend`` package from the repo root
+# and is never pip-installed. This file declares the project, pins
+# the development toolchain, and holds the ruff + pytest config in
+# one place. ``init_venv.py`` at the repo root reads the pinned
+# dependencies from here and installs them into ``var/venv``.
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spec-driven-starter"
+version = "0.0.0"
+description = "Spec-driven starter: sample backend, frontend, and gate harness"
+requires-python = ">=3.12"
+# Runtime dependencies: none. The sample backend is Python 3.12
+# stdlib only; a real project pins its exact runtime set here.
+dependencies = []
+
+# Pinned development toolchain. Exact pins, on purpose: the gate
+# must behave identically on every machine and in every fresh-tree
+# proof. pytest-timeout guards the gate against a hung test.
+[project.optional-dependencies]
+dev = [
+    "ruff==0.17.2",
+    "pytest==9.1.1",
+    "pytest-xdist==3.8.0",
+    "pytest-timeout==2.4.0",
+]
+
+[tool.setuptools]
+packages = []
+
+# ---------------------------------------------------------------------------
+# Ruff (format + lint). Config lives here, not in scattered noqa
+# comments; a suppression lands in this file with its rationale.
+# ---------------------------------------------------------------------------
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+# A sane, defect-focused set: pycodestyle errors, pyflakes, import
+# sorting, pyupgrade, bugbear, warnings. Widen deliberately, in
+# this file, never per-module.
+select = ["E", "F", "I", "W", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# check.py and init_venv.py are bootstrap/gate scripts at the repo
+# root: they legitimately drive subprocesses and probe the machine.
+# No rule in the selected set needs suppressing for them today; the
+# entries pin where a future, rationale-carrying suppression goes.
+"check.py" = []
+"init_venv.py" = []
+
+# ---------------------------------------------------------------------------
+# Pytest. This file lives at the repo root, so rootdir is the repo
+# root and testpaths is the flat suite under tests/. Worker count
+# is NOT set here: check.py owns it (--workers, default 2).
+# ---------------------------------------------------------------------------
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+# Per-test ceiling in seconds (pytest-timeout); a hung test fails
+# the gate instead of stalling it.
+timeout = 60

@@ -30,11 +30,12 @@ display-ready model `API.md` specifies: every enum arrives with
 its human label beside it, every count is computed here. The
 frontend never re-derives a status or a label.
 
-## Gate (`check.sh`)
+## Gate (`check.py`)
 
-Line cap (800) + portability scan + test suite, fail-fast. The
-gate is the definition of "ready to land"; a red gate is never
-waived by narration.
+Ruff format + lint, the policy-scanner framework, and the
+pytest suite, fail-fast. The gate is the definition of "ready
+to land"; a red gate is never waived by narration. Full
+reference: `docs/checks.md`.
 
 ## Plan file (see `docs/plan-template.md`)
 

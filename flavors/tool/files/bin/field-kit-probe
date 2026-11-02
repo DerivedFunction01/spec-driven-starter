@@ -5,5 +5,5 @@ set -euo pipefail
 export PATH="/usr/local/bin:/usr/bin:/bin:${PATH}"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 python3 -c 'import sys; assert sys.version_info >= (3, 12), sys.version'
-[[ -f "$ROOT/init_venv.py" && -f "$ROOT/check.sh" ]]
+[[ -f "$ROOT/init_venv.py" && -f "$ROOT/check.py" ]]
 echo "probe: ok"

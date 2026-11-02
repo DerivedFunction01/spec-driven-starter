@@ -2,8 +2,7 @@
 
 Every machine assumption (host, port, data path, thresholds)
 resolves here, once, into a frozen Settings object. All other
-modules receive values; none import os.environ. Defaults are
-chosen so a fresh clone runs with no configuration at all.
+modules receive values; defaults let a fresh clone just run.
 """
 
 from __future__ import annotations
@@ -23,13 +22,11 @@ class Settings:
     low_spare_threshold: int = 1
 
     @classmethod
-    def from_env(cls) -> "Settings":
+    def from_env(cls) -> Settings:
         data = os.environ.get("FIELDKIT_DATA", "")
         return cls(
             host=os.environ.get("FIELDKIT_HOST", "127.0.0.1"),
             port=int(os.environ.get("FIELDKIT_PORT", "8797")),
             data_path=Path(data) if data else None,
-            low_spare_threshold=int(
-                os.environ.get("FIELDKIT_LOW_SPARE", "1")
-            ),
+            low_spare_threshold=int(os.environ.get("FIELDKIT_LOW_SPARE", "1")),
         )

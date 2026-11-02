@@ -1,6 +1,6 @@
 # Full-stack release checklist
 
-- [ ] `bash check.sh` green on the exact tree being released.
+- [ ] `python3 check.py` green on the exact tree being released.
 - [ ] `API.md` contract version in the model payload matches
       the version the frontend was built against.
 - [ ] Frontend reaches the API at the base it was served from;
