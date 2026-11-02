@@ -40,6 +40,30 @@ done when: <the observable end state>
 - <file> — <why it matters to this plan>
 ```
 
+## Conversion mode (skip when `Mode: greenfield`)
+
+A conversion plan opens with a preamble block, before Step 1:
+
+```text
+## Conversion preamble
+Predecessor: <name and revision>
+Dossier: <characterization dossier location>
+Keep / change / drop: <table location in the spec extraction>
+```
+
+- **Step 0 is characterization**: the dossier is complete and
+  the golden fixtures are captured from the running
+  predecessor. Step 0 gates every later step — no other step
+  starts until it is done.
+- Each step's `verify:` names its parity evidence in addition
+  to the gate: the fixture diff result (byte-identical, or the
+  diffs enumerated and explained). A deliberate behavior change
+  cites its change ruling and lands with its spec amendment in
+  the same change.
+- The final step is the swap (`docs/conversion.md`): safety
+  bundle taken, checksum manifest written, swap in place,
+  preserved files verified byte-identical against the manifest.
+
 ## Working a plan
 
 - Create one todo per step through the project's todo harness

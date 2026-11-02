@@ -16,6 +16,14 @@ predecessor exists, the same discipline applies to the problem
 statement, the data, and any reference material: the spec records
 evidence and citations, never aspirations.
 
+A project declares its mode in `SPEC.md` — `greenfield` (the
+default) or `conversion`. Greenfield follows the six moves as
+written. Conversion adds a characterization-first track on top
+of this move: the predecessor is inventoried, its failure modes
+catalogued, and its behavior captured as golden fixtures before
+the track specs are extracted. Read `docs/conversion.md` before
+extracting a conversion's spec.
+
 The spec is many small files behind an index (`SPEC.md`) that
 carries no content of its own. No spec file grows past roughly
 800 lines; material that outgrows a file gets its own file and a

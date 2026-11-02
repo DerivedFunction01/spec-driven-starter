@@ -15,8 +15,13 @@ files themselves. A real project replaces this section with its
 oracle: the predecessor or source material the spec was
 extracted from, and the rule for disagreements (observed
 behavior wins over documents, and the extraction says so).
+A conversion project declares `Mode: conversion` below and
+follows the characterization-first track in
+`docs/conversion.md`.
 
 ## Layout and gates
+
+Mode: greenfield
 
 - **Backend track** — `spec/backend/` — Python. Gate 1B.
 - **Frontend track** — `spec/frontend/` — static client. Gate 1F.

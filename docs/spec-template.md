@@ -10,10 +10,19 @@ no normative content of its own.
 ```text
 # SPEC — <project> (index)
 
+Mode: greenfield | conversion
+
 ## Source and oracle
 <What the spec was extracted or written from, with citations.
 Where a source document and observed behavior disagree, which
 wins, and that the extraction said so.>
+<Conversion only: name the predecessor and state the oracle
+rule — its observed behavior is the evidence; where its
+documents disagree with observation, observation wins and the
+extraction says so. Point at the characterization dossier
+(docs/characterization-template.md) and at the keep / change /
+drop table's location: every predecessor behavior carries one
+of those rulings, with reasons for change and drop.>
 
 ## Layout and gates
 <Tracks, their file sets, the one seam contract, and each

@@ -11,6 +11,12 @@ each kit is ready, low, or missing items. It is fiction, chosen
 because it is small enough to read in one sitting and rich enough
 to exhibit every layer. Replace it; keep the shape.
 
+Two modes: **greenfield** (the default — declare it in
+`SPEC.md` and follow the method as written) and **conversion**,
+for replacing a working predecessor: characterization,
+golden-fixture parity, and a verified swap, in
+`docs/conversion.md`.
+
 ## Create a fresh instance
 
 Everything below uses only this README.

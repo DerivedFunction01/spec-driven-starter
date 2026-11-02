@@ -3,6 +3,8 @@
 Read in order: `SPEC.md` (index only), your track's files under
 `spec/`, `API.md` (the only backend/frontend seam), then
 `docs/fundamentals.md`. The method itself is `docs/method.md`.
+When `SPEC.md` declares `Mode: conversion`, read
+`docs/conversion.md` after the spec files, before code.
 
 Hard rules:
 
