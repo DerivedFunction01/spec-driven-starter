@@ -104,7 +104,9 @@ the scanner emits exactly one notice and the gate still
 passes. With a list provisioned, every hit is an error
 finding: rule, path, line — the literal and the line's
 content are never printed, and the list file itself is
-never scanned.
+never scanned. In conversion mode the denylist is provisioned
+from the predecessor's personal literals at conversion time
+(see `docs/conversion.md`).
 
 ## Example configs — patterns noted, not implemented
 
