@@ -27,7 +27,7 @@ python3 tools/apply_flavor.py service        # or: tool | full-stack
 python3 init_venv.py
 
 # 4. Run the gate. It must be green before any other work.
-bash check.sh
+python3 check.py
 
 # 5. Run the sample.
 var/venv/bin/python -m backend.apps.server   # binds 127.0.0.1:8797
@@ -49,11 +49,12 @@ backend/           layered Python: foundation, domain, infra,
                    services, apps (imports point downward only)
 frontend/          a framework-free client; renders the API model,
                    recomputes nothing but arithmetic over served data
-tools/             portability scanner, flavor applier
+tools/             the flavor applier (scanners live in the backend)
 flavors/           per-shape overlays over the shared core
 deploy/            deploy script + the platform contracts it needs
-tests/             the sample test suite (stdlib unittest)
-check.sh           the gate: line cap, portability scan, tests
+tests/             the test suite (unittest style, run by pytest)
+check.py           the gate: ruff, policy scanners, tests (docs/checks.md)
+pyproject.toml     the tooling seam: pins + ruff/pytest config
 init_venv.py       the environment builder (each repo owns its own)
 workbench.yaml     the workbench manifest for plan/todo tracking
 ```

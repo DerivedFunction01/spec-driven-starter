@@ -56,8 +56,7 @@ class JsonFileStore:
                 "id": kit.id,
                 "name": kit.name,
                 "items": [
-                    {"name": i.name, "have": i.have, "need": i.need}
-                    for i in kit.items
+                    {"name": i.name, "have": i.have, "need": i.need} for i in kit.items
                 ],
             }
             for kit in kits

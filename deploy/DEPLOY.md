@@ -7,7 +7,7 @@ a real host replaces stage 3 and keeps the other stages.
 
 ## The four stages
 
-1. **Gate.** `bash check.sh` green on the exact tree being
+1. **Gate.** `python3 check.py` green on the exact tree being
    deployed. A red gate stops the deploy; it is never waived.
 2. **Build.** `python3 init_venv.py` produces the environment
    from the repo's own spec. No step reaches outside the repo

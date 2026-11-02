@@ -39,8 +39,6 @@ def kit_status(kit: Kit, low_spare_threshold: int = 1) -> str | None:
         return None
     if missing_items(kit):
         return "incomplete"
-    if any(
-        item.have - item.need <= low_spare_threshold for item in kit.items
-    ):
+    if any(item.have - item.need <= low_spare_threshold for item in kit.items):
         return "low"
     return "ready"

@@ -109,7 +109,7 @@ value never is. The same test governs the live UI. Full standard:
 
 ## Enforcement, not memory
 
-Each rule above has a mechanism: the gate (`check.sh`) enforces
+Each rule above has a mechanism: the gate (`check.py`) enforces
 the line cap and portability mechanically; the settings seam is
 one module a reviewer can grep for; layering is visible in the
 folder tree. A rule that recurs as a correction gets turned into

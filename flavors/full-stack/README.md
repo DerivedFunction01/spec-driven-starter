@@ -23,3 +23,19 @@ green, contract version matches on both sides, frontend served
 from the backend (or published by the deploy contract), honest
 empty states present, no control rendered without a served
 behavior behind it (see `docs/mockup-approval.md`).
+
+## Frontend gate battery (when a project grows a build)
+
+The starter's frontend is framework-free and buildless, so the
+Python gate is its only gate. When a project adds a frontend
+build, it adds its own gate beside `check.py` covering:
+
+- [ ] Generated-artifact freshness: every generated file
+      (types, tokens, fixtures) regenerates byte-identically —
+      each generator runs in a `--check` mode that fails on drift.
+- [ ] Typecheck: the frontend compiles with no errors
+      (its compiler's no-emit mode) as a gate leg.
+- [ ] Contract tests: the client is tested against the served
+      contract, including a byte-equality pin — any client copy
+      of a backend-emitted schema or fixture must byte-equal
+      the canonical file, so the two sides cannot drift silently.
