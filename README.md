@@ -1,0 +1,76 @@
+# Spec-Driven Starter
+
+A reusable starting point for a project built spec-first: the
+specification is reverse-engineered (or written) before code, the
+backend owns semantics, the frontend is a consumer, and every
+convention is enforced by a gate rather than remembered.
+
+The sample domain is **field-kit inventory**: a small service that
+tracks kits (a named bag of gear), the items in them, and whether
+each kit is ready, low, or missing items. It is fiction, chosen
+because it is small enough to read in one sitting and rich enough
+to exhibit every layer. Replace it; keep the shape.
+
+## Create a fresh instance
+
+Everything below uses only this README.
+
+```sh
+# 1. Copy this tree to the new project's home and enter it.
+cp -r spec-driven-starter my-project
+cd my-project
+
+# 2. Choose and apply a flavor (see flavors/README.md).
+python3 tools/apply_flavor.py service        # or: tool | full-stack
+
+# 3. Build the environment (stdlib-only sample: fast).
+python3 init_venv.py
+
+# 4. Run the gate. It must be green before any other work.
+bash check.sh
+
+# 5. Run the sample.
+var/venv/bin/python -m backend.apps.server   # binds 127.0.0.1:8797
+# In another shell:
+curl http://127.0.0.1:8797/health
+curl http://127.0.0.1:8797/api/v1/model
+# The frontend is served at http://127.0.0.1:8797/ — open it, or
+# open frontend/index.html directly and point it at the server.
+```
+
+## Layout
+
+```text
+SPEC.md            index of the spec; carries no content of its own
+spec/              the spec, in small files, split by track
+API.md             the one seam between backend and frontend (versioned)
+docs/              the method, fundamentals, primitives, templates
+backend/           layered Python: foundation, domain, infra,
+                   services, apps (imports point downward only)
+frontend/          a framework-free client; renders the API model,
+                   recomputes nothing but arithmetic over served data
+tools/             portability scanner, flavor applier
+flavors/           per-shape overlays over the shared core
+deploy/            deploy script + the platform contracts it needs
+tests/             the sample test suite (stdlib unittest)
+check.sh           the gate: line cap, portability scan, tests
+init_venv.py       the environment builder (each repo owns its own)
+workbench.yaml     the workbench manifest for plan/todo tracking
+```
+
+## The rules in one paragraph
+
+Spec before code, per track, with a gate the owner rules on.
+Backend does the work; frontend is a consumer. Layers import
+downward only. Machine assumptions resolve through one settings
+seam (`backend/foundation/settings.py`); no other module reads
+the environment. No tracked file exceeds 800 lines, references a
+file outside the repo, or carries a personal identifier — the
+gate proves all three. Plans are written in the plan syntax in
+`docs/plan-template.md`, tracked as one todo file per step, and
+closed out (status set, file archived) in the same pass that
+lands them. An approved mockup is an exact specification, not
+inspiration; anything in it that real data cannot reproduce
+returns as an explicit exception before a substitute ships.
+
+Full method: `docs/method.md`.

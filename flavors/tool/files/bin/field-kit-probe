@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# field-kit-probe — read-only environment probe: can this
+# machine run the tool? Changes nothing; exit 0 means yes.
+set -euo pipefail
+export PATH="/usr/local/bin:/usr/bin:/bin:${PATH}"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+python3 -c 'import sys; assert sys.version_info >= (3, 12), sys.version'
+[[ -f "$ROOT/init_venv.py" && -f "$ROOT/check.sh" ]]
+echo "probe: ok"

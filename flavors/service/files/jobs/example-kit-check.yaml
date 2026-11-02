@@ -1,0 +1,6 @@
+id: example-kit-check
+kind: scripted
+schedule: "daily 07:00"
+command: ["python3", "-m", "backend.apps.server", "--once"]
+state: var/kit-check.json
+migrated: false
