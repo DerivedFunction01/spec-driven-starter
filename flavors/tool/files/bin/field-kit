@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# field-kit — status wrapper. Thin by design: resolve the repo
+# from this script's own location, prefer the repo venv, and
+# delegate. Sets PATH explicitly; a caller's PATH is not assumed.
+set -euo pipefail
+export PATH="/usr/local/bin:/usr/bin:/bin:${PATH}"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PY="$ROOT/var/venv/bin/python"
+[[ -x "$PY" ]] || PY="python3"
+cd "$ROOT"
+exec "$PY" -c '
+import json
+from backend.foundation.settings import Settings
+from backend.infra.sample_data import SAMPLE_KITS
+from backend.infra.store import MemoryStore
+from backend.services.model import build_model
+print(json.dumps(build_model(MemoryStore(SAMPLE_KITS), Settings()), indent=2))
+'

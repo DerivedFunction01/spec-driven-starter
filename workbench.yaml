@@ -1,0 +1,9 @@
+# Workbench manifest: plans and todos for this project live
+# under the plans directory named here, one todo file per step,
+# created before work starts and moved at each transition.
+name: Spec-Driven Starter
+slug: spec-driven-starter
+registry: workbench/registry.db
+plans: .plans
+mockups: workbench/entries
+archive: workbench/archive
