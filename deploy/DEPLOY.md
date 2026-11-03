@@ -21,16 +21,29 @@ a real host replaces stage 3 and keeps the other stages.
    shell proves nothing about the published copy; verification
    runs against the target, in the target's environment.
 
+Stage 4's start is a verification, not supervision: the
+process is killed when the check ends. A target that must
+stay up installs supervision as a separate, named step after
+publish — `ops/install-unit.sh` renders the unit from the
+settings seam, and the supervisor owns the process from then
+on.
+
 ## Platform-bound functions, by contract
 
 - **Supervisor:** starts the server (`python -m
   backend.apps.server`, working directory = repo root, host and
   port from the settings seam's environment) and restarts it on
-  failure.
+  failure. The reference mechanism is the supervision kit in
+  `ops/` (unit template, installer, serve script, watchdog
+  ladder); another platform supplies the same contract: start
+  at boot, restart on failure, unit reproducible from tracked
+  source.
 - **Publisher for a hosted frontend:** if the frontend is
   hosted separately from the backend, the publisher places the
   static files and the client must still reach the API at its
   configured base — the contract in `API.md` does not change.
-- **Keeper (service flavor):** an external poller that
-  health-checks the server and surfaces failures to the
-  operator; it never edits the repo or the registry itself.
+- **Keeper (service flavor):** an external poller that runs
+  the watchdog ladder (`ops/watchdog.sh`) on an interval and
+  surfaces its failures to the operator; the poller binding is
+  the host's own, and the keeper never edits the repo or the
+  registry itself.

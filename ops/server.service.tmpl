@@ -1,0 +1,22 @@
+# Template — render before installing: ops/install-unit.sh
+# substitutes @ROOT@, @PYTHON@, @HOME@, @UNIT@ and @PORT@
+# (values from the settings seam, via backend.apps.ops_values).
+# The rendered unit is a machine-local artefact, never tracked.
+[Unit]
+Description=@UNIT@ sample server (API + frontend on @HOST@:@PORT@)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=@ROOT@
+Environment=HOME=@HOME@
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=FIELDKIT_PORT=@PORT@
+ExecStart=@PYTHON@ -m backend.apps.server
+Restart=always
+RestartSec=2
+StandardOutput=append:@ROOT@/var/state/@UNIT@.log
+StandardError=append:@ROOT@/var/state/@UNIT@.log
+
+[Install]
+WantedBy=default.target

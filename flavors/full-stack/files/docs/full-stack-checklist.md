@@ -11,3 +11,7 @@
       a tile, a list, or a chart).
 - [ ] Deploy ran via `deploy/deploy.sh` and its health check
       passed against the deployed target, not the dev tree.
+- [ ] If the served app is kept always-on: the supervision
+      kit is installed (`ops/install-unit.sh`) and the
+      watchdog drills pass (unit reinstalled when missing,
+      server restored when down, failure loud).
