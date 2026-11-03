@@ -7,8 +7,8 @@ first, with its contract, before feature code uses it.
 ## Settings (`backend/foundation/settings.py`)
 
 `Settings.from_env()` returns one frozen object carrying every
-machine assumption: host, port, data path, low-stock threshold.
-It is the only environment reader in the repo.
+machine assumption: host, port, unit name, data path, low-stock
+threshold. It is the only environment reader in the repo.
 
 ## Store (`backend/infra/store.py`)
 
@@ -36,6 +36,23 @@ Ruff format + lint, the policy-scanner framework, and the
 pytest suite, fail-fast. The gate is the definition of "ready
 to land"; a red gate is never waived by narration. Full
 reference: `docs/checks.md`.
+
+## Supervision kit (`ops/`)
+
+The always-on server's lifecycle, in four parts: the unit
+template (`server.service.tmpl`; placeholders for root,
+interpreter, home, host, port, and unit name, rendered at
+install), `install-unit.sh` (the idempotent render into the
+supervisor's unit dir), `serve.sh` (start/stop/restart/status —
+delegates to the supervisor when the unit is installed, the
+direct pidfile path when it is not), and `watchdog.sh` (the
+restore ladder: probe health, reinstall a missing unit,
+restart under supervision, fall back to the serve path; silent
+on success, nonzero with a note in `var/state/<unit>.log` on
+failure). Values resolve from the settings seam via
+`backend/apps/ops_values.py`. An external keeper polls the
+watchdog; the kit ships the ladder and that contract, never a
+host-specific poller binding.
 
 ## Plan file (see `docs/plan-template.md`)
 

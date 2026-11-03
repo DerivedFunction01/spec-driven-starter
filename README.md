@@ -42,6 +42,12 @@ curl http://127.0.0.1:8797/health
 curl http://127.0.0.1:8797/api/v1/model
 # The frontend is served at http://127.0.0.1:8797/ — open it, or
 # open frontend/index.html directly and point it at the server.
+
+# 6. Or run it always-on, supervised (the kit in ops/ — see
+#    "Supervision kit" in docs/primitives.md):
+bash ops/install-unit.sh   # render + install the unit
+bash ops/serve.sh start    # delegates to the supervisor
+bash ops/watchdog.sh       # the restore ladder; silent while healthy
 ```
 
 ## Layout
@@ -57,6 +63,8 @@ frontend/          a framework-free client; renders the API model,
                    recomputes nothing but arithmetic over served data
 tools/             the flavor applier (scanners live in the backend)
 flavors/           per-shape overlays over the shared core
+ops/               the supervision kit: unit template, installer,
+                   serve script, watchdog (docs/primitives.md)
 deploy/            deploy script + the platform contracts it needs
 tests/             the test suite (unittest style, run by pytest)
 check.py           the gate: ruff, policy scanners, tests (docs/checks.md)

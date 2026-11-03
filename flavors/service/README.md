@@ -15,12 +15,17 @@ entry, never adding a separate scheduler per job.
 
 ## Contracts a host must supply (specified, not assumed)
 
-- **Supervisor:** something starts the server at boot and
-  restarts it on failure (a service manager, a container
-  runtime, or a documented manual start).
-- **Keeper:** an external poller that health-checks
-  `GET /health`, restarts the server on failure, and surfaces
-  pending escalations to the operator's work surface.
+- **Supervisor:** the core supervision kit (`ops/`) is the
+  mechanism. `install-unit.sh` renders the unit from the
+  settings seam — a service instance names its own unit via
+  `FIELDKIT_UNIT` — the supervisor starts the server at boot
+  and restarts it on failure, and `serve.sh` delegates to the
+  supervisor whenever the unit is installed.
+- **Keeper:** an external poller that runs `ops/watchdog.sh`
+  on an interval — the restore ladder behind the Supervisor
+  contract — and surfaces its failures (a nonzero exit, with
+  the note in `var/state/<unit>.log`) and pending escalations
+  to the operator's work surface. A healthy poll is silent.
 - **State:** the server's runtime state lives under `var/`,
   is regenerable, and is never tracked.
 
