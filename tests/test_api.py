@@ -35,6 +35,7 @@ class ApiTests(unittest.TestCase):
         status, body = self.get("/health")
         self.assertEqual(status, 200)
         self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["environment"], "local")
 
     def test_model(self):
         status, body = self.get("/api/v1/model")

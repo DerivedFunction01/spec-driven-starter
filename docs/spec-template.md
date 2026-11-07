@@ -30,8 +30,12 @@ conversion intake produced, recorded once and cited by the
 files they activate. The audience-and-persistence declaration:
 who uses the app, whether their entries are saved, whether it
 needs a public link, a custom domain, or a team, and the
-hosting shape ruled from those answers. Then one row per
-conditional question asked:
+hosting shape ruled from those answers. Persistence: one line
+per store the project keeps, naming its class — regenerable
+(state rebuilds from source; no migration machinery, by
+decision), local-durable (one machine; versioned local
+transforms), or shared-production (live data; the migration
+policy in full). Then one row per conditional question asked:
 | Question | Answer | Scope | Activates |
 | --- | --- | --- | --- |
 | <the conditional question> | <yes / no> | <where it applies> | <the section, template, or primitive a yes created> |

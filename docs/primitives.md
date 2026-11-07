@@ -189,8 +189,8 @@ result, the record is read before any retry.
 
 ### Expand–contract migrations
 
-*Active when the intake answers yes to: a persistent database
-with live data.* A breaking schema change never lands in one
+*Active when a store's persistence class is local-durable or
+shared-production.* A breaking schema change never lands in one
 deploy: **expand** (add the new shape; old code unaffected),
 **dual-write and backfill** in batches, **flip reads**, then
 **contract** (remove the old shape) in a separate later deploy
@@ -199,3 +199,13 @@ the old and the new code, so every step is independently
 rollback-safe. A dropped column is the irreversible step and
 is gated accordingly. Migrations run as their own deploy step,
 timed first against production-sized data.
+The policy around the pattern: migrations are versioned and
+ordered from the first persistent write — a store with no
+version marker is pre-versioning debt, named as such.
+Introducing a database into a project that had none is
+migration zero, planned and rehearsed as a migration, not
+absorbed as setup. Every migration is rehearsed against a
+production-shaped copy of the data before it runs on
+production, and a step that cannot reverse is gated on a
+verified backup. The project's release rule states its
+deploy/migrate order explicitly.

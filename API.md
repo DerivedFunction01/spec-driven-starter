@@ -86,3 +86,10 @@ Errors are **problem details** (RFC 9457), never the plain
   header and the server's log record for the same request.
 - Stack traces, queries, and internal paths never cross the
   seam.
+
+## Addendum — `api/2` (2026-11-07, environment identity)
+
+`GET /health` additionally serves `environment`: the settings
+seam's environment identity for the running instance, so any
+surface showing state can name the environment it is reading.
+Additive; no `api/1` or earlier `api/2` field changes.

@@ -14,6 +14,7 @@ class SettingsDefaultsTests(unittest.TestCase):
         self.assertEqual(settings.host, "127.0.0.1")
         self.assertEqual(settings.port, 8797)
         self.assertEqual(settings.unit_name, "field-kit")
+        self.assertEqual(settings.environment, "local")
         self.assertIsNone(settings.data_path)
         self.assertEqual(settings.low_spare_threshold, 1)
 
@@ -37,6 +38,18 @@ class SettingsEnvTests(unittest.TestCase):
         with mock.patch.dict(os.environ, {}, clear=True):
             settings = Settings.from_env()
         self.assertEqual(settings, Settings())
+
+    def test_dev_refuses_a_production_data_path(self):
+        env = {"FIELDKIT_ENV": "dev", "FIELDKIT_DATA": "/srv/prod/kits.json"}
+        with mock.patch.dict(os.environ, env, clear=True):
+            with self.assertRaises(ValueError):
+                Settings.from_env()
+
+    def test_prod_environment_accepts_a_production_data_path(self):
+        env = {"FIELDKIT_ENV": "prod", "FIELDKIT_DATA": "/srv/prod/kits.json"}
+        with mock.patch.dict(os.environ, env, clear=True):
+            settings = Settings.from_env()
+        self.assertEqual(settings.environment, "prod")
 
 
 if __name__ == "__main__":

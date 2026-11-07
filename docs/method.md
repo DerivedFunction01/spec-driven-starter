@@ -28,7 +28,11 @@ the app, whether their entries are saved, and whether it needs
 a public link, a custom domain, or a team — the hosting shape
 follows from those answers, and the tradeoff (for example,
 public link versus saved data) is ruled explicitly, not
-discovered after build. The **conditional questions** are asked
+discovered after build. The declaration also classifies each
+store the project keeps — regenerable, local-durable, or
+shared-production — because the class, not the mere existence
+of a database, decides what migration and backup machinery
+the project carries. The **conditional questions** are asked
 only when their trigger is in play; each names the starter
 material its yes answer activates:
 
@@ -47,7 +51,9 @@ material its yes answer activates:
 | The project references external assets | External asset preflight check |
 | The project ships layout-bearing deliverables | Rendered-output verification |
 | The project collects personal data | Personal-data inventory in the spec |
-| The project keeps a persistent database with live data | Expand–contract migration primitive |
+| The project keeps state that rebuilds from source | Persistence class: regenerable — no migration machinery, recorded as a decision |
+| The project keeps durable state on one machine | Persistence class: local-durable — migration policy (versioned local transforms) |
+| The project keeps a persistent database with live data | Persistence class: shared-production — migration policy in full; expand–contract primitive |
 | The project keeps persistent user data worth restoring | Backup and restore-rehearsal rule |
 | The site must be found by search | Discoverability file |
 | Pages are public or conversion-critical | Full performance budgets (otherwise a lighter budget) |

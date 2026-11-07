@@ -39,9 +39,9 @@ No upward imports, no cycles, no reexports: import from the leaf.
 ## Seams
 
 - **Settings seam.** `backend/foundation/settings.py` is the only
-  module that reads the environment. Host, port, unit name, data
-  path, and thresholds resolve there, with defaults a fresh
-  clone runs on.
+  module that reads the environment. Host, port, unit name,
+  environment identity, data path, and thresholds resolve
+  there, with defaults a fresh clone runs on.
 - **API seam.** `API.md` is the only contract with the frontend.
 - **Store seam.** `backend/infra/store.py` defines the store
   interface; services depend on the interface, so a file store,
@@ -146,6 +146,14 @@ answer; nothing there binds a project whose answer is no.
   tunable numbers under it still live in the config source.
   The gate's restated-value scan enforces this over the
   docs.
+- **Environment separation for state.** Production,
+  development, and test resolve to distinct state roots and
+  distinct credentials through the settings seam. A dev or
+  test configuration that resolves to production state is
+  refused at resolution, not warned about after the fact.
+  The active environment's identity is a served fact on any
+  surface that shows state, so no reader can mistake which
+  data they are looking at.
 
 ## Conditional rules (intake-gated)
 

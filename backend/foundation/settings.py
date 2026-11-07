@@ -19,16 +19,28 @@ class Settings:
     host: str = "127.0.0.1"
     port: int = 8797
     unit_name: str = "field-kit"
+    environment: str = "local"
     data_path: Path | None = None  # None -> seeded memory store
     low_spare_threshold: int = 1
 
     @classmethod
     def from_env(cls) -> Settings:
         data = os.environ.get("FIELDKIT_DATA", "")
+        environment = os.environ.get("FIELDKIT_ENV", "local")
+        data_path = Path(data) if data else None
+        if (
+            environment in ("dev", "test")
+            and data_path is not None
+            and "prod" in data_path.parts
+        ):
+            raise ValueError(
+                f"{environment} environment refuses a production data path: {data_path}"
+            )
         return cls(
             host=os.environ.get("FIELDKIT_HOST", "127.0.0.1"),
             port=int(os.environ.get("FIELDKIT_PORT", "8797")),
             unit_name=os.environ.get("FIELDKIT_UNIT", "field-kit"),
-            data_path=Path(data) if data else None,
+            environment=environment,
+            data_path=data_path,
             low_spare_threshold=int(os.environ.get("FIELDKIT_LOW_SPARE", "1")),
         )

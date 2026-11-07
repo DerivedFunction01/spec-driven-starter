@@ -108,6 +108,16 @@ one exact matched string and its reason (em-dash separated);
 a directive anywhere else is itself a finding, and exceptions
 never apply to the denylist.
 
+## Store contract tests
+
+Where a store port exists, the gate's suite carries one
+contract test per port, run unchanged against every store
+implementation (the fake included): load/save round-trip,
+replace-on-save, empty-before-first-save. A storage swap that
+breaks the contract fails in the gate, not in the services.
+A regenerable-class store substitutes its drill: rebuild its
+state from source into the fake and compare.
+
 ## Adding a scanner: the quartet
 
 A scanner lands as four pieces, all in one change:

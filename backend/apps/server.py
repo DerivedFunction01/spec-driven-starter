@@ -71,7 +71,13 @@ def make_handler(store: Store, settings: Settings):
 
         def do_GET(self) -> None:  # noqa: N802 (stdlib naming)
             if self.path == "/health":
-                self._send_json({"status": "ok", "contract": "api/2"})
+                self._send_json(
+                    {
+                        "status": "ok",
+                        "contract": "api/2",
+                        "environment": settings.environment,
+                    }
+                )
             elif self.path == "/api/v1/model":
                 self._send_json(build_model(store, settings))
             elif self.path in STATIC:
