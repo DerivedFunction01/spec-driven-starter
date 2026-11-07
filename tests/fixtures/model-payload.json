@@ -1,0 +1,72 @@
+{
+  "contract": "api/2",
+  "generated_note": "Sample data; fiction.",
+  "kits": [
+    {
+      "id": "kit-river",
+      "name": "River Day Kit",
+      "status": "ready",
+      "status_label": "Ready",
+      "items": [
+        {
+          "name": "Dry bag",
+          "have": 6,
+          "need": 4
+        },
+        {
+          "name": "Safety whistle",
+          "have": 8,
+          "need": 4
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "kit-trail",
+      "name": "Trail Repair Kit",
+      "status": "low",
+      "status_label": "Low stock",
+      "items": [
+        {
+          "name": "Patch roll",
+          "have": 5,
+          "need": 4
+        },
+        {
+          "name": "Mini pump",
+          "have": 4,
+          "need": 4
+        }
+      ],
+      "missing": []
+    },
+    {
+      "id": "kit-camp",
+      "name": "Camp Kitchen Kit",
+      "status": "incomplete",
+      "status_label": "Incomplete",
+      "items": [
+        {
+          "name": "Stove",
+          "have": 1,
+          "need": 2
+        },
+        {
+          "name": "Fuel canister",
+          "have": 3,
+          "need": 3
+        }
+      ],
+      "missing": [
+        {
+          "name": "Stove",
+          "short_by": 1
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "kits": 3,
+    "ready": 1
+  }
+}

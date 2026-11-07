@@ -7,6 +7,10 @@ Consumers import ``ALL_SCANNERS`` from this leaf module.
 
 from __future__ import annotations
 
+from backend.foundation.scanners.a11y_static import SCANNER as A11Y_STATIC_SCANNER
+from backend.foundation.scanners.asset_manifest import (
+    SCANNER as ASSET_MANIFEST_SCANNER,
+)
 from backend.foundation.scanners.base import Scanner
 from backend.foundation.scanners.clean_exit import SCANNER as CLEAN_EXIT_SCANNER
 from backend.foundation.scanners.denylist import SCANNER as DENYLIST_SCANNER
@@ -19,11 +23,22 @@ from backend.foundation.scanners.literal import SCANNER as LITERAL_SCANNER
 from backend.foundation.scanners.no_reexport import (
     SCANNER as NO_REEXPORT_SCANNER,
 )
+from backend.foundation.scanners.perf_budget import SCANNER as PERF_BUDGET_SCANNER
+from backend.foundation.scanners.port_boundary import (
+    SCANNER as PORT_BOUNDARY_SCANNER,
+)
 from backend.foundation.scanners.portability import (
     SCANNER as PORTABILITY_SCANNER,
 )
+from backend.foundation.scanners.privacy_pin import SCANNER as PRIVACY_PIN_SCANNER
 from backend.foundation.scanners.prose_length import (
     SCANNER as PROSE_LENGTH_SCANNER,
+)
+from backend.foundation.scanners.route_coverage import (
+    SCANNER as ROUTE_COVERAGE_SCANNER,
+)
+from backend.foundation.scanners.security_baseline import (
+    SCANNER as SECURITY_BASELINE_SCANNER,
 )
 from backend.foundation.scanners.settings_seam import (
     SCANNER as SETTINGS_SEAM_SCANNER,
@@ -46,6 +61,13 @@ ALL_SCANNERS: tuple[Scanner, ...] = (
     CLEAN_EXIT_SCANNER,
     TRACKING_SCANNER,
     TESTS_TRACKED_ONLY_SCANNER,
+    ROUTE_COVERAGE_SCANNER,
+    PORT_BOUNDARY_SCANNER,
+    PRIVACY_PIN_SCANNER,
+    ASSET_MANIFEST_SCANNER,
+    SECURITY_BASELINE_SCANNER,
+    A11Y_STATIC_SCANNER,
+    PERF_BUDGET_SCANNER,
 )
 
 __all__ = ["ALL_SCANNERS"]
