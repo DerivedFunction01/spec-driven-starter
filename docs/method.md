@@ -85,6 +85,33 @@ Conversion projects run the counterpart intake in
 `docs/conversion.md`; the conditional questions and the
 audience declaration are the same.
 
+## Wishes and specs
+
+Requirements arrive in two kinds, and the method treats them
+differently. A **wish** is a desired outcome stated without
+rules: "the customer should get the invoice when the job
+starts." A **spec** states the rules, constraints, edge
+cases, and failure paths, and names its decisions.
+
+Nothing builds from a wish. A wish is converted by a planning
+pass: the pass works out the rules the outcome implies and
+ends in a **decision list** — the open questions, each owned
+by whoever has the standing to answer it. The spec is
+adopted by a **dated ruling** on that list; only then does a
+build implement it. A provisional default offered during the
+pass is not a ruling, and silence is not one either.
+Questions nobody has ruled on wait in the spec's register of
+open decisions — they are never settled by a builder's
+assumption, because an assumption ships silently and a
+register entry waits visibly.
+
+The doctrine lives in the repo, not in the builder's memory.
+This section states it; each project's own fundamentals
+carry the standing rule (the fundamentals template keeps the
+section), so a later owner of the repo — coder or not,
+working from a fresh clone — learns how requirements become
+buildable from the clone itself.
+
 ## 1. Reverse-engineer the spec from the evidence
 
 When a predecessor exists, it is the oracle: what it *does* —

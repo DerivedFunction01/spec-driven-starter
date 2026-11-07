@@ -32,4 +32,14 @@ everything else receives values instead.>
 ## Conventions
 <Naming, error handling, testing (tests read tracked content
 only), and the file-size cap the gate enforces.>
+
+## Wishes and specs
+<The doctrine, in this project's words: a wish states an
+outcome without rules and nothing builds from one; a spec
+states rules, constraints, edge cases, and failure paths and
+is adopted by a dated ruling; a provisional default is not a
+ruling; undecided questions wait in the spec's register of
+open decisions. This section is never dropped in a generated
+fundamentals — it is how a later owner, coder or not, learns
+the rule from the repo itself.>
 ```

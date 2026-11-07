@@ -60,6 +60,12 @@ its track's gate.>
 source arrive (dated delta files, never silent rewrites).>
 
 ## Amending
+A spec section takes effect when it is adopted by a dated
+ruling; before that it is a draft, and a wish feeding it is
+recorded as a wish, not as settled text. Questions the
+ruling leaves open go in the register of open decisions —
+a short list in the spec index naming each question and its
+owner — and wait there rather than being assumed away.
 Amend the small file that owns the section. Keep section
 numbering stable. Date the amendment and cite its ruling or
 evidence. A behavior change amends the spec in the same change

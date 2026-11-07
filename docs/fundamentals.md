@@ -154,6 +154,16 @@ answer; nothing there binds a project whose answer is no.
   The active environment's identity is a served fact on any
   surface that shows state, so no reader can mistake which
   data they are looking at.
+- **Nothing builds from a wish.** A wish states an outcome
+  without rules; a spec states the rules, constraints, edge
+  cases, and failure paths, and names its decisions. A wish
+  becomes buildable only through a planning pass that ends
+  in a decision list, adopted by a dated ruling; a
+  provisional default is not a ruling. Undecided questions
+  wait in the spec's register of open decisions, never in a
+  builder's assumption. This rule is stated here, in the
+  project's own fundamentals, so it survives handover: an
+  owner reading a fresh clone learns it from the repo.
 
 ## Conditional rules (intake-gated)
 
