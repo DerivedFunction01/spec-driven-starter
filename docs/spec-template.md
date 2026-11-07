@@ -61,7 +61,7 @@ numbering stable. Date the amendment and cite its ruling or
 evidence. A behavior change amends the spec in the same change
 that implements it. A contract change amends the seam document
 under its own versioning, never a spec file alone. Material
-that outgrows a file (~800 lines) gets its own file and a map
+that outgrows a file (past the gate's length cap) gets its own file and a map
 row; it does not inflate a neighbor.
 ```
 

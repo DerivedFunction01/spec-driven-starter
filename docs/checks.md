@@ -81,7 +81,7 @@ reporting itself unconfigured).
 
 | Scanner | Rule in one line |
 | --- | --- |
-| length | no file over the 800-line cap (Python + frontend scripts) |
+| length | no file over the length cap the scanner's constant sets (Python + frontend scripts) |
 | portability | tracked text references only what a fresh clone resolves: no absolute or home-anchored paths, no owner's name, no specific untracked plan files |
 | denylist | no personal literals from the provisioned denylist (below) |
 | layers | backend imports point downward only across foundation < domain < infra < services < apps (AST) |
@@ -99,7 +99,8 @@ reporting itself unconfigured).
 | asset_manifest | every binary or external asset the frontend uses is registered in `frontend/assets-manifest.json`; stale entries fail too |
 | security_baseline | no dynamic-execution / unsafe-deserialization patterns in backend code; the four security response headers are set in the apps layer |
 | a11y_static | the static accessibility floor over frontend HTML: lang declared, images alted, controls and buttons named, no positive tabindex |
-| perf_budget | frontend asset weight per class stays inside `frontend/budgets.json` (a notice, never a failure, while no budget file exists) |
+| perf_budget | frontend asset weight per class stays inside `frontend/budgets.json`, and the field-vitals thresholds live there as positive numbers (a notice, never a failure, while no budget file exists) |
+| value_source | no document restates a source constant: the length cap, the sample port (the README quickstart keeps one literal), or a field-vitals threshold — docs state the rule and name the source |
 
 Portability exceptions: only files named in the scanner's
 `EXCEPTION_FILES` registry may carry a directive line naming

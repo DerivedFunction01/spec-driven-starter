@@ -47,6 +47,7 @@ from backend.foundation.scanners.tests_tracked_only import (
     SCANNER as TESTS_TRACKED_ONLY_SCANNER,
 )
 from backend.foundation.scanners.tracking import SCANNER as TRACKING_SCANNER
+from backend.foundation.scanners.value_source import SCANNER as VALUE_SOURCE_SCANNER
 
 ALL_SCANNERS: tuple[Scanner, ...] = (
     LENGTH_SCANNER,
@@ -68,6 +69,7 @@ ALL_SCANNERS: tuple[Scanner, ...] = (
     SECURITY_BASELINE_SCANNER,
     A11Y_STATIC_SCANNER,
     PERF_BUDGET_SCANNER,
+    VALUE_SOURCE_SCANNER,
 )
 
 __all__ = ["ALL_SCANNERS"]

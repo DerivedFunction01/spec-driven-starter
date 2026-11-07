@@ -55,5 +55,5 @@ Amend the small file that owns the section; keep numbering
 stable; date the amendment and cite its ruling or evidence.
 A behavior change amends the spec in the same change that
 implements it. A contract change amends `API.md` under its own
-versioning rules. Material outgrowing a file (~800 lines) gets
-its own file and a map row.
+versioning rules. Material outgrowing a file (past the gate's
+length cap) gets its own file and a map row.

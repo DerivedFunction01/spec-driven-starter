@@ -100,8 +100,8 @@ the track specs are extracted. Read `docs/conversion.md` before
 extracting a conversion's spec.
 
 The spec is many small files behind an index (`SPEC.md`) that
-carries no content of its own. No spec file grows past roughly
-800 lines; material that outgrows a file gets its own file and a
+carries no content of its own. No spec file grows past the
+gate's length cap; material that outgrows a file gets its own file and a
 row in the index map. Section numbering, once published, is
 stable: amendments keep numbering, date themselves, and cite the
 ruling or evidence behind them. A behavior change amends the spec

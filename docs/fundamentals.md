@@ -133,6 +133,19 @@ answer; nothing there binds a project whose answer is no.
   concept with no entry is named and entered before it is
   built on, and a term argued about is defined in the same
   pass that argues it.
+- **One source per constant.** Every changeable value — caps,
+  thresholds, budgets, cadences, ports, paths — has exactly
+  one machine source (the settings seam, a config file, a
+  scanner constant, a served payload), and that source is
+  where the value lives. Documents state the rule and its
+  intent and name the source; they never restate the value,
+  because a restated value is a second source that drifts
+  silently when the first changes. A test pinning its
+  source's value is a proof, not a copy; an external
+  standard's named level is a name, not a tunable — the
+  tunable numbers under it still live in the config source.
+  The gate's restated-value scan enforces this over the
+  docs.
 
 ## Conditional rules (intake-gated)
 
@@ -185,10 +198,12 @@ or a promise.
   under the same discipline. Each template gets a budget in
   the spec — script, image, font, and total weight limits set
   for the audience's real devices and networks — enforced in
-  the gate. Field targets are the Core Web Vitals at the 75th
-  percentile, mobile and desktop separately: LCP ≤ 2.5 s,
-  INP ≤ 200 ms, CLS ≤ 0.1; a project overrides them in its
-  spec with the reason recorded. Lab and field results are
+  the gate. Field targets are the Core Web Vitals thresholds
+  (LCP, INP, CLS) at the 75th percentile, mobile and desktop
+  separately; their values live in the budgets config
+  (`frontend/budgets.json`), the single source, and a project
+  overrides them there with the reason recorded in its spec.
+  Lab and field results are
   reported as different facts; a lab pass never settles the
   field number. Images ship responsive in modern formats with
   dimensions set, fonts are self-hosted, third-party scripts
@@ -212,7 +227,7 @@ or a promise.
   reasons no single file explained.
 - Small files, mechanically capped: a predecessor's single
   living document and single code tree became unreviewable; the
-  800-line cap in the gate is the mechanical form of this lesson.
+  length cap in the gate is the mechanical form of this lesson.
 - Supervision, restorable from tracked source: a predecessor's
   companion server, started by hand with no supervisor, died
   with its host again and again in a single day, silently each

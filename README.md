@@ -35,12 +35,14 @@ python3 init_venv.py
 # 4. Run the gate. It must be green before any other work.
 python3 check.py
 
-# 5. Run the sample.
-var/venv/bin/python -m backend.apps.server   # binds 127.0.0.1:8797
+# 5. Run the sample. It binds the settings seam's default
+#    host and port; the one literal below is the quickstart's
+#    documented instance of that default.
+var/venv/bin/python -m backend.apps.server
 # In another shell:
 curl http://127.0.0.1:8797/health
-curl http://127.0.0.1:8797/api/v1/model
-# The frontend is served at http://127.0.0.1:8797/ — open it, or
+# The model endpoint is /api/v1/model on the same address, and
+# the frontend is served at the same address root — open it, or
 # open frontend/index.html directly and point it at the server.
 
 # 6. Or run it always-on, supervised (the kit in ops/ — see
@@ -84,7 +86,7 @@ Spec before code, per track, with a gate the owner rules on.
 Backend does the work; frontend is a consumer. Layers import
 downward only. Machine assumptions resolve through one settings
 seam (`backend/foundation/settings.py`); no other module reads
-the environment. No tracked file exceeds 800 lines, references a
+the environment. No tracked file exceeds the gate's length cap, references a
 file outside the repo, or carries a personal identifier — the
 gate proves all three. Plans are written in the plan syntax in
 `docs/plan-template.md`, tracked as one todo file per step, and

@@ -54,6 +54,6 @@ def scan(root: Path) -> list[Finding]:
 
 SCANNER = Scanner(
     name="length",
-    description="enforce the 800-line cap on Python and frontend files",
+    description="enforce the line cap on Python and frontend files",
     run=scan,
 )

@@ -24,7 +24,7 @@ class PerfBudgetScannerTests(unittest.TestCase):
         findings = scan_tree(
             {
                 "frontend/app.js": "x".join(["a"] * 100),
-                "frontend/budgets.json": '{"budgets": {"script_kb": 16}}',
+                "frontend/budgets.json": '{"budgets": {"script_kb": 16}, "vitals": {"lcp_s": 2.5, "inp_ms": 200, "cls": 0.1}}',
             }
         )
         self.assertEqual(findings, [])
@@ -33,7 +33,7 @@ class PerfBudgetScannerTests(unittest.TestCase):
         findings = scan_tree(
             {
                 "frontend/app.js": "a" * 4096,
-                "frontend/budgets.json": '{"budgets": {"script_kb": 1}}',
+                "frontend/budgets.json": '{"budgets": {"script_kb": 1}, "vitals": {"lcp_s": 2.5, "inp_ms": 200, "cls": 0.1}}',
             }
         )
         self.assertEqual(
@@ -48,6 +48,18 @@ class PerfBudgetScannerTests(unittest.TestCase):
 
     def test_no_frontend_is_clean(self):
         self.assertEqual(scan_tree({"backend/x.py": "x = 1\n"}), [])
+
+    def test_missing_vitals_is_a_finding(self):
+        findings = scan_tree(
+            {
+                "frontend/app.js": "a",
+                "frontend/budgets.json": '{"budgets": {"script_kb": 16}}',
+            }
+        )
+        self.assertEqual(
+            [f.rule for f in findings],
+            ["perf-budget/vitals-unconfigured"] * 3,
+        )
 
 
 if __name__ == "__main__":

@@ -56,11 +56,28 @@ def scan(root: Path) -> list[Finding]:
             )
         ]
     try:
-        budgets = json.loads(budget_path.read_text(encoding="utf-8")).get("budgets", {})
+        document = json.loads(budget_path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError):
         return []
-    weights = _weights(root)
+    budgets = document.get("budgets", {})
+    vitals = document.get("vitals", {})
     findings: list[Finding] = []
+    for key in ("lcp_s", "inp_ms", "cls"):
+        value = vitals.get(key)
+        if not isinstance(value, (int, float)) or isinstance(value, bool) or value <= 0:
+            findings.append(
+                Finding(
+                    scanner="perf_budget",
+                    rule="perf-budget/vitals-unconfigured",
+                    path=BUDGETS,
+                    line=None,
+                    message=(
+                        f"field-vitals threshold {key} missing or not a "
+                        "positive number; budgets.json is its only source"
+                    ),
+                )
+            )
+    weights = _weights(root)
     for key, weight in sorted(weights.items()):
         budget = budgets.get(key)
         if budget is not None and weight > budget:
