@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "types": ["node"]
+  },
+  "extends": "../../tsconfig.base.json",
+  "include": ["src"],
+  "references": [{ "path": "../../packages/contract" }]
+}

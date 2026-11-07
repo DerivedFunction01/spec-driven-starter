@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Apply a flavor overlay to this repo (see flavors/README.md).
 
-Usage: python3 tools/apply_flavor.py <service|tool|full-stack>
+Usage: python3 tools/apply_flavor.py <service|tool|full-stack|webapp>
 
 Copies flavors/<name>/files/ over the repo root. Overlay files
 are additive examples (a registry entry, a CLI wrapper, a

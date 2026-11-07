@@ -1,0 +1,12 @@
+{
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "name": "@starter/contract",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0"
+}

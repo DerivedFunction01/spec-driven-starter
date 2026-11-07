@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "prettier": "3.4.2",
+    "typescript": "5.7.2"
+  },
+  "name": "starter-webapp",
+  "packageManager": "pnpm@9.15.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc -b",
+    "check": "node tools/check.mjs"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}

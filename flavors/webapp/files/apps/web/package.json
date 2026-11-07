@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "@starter/contract": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2"
+  },
+  "name": "@starter/web",
+  "private": true,
+  "scripts": {
+    "start": "node dist/server.js"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}
