@@ -204,6 +204,16 @@ transition (todo, doing, done / blocked) — chat is not the
 progress record. A plan implementation carries a status-update
 interval of 15 or 30 minutes, never longer.
 
+**Plan altitude and timing:** because features group by
+intent (§3, and each track's fundamentals), detailed plans
+are written at the intent-group level, just ahead of that
+group's build — not for small features far ahead of their
+time. An early small-feature plan goes stale against a
+moving tree and ends up re-derived or wrongly trusted. A
+group plan states only the rules a small feature needs to
+stay coherent with its group, in a line or two; the
+feature's own detail is written when its group is next up.
+
 **Closeout discipline:** when a plan lands, in the same pass its
 status becomes `complete` and the file moves to the finished
 archive. Remaining work never holds a landed plan open: it is

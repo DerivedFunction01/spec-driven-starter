@@ -14,7 +14,9 @@ candidate for removal, not a tradition.>
 
 ## Organizing principle
 <Group by intent inside layer tiers. State what grouping is
-prohibited and why.>
+prohibited and why. Extraction groups by intent too:
+reporting surfaces derive from the same served sources the
+product uses; no feature grows a private query path.>
 
 ## The tree
 <The track's folders, one line each: what lives there and what

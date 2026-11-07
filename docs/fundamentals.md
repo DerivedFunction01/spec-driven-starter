@@ -11,7 +11,13 @@ Code is grouped by what it is about (kits, items, readiness),
 inside layer tiers that say what it may touch. Grouping by
 technical kind across all intents (one folder of every parser,
 one folder of every driver) is prohibited: it scatters everything
-about one intent across five trees.
+about one intent across five trees. Extraction groups by
+intent too: reporting surfaces belong to an intent group and
+derive from the same served sources the product uses — a
+feature never grows a private query path to answer a
+reporting question, so two reports about one intent are one
+surface fed by one source, not two features' separate
+queries.
 
 ## The tree
 
