@@ -4,6 +4,81 @@ Spec-driven development, distilled from a rebuild that replaced a
 working prototype with a clean implementation without losing any
 of its behavior. The method has six moves.
 
+## Before move 1: the pre-build conversation (greenfield)
+
+A greenfield project starts with a structured planning
+conversation, before any spec work. One question at a time;
+vague answers get pushback, not transcription — "users will
+manage their stuff" is not an answer, the named user, the named
+stuff, and the named actions are. The conversation works a
+fixed inventory until scope is explicit in *and* out:
+
+- **Product** — who it is for, the job it does, what success
+  looks like, what is deliberately not in scope.
+- **Technical** — data it keeps, integrations it needs,
+  always-on or invoked, where it runs.
+- **Design** — surfaces and their states, design references,
+  imagery, the visual register.
+- **Process** — who rules on gates, how work ships, what the
+  landing proof is.
+
+Two kinds of answers come out of it. The **audience-and-
+persistence declaration** is asked on every project: who uses
+the app, whether their entries are saved, and whether it needs
+a public link, a custom domain, or a team — the hosting shape
+follows from those answers, and the tradeoff (for example,
+public link versus saved data) is ruled explicitly, not
+discovered after build. The **conditional questions** are asked
+only when their trigger is in play; each names the starter
+material its yes answer activates:
+
+| Question (asked when the trigger is in play) | A yes activates |
+| --- | --- |
+| The project takes form submissions | Form specification primitive; submission-data stability rule |
+| The project books appointments or slots | Time-and-booking primitive |
+| The project quotes prices | Price-and-terms quote primitive |
+| Records carry more than one lifecycle | Orthogonal state axes primitive |
+| The project integrates third-party services | One integration record per service |
+| The project syncs state to an external system | Sync lifecycle primitive |
+| The project offers a demo or specimen sign-in | Specimen seed primitive |
+| The project ships a UI shell with editable views | Brand-link dirty guard primitive |
+| The project emails self-service access or recovery links | Possession-based authorization rule |
+| The project ships imagery or accepts user media | Imagery discipline; media store-port contract |
+| The project references external assets | External asset preflight check |
+| The project ships layout-bearing deliverables | Rendered-output verification |
+| The project collects personal data | Personal-data inventory in the spec |
+| The project keeps a persistent database with live data | Expand–contract migration primitive |
+| The project keeps persistent user data worth restoring | Backup and restore-rehearsal rule |
+| The site must be found by search | Discoverability file |
+| Pages are public or conversion-critical | Full performance budgets (otherwise a lighter budget) |
+| The project is a design-led build, or its market has visible reference apps | Inspiration pin board |
+| The project's readers include non- or beginner coders | Plain-language register |
+
+Every answer is recorded in the project's spec (the intake
+record in `docs/spec-template.md`), with its scope. A yes
+creates exactly the conditional sections, templates, and
+primitives it names — in that project, not in the starter's
+defaults. A no leaves no trace: no section, no rule, no
+placeholder. The questions are asked once, here or at
+conversion intake; a feature that later crosses a trigger
+re-opens the one question it crosses, recorded the same way.
+
+The conversation ends by generating the project's starting
+files from the recorded answers rather than handing over blank
+templates: for each template the starter ships (spec files,
+fundamentals, plan, and the conditional templates its yes
+answers activated), the generation prompt is the same shape —
+*from the intake record, draft this file: carry over every
+recorded answer verbatim where the template asks for it, mark
+each claim the record does not settle as an open question in
+the file's own format, and invent nothing the record does not
+contain.* A generated draft the record cannot support is a
+finding about the conversation, not a detail to improvise.
+
+Conversion projects run the counterpart intake in
+`docs/conversion.md`; the conditional questions and the
+audience declaration are the same.
+
 ## 1. Reverse-engineer the spec from the evidence
 
 When a predecessor exists, it is the oracle: what it *does* —
@@ -114,6 +189,132 @@ explicit exception *before* a substitute ships; honest absence
 (an empty state, a null) is a legitimate rendering, a fabricated
 value never is. The same test governs the live UI. Full standard:
 `docs/mockup-approval.md`.
+
+## Process additions
+
+Standing process rules the six moves assume. Each names where
+its record lives; a practice with no record did not happen.
+
+### Demo-first landing
+
+A portion is reported only after it deploys and passes a
+both-ends smoke *on the deployment itself*: the public routes,
+a specimen sign-in where one exists, and one guarded surface.
+Reports name the deployed commit and what to click. A local
+pass is a precondition, never the report. Record: the landing
+note in the portion's plan todo, with the deployed commit.
+
+### Study pattern
+
+Anything not solid — missing, or carrying friction — gets a
+before/after mockup study before it is built (move 6 governs
+the mock itself). Defaults in a mock are staged honestly: an
+off-by-default control is shown off. A before that cannot be
+captured is labeled a reproduction, never passed off as a
+capture. The owner picks by a copy-back verdict payload, and
+the picked study is the spec for the build. Record: the study
+artifact and its verdict, in the plan that builds it.
+
+### Artifact lifecycle
+
+A study or mockup artifact is deleted when its subject is
+implemented, riding the landing change. Notes and screenshots
+are the permanent record; the artifact itself is scaffolding,
+and scaffolding that outlives its build becomes a second,
+stale spec. Record: the deletion lands with the implementation
+it specified.
+
+### Worktree lanes
+
+Feature work builds in sibling worktrees on feature branches —
+typecheck and unit tests run in-tree, in the lane. Merges into
+the main branch stay serial, ancestry-checked, with the full
+gate per merge. Lanes never commit to the shared branch; the
+coordinating agent gates, commits, and verifies. Record: the
+bundle's todo files, one per lane step.
+
+### Unit decomposition and build order
+
+Work is cut into units: one visible, verifiable result, within
+one system boundary, buildable in one session. Adjacent units
+with no standalone result between them merge. Order:
+dependencies first; security before the functionality it
+protects; backend before frontend wiring; UI shells before
+real data; packages installed just-in-time, in the unit that
+first needs them. Record: the plan's step list is the unit
+list — a step that fails the unit test is re-cut, not endured.
+
+### Diagnosis loop
+
+A hard bug or regression is worked in one fixed order: build a
+reproduction; minimise it; rank a few hypotheses; instrument
+one variable at a time; fix; add the regression test; then
+clean up the instrumentation. No fix is attempted before the
+reproduction exists, and two variables are never changed in
+one step — an unreproduced fix is a guess wearing a patch.
+Record: a short post-mortem note with the fix (what reproduced
+it, which hypothesis held, what the regression test pins).
+
+### Verify in the target runtime
+
+Before an environment failure is diagnosed, name the process
+that will actually run the work — supervisor unit, cron,
+deployed serve — with its home, PATH, working directory, user,
+and interpreter differences from a dev shell recorded. A shell
+result is a hypothesis about that runtime, never proof; a
+health response alone does not prove a restart or a fix.
+Fixes land in the durable template or config that recreates
+the service. Reports separate target-proven from shell-proven.
+Record: the run record for the drive, marked with which kind
+of proof each claim carries.
+
+### Rendered-output verification
+
+*Active when the intake answers yes to: ships layout-bearing
+deliverables.* Anything whose value is its layout — a page, a
+PDF, a confirmation — is verified from its rendered form
+(screenshot, rendered page, live deployment), not from source
+or extracted text; text extraction is for wording checks only.
+A build that could not render is reported as unchecked in that
+respect, never as passed and never as absent content. Record:
+the rendered evidence cited in the landing note.
+
+### Release and rollback discipline
+
+Build once; promote the same artifact through every
+environment — only injected configuration differs. A release
+is an immutable, addressable unit (artifact plus config) whose
+rollback is prepared *before* it ships: the previous artifact
+retained, migrations backward-compatible with the previous
+release (expand–contract, `docs/primitives.md`), rollback
+rehearsed in staging. Post-deploy smoke runs against the
+deployment itself; a failed smoke or a symptom alert triggers
+the prepared rollback, not an improvised fix forward. Record:
+the release entry in the run record, naming artifact, config,
+and the rollback it prepared.
+
+### Alert on symptoms, budget the errors
+
+*Active for always-on services (asked via the service
+flavor).* The service declares a small set of user-facing
+objectives — an indicator, a target, a window — and the error
+budget that follows. Alerts page on symptoms users feel: burn
+rate against that budget, in fast and slow windows. Cause
+signals (CPU, queue depth, restarts) go to dashboards and
+tickets, never pages. An exhausted budget is a recorded state
+that changes what ships next. Record: the objectives and the
+budget state, in the service's run record.
+
+### Backup is a restore rehearsal
+
+*Active when the intake answers yes to: persistent user data
+worth restoring.* The spec names a recovery objective — how
+much loss is tolerable, how long a restore may take — the
+assembly carries a backup mechanism, and a scheduled rehearsal
+restores the backup into a scratch environment and proves it
+byte- or record-identical. An untested backup is reported as
+no backup. Record: rehearsal results in the run record, like
+any other gate.
 
 ## Enforcement, not memory
 

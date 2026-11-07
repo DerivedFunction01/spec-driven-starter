@@ -45,10 +45,15 @@ retries, partial-failure handling, quirks. Each note cites how
 it was observed. Where the predecessor's documents disagree
 with observation, the note says so.>
 
+## Intent table
+| Intent | Where the history expresses it | Successor verdict |
+| --- | --- | --- |
+| <what the predecessor was for, row by row> | <plan / record / ruled question> | <improvement (how) / missing (priced) / not-implemented (ruled)> |
+
 ## Failure-mode catalogue
-| Mode | Root cause | Evidence | Successor disposition |
-| --- | --- | --- | --- |
-| <failure> | <diagnosed cause> | <log / repro / record> | <designed around / kept knowingly / open> |
+| Mode | Root cause | Evidence | Successor disposition | Coverage verdict | Regression test |
+| --- | --- | --- | --- | --- | --- |
+| <failure> | <diagnosed cause> | <log / repro / record> | <designed around / kept knowingly / open> | <covered / partial / missing / not applicable / unproven, with its supporting file or record> | <the test that fails against the unported behavior> |
 
 ## Golden fixture capture log
 | Fixture | What it captures | How captured | Stored |

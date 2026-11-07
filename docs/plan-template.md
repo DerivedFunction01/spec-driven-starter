@@ -64,6 +64,15 @@ Keep / change / drop: <table location in the spec extraction>
   bundle taken, checksum manifest written, swap in place,
   preserved files verified byte-identical against the manifest.
 
+## Intake-gated scope
+
+A plan whose work crosses a conditional question the project's
+intake answered no (a first form, a first integration, a first
+persistent store) cites the intake record in its Rulings and
+re-opens that one question there — the conditional material the
+yes activates is named in the affected step, so the plan, not
+memory, carries why the new machinery appears.
+
 ## Working a plan
 
 - Create one todo per step through the project's todo harness

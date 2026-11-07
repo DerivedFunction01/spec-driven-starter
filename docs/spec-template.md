@@ -24,6 +24,21 @@ extraction says so. Point at the characterization dossier
 drop table's location: every predecessor behavior carries one
 of those rulings, with reasons for change and drop.>
 
+## Intake record
+<The answers the pre-build conversation (greenfield) or the
+conversion intake produced, recorded once and cited by the
+files they activate. The audience-and-persistence declaration:
+who uses the app, whether their entries are saved, whether it
+needs a public link, a custom domain, or a team, and the
+hosting shape ruled from those answers. Then one row per
+conditional question asked:
+| Question | Answer | Scope | Activates |
+| --- | --- | --- | --- |
+| <the conditional question> | <yes / no> | <where it applies> | <the section, template, or primitive a yes created> |
+A conditional section exists in this spec only where a row
+above answers yes; a no leaves no trace — no section, no
+placeholder.>
+
 ## Layout and gates
 <Tracks, their file sets, the one seam contract, and each
 track's gate: who rules, and that no application code precedes
@@ -58,3 +73,33 @@ row; it does not inflate a neighbor.
 - Known defects and stubs of any predecessor get their own
   section, owned by the track that will fix them, with pointers
   from the other track — never silently dropped.
+
+## Frontend surface specs: the state matrix
+
+Every frontend surface spec carries a state matrix — one row
+per state, stating what renders:
+
+| State | Renders |
+| --- | --- |
+| populated | <the surface with its data> |
+| empty | <the honest-absence rendering: what is said when there is nothing> |
+| loading | <per portion — each portion loads when it can; never one global state hiding the whole surface> |
+| error | <what the reader is told, in plain words; last-good data where the contract keeps it> |
+| partial | <some portions present, some absent — and how absence is marked> |
+
+The matrix is part of the track gate: a surface with an
+unspecified state is an incomplete spec. The visual check
+exercises the main flow in each state at the relevant screen
+sizes.
+
+## Register (when the intake records non- or beginner coders)
+
+Reader-facing material — questions, status reports, studies,
+summaries — is written in two registers in one document: a
+plain-language lead stating the decision, the outcome, and
+what it means for the reader, with every technical term
+explained at first use from the project's glossary; then the
+exact technical record (identifiers, contracts, commands),
+untranslated and unabridged. Plain is a translation of the
+substance, never a reduction of it: the same decision must be
+recoverable from either register.

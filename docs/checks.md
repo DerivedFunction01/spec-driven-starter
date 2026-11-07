@@ -41,6 +41,25 @@ the scanner/checks harness, `check.py`, `init_venv.py`, or
 no tests and exits 0; when git cannot answer, the full suite
 runs — a small suite is not worth a clever miss.
 
+**Contract-surface scoping.** Targeting by changed file is the
+default, never the scope proof. A change to a shared contract —
+`API.md` or anything under `spec/` — gates every surface that
+consumes it: the gate runs the whole suite and `--explain`
+says why ("contract change …: all surfaces"). The gate reports
+per leg and per scanner, never one blended green; a surface
+deliberately excluded from a run is named, with the check that
+cleared it, in the landing record — a red in an excluded
+surface that shares the contract is part of the change.
+
+**Test-isolation proof.** When tests run, the gate hashes the
+real state files under `var/` (the venv excluded) before and
+after the suite. Tests and fakes resolve every home, config,
+session, and state path from the harness or a scratch
+directory, and clocks, caps, and limits are injected, never
+hardcoded — so any difference in the hashes fails the gate
+even when every test passes, and the report names the files
+that changed.
+
 ## Tooling seam
 
 `pyproject.toml` is the single tooling seam: project metadata,
@@ -74,6 +93,13 @@ reporting itself unconfigured).
 | clean_exit | no process exits in the library tiers; entry points and `__main__` guards excepted |
 | tracking | no tracked files under `var/` (git ls-files; degrades to a notice without git) |
 | tests_tracked_only | test strings reference no `var/` or frozen-snapshot paths |
+| route_coverage | every route served by the apps layer is enrolled in `spec/route-coverage.md`; exemptions name an expiry and die on schedule |
+| port_boundary | provider names appear in code only under a `vendors/` path segment — provider specifics stay behind the port |
+| privacy_pin | no staff-only field (`internal_*`, `staff_*`, pinned names) in a services-layer payload dict |
+| asset_manifest | every binary or external asset the frontend uses is registered in `frontend/assets-manifest.json`; stale entries fail too |
+| security_baseline | no dynamic-execution / unsafe-deserialization patterns in backend code; the four security response headers are set in the apps layer |
+| a11y_static | the static accessibility floor over frontend HTML: lang declared, images alted, controls and buttons named, no positive tabindex |
+| perf_budget | frontend asset weight per class stays inside `frontend/budgets.json` (a notice, never a failure, while no budget file exists) |
 
 Portability exceptions: only files named in the scanner's
 `EXCEPTION_FILES` registry may carry a directive line naming
@@ -91,6 +117,66 @@ A scanner lands as four pieces, all in one change:
    (tmp-tree fixtures, seeded violations + clean cases; the
    registry test fails if any registered scanner lacks one),
 4. its line in the table above.
+
+## The catch-net pair
+
+Two nets sit above the unit tests, aimed at what units cannot
+see:
+
+- **Surface-sanity net** — a test over the shipped surface
+  itself (the sample's is `tests/test_surface_net.py`): the
+  furniture is present (title, landmarks, status region), the
+  viewport is declared, no fixed width overflows a 320 px
+  viewport, and every declared text color meets the contrast
+  floor against the page background. A project with themes
+  runs the same contrast computation per theme over its token
+  pairs. This net is also the automated leg of the
+  accessibility rule — a regression net, never an
+  accessibility verdict (fundamentals, accessibility target).
+- **Route-coverage enrollment** — the `route_coverage`
+  scanner above: every served route is enrolled in
+  `spec/route-coverage.md` with the check that exercises it.
+  Exemptions are named in the registry with an expiry date;
+  an expired exemption fails like an unenrolled route.
+
+## Misclick audit
+
+Periodically — and whenever a surface gains committing
+controls — inventory every committing control and classify it
+by reversibility: **A**, one tap and irreversible, or bulk;
+**B**, costly to reverse; **C**, safe. The inventory lives
+with the frontend spec; class A and B controls route through
+the guard kit (`docs/primitives.md`) or carry a written
+exemption. The audit's seed finding, recorded before any
+inventory exists: the absence of any confirm dialog on a
+committing surface is itself the headline — "no guards found"
+is the first row, not a pass.
+
+## Production-shaped fixtures
+
+Test fakes are built from real captured payloads, preserving
+production structure — labelled pairs, grouped and composite
+fields, empty and missing members. A simplifying fake that
+flattens that structure is rejected: it can pass while the
+real shape fails. Each parser, join, and serializer keeps at
+least one production-shaped specimen (the sample's is
+`tests/fixtures/model-payload.json`, captured from the model
+builder over the sample store; `tests/test_fixtures.py` pins
+the builder's output to its shape). Refresh the capture when
+the real shape is learned to have changed, in the same change
+that learns it.
+
+## External asset preflight
+
+An externally referenced image is shipped only after a
+browser-like probe passes: final 2xx, image content type and
+magic bytes, no hotlink refusal under a cross-origin referer,
+no watermark, no expiring or redirecting URL. The probe result
+is recorded with the asset's entry in
+`frontend/assets-manifest.json` (the `asset_manifest` scanner
+enforces registration). A CDN thumbnail is a preview, never
+the durable copy; a selected asset is ingested into
+project-owned storage.
 
 ## Denylist provisioning
 

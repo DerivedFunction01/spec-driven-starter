@@ -6,6 +6,10 @@ Read in order: `SPEC.md` (index only), your track's files under
 When `SPEC.md` declares `Mode: conversion`, read
 `docs/conversion.md` after the spec files, before code.
 
+This file is the repo's one instruction source. Any other
+harness's file (a bridge file, an editor-rules entry) is a
+thin pointer to this file, never a copy of its content.
+
 Hard rules:
 
 - No application code before the spec gate for its track is ruled.

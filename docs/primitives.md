@@ -59,3 +59,143 @@ host-specific poller binding.
 Objective, rulings, steps with verify and done-when, structured
 open questions, and the closeout move. The plan plus its todo
 files are the work record.
+
+## Guard kit
+
+The one path for committing controls. Four parts: a
+**confirm-action** step that names the action, the object, and
+the consequence before anything commits; an **arm/confirm**
+two-step for lockout-class actions, where arming and firing
+are separate gestures; **idempotent submit**, so a repeated
+submit — double tap, retry, refresh — has exactly one effect;
+and **preview-diff** as the standard grouped-save pattern, so
+a multi-field save shows what will change before it commits.
+Pairing rule: any control that commits a terminal, bulk, or
+lockout action routes through this kit; a committing control
+outside it is a defect (the misclick audit in `docs/checks.md`
+is how they are found).
+
+## Structured telemetry
+
+A service emits three linked signals from day one: **metrics**
+(rate, errors, latency, saturation), **structured logs**, and
+**traces** — all carrying the same correlation id, all using
+standard semantic attribute names, exported through a
+vendor-neutral port (OpenTelemetry) so the telemetry backend
+is an assembly choice, not an instrumentation rewrite. Logs
+are structured events, never free-text dumps; personal data
+and credentials never appear in any signal. The health
+endpoint distinguishes liveness (the process runs) from
+readiness (the service can take work); a probe that conflates
+them proves neither.
+
+## Conditional primitives
+
+Each primitive below is part of a project only when its intake
+answer is yes; the activation line is part of its contract.
+
+### Sync lifecycle
+
+*Active when the intake answers yes to: syncs state to an
+external system of record.* Sync state lives on the record —
+`pending`, `synced`, `failed`, plus a retry count — never only
+in a log. A failed sync never blocks the core transaction: the
+record stands, the sync retries. The external object is found
+by its stored id first, then by search-before-create;
+convergence is idempotent and a blind insert is prohibited,
+so a retry can never duplicate the external object.
+
+### Specimen seed
+
+*Active when the intake answers yes to: offers a demo or
+specimen sign-in mode.* Published fictional sign-ins and a
+seeded demo assembly let a reader exercise the whole product
+without real data. The demo assembly is separate from the
+production assembly, and production fails closed at boot:
+specimens off, test fakes refused, a specimen credential in a
+production assembly a startup error.
+
+### Brand-link dirty guard
+
+*Active when the intake answers yes to: ships a UI shell with
+editable views.* Editable views register their unsaved state
+in a tiny dirty registry; the chrome's home (brand) link
+consults it — pristine navigates, dirty confirms first. The
+guard covers both shells (public and staff), and the link's
+accessible name names the destination it guards.
+
+### Media store port
+
+*Active when the intake answers yes to: ships imagery or
+accepts user media.* User media splits in two: metadata is
+permanent and lives in the database; payloads live behind a
+store port, so the storage backend is an assembly choice.
+Transfers are chunked, never base64; originals are never
+recompressed; renditions are generated on ingest. Every asset
+carries a retention class, and expiry is a report-first sweep:
+the sweep reports what would expire before anything is
+deleted. Assets are manifest-referenced (imagery discipline,
+`docs/fundamentals.md`).
+
+### Form specification
+
+*Active when the intake answers yes to: takes form
+submissions.* Every form is spec'd field by field before
+build: each field names the purpose that needs it; a field is
+required only when that purpose fails without it; one question
+per field, in neutral wording; the choice type follows the
+answer shape (single choice for exclusive answers, multiple
+for independent ones, free text when a list would miss
+answers). Related fields group; non-applicable fields are
+skipped by branching; easy fields precede sensitive ones. The
+respondent path — introduction, questions, completion — is
+tested with representative *and* incomplete submissions
+before the form ships. The guard kit (above) governs the
+submit; this primitive governs what is asked.
+
+### Time-and-booking
+
+*Active when the intake answers yes to: books appointments or
+slots.* A booking is stored in its own timezone, never
+converted to the operator's; a daylight-saving change between
+the booking date and the service date is checked at write
+time, not discovered on the day. A listed or held slot is not
+a confirmed booking — hold, confirmed, and cancelled are
+distinct states. Duration, buffer, and travel time are spec'd
+values on the service, not UI afterthoughts. After a write,
+the record is read back, and its final local time, timezone,
+and parties are what gets reported.
+
+### Price-and-terms quote
+
+*Active when the intake answers yes to: quotes prices.* The
+backend serves a quote as a total with its components (base,
+travel and fees, discounts) and the terms that change its
+meaning (refundable, prepaid, pay-on-service, minimum). A
+headline or starting price is never the served price. Two
+quotes at the same total under different terms are different
+offers and are presented as such.
+
+### Orthogonal state axes
+
+*Active when the intake answers yes to: records carry more
+than one lifecycle.* The domain spec enumerates a record's
+state axes separately — booking, payment, assignment,
+fulfilment — each with its own states, transitions, and
+actions; no single status field collapses them. A change sets
+an explicit target state, never a toggle. An accepted or
+queued request is not a confirmed state. After an uncertain
+result, the record is read before any retry.
+
+### Expand–contract migrations
+
+*Active when the intake answers yes to: a persistent database
+with live data.* A breaking schema change never lands in one
+deploy: **expand** (add the new shape; old code unaffected),
+**dual-write and backfill** in batches, **flip reads**, then
+**contract** (remove the old shape) in a separate later deploy
+once nothing references it. Every intermediate state runs both
+the old and the new code, so every step is independently
+rollback-safe. A dropped column is the irreversible step and
+is gated accordingly. Migrations run as their own deploy step,
+timed first against production-sized data.

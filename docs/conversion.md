@@ -18,6 +18,30 @@ Greenfield is the default. Conversion adds this track: no
 application code before characterization (below) is complete
 and the track gates are ruled.
 
+## Conversion intake
+
+Characterization (below) establishes what the predecessor
+*does*; the intake establishes what the successor is *for*.
+Before the spec extraction, the conversion runs the same
+intake as a greenfield project (the pre-build conversation in
+`docs/method.md`), with three conversion-specific rules:
+
+- The **audience-and-persistence declaration** is re-asked,
+  never inherited: a successor whose audience or persistence
+  differs from the predecessor's says so as a change ruling.
+- Every **conditional question** is asked against the
+  predecessor's observed behavior — a capability the
+  predecessor has is evidence the trigger is in play, and a
+  no answer for it is a drop ruling in the extraction, not a
+  silent omission.
+- Inspiration pins (the pin-board template) refresh at
+  intake: pins the predecessor's era produced are re-ruled
+  or dropped before the successor's surfaces are designed.
+
+Answers are recorded in the dossier and cited by the spec
+extraction; a yes creates the same conditional sections and
+templates it creates in a greenfield project.
+
 ## Characterize before touching
 
 Before any change, inventory the predecessor as it runs:
@@ -55,6 +79,42 @@ the rebuild. The successor designs around known defects instead
 of inheriting them or paying to diagnose them a second time.
 An undiagnosed predecessor quirk is an open question in the
 dossier, not a surprise scheduled for later.
+
+## Intent checklist
+
+Keep / change / drop rules on *behavior*; the successor is
+also judged against the predecessor's *intent*, mined from its
+history (its plans, its records, its ruled questions) and
+checked row by row in the dossier's intent table:
+
+- **improvement** — the successor does the intended thing
+  better, and says how;
+- **missing** — the intent is real and the successor does not
+  carry it yet: a finding with a price, not a shrug;
+- **not-implemented** — the intent was never built in the
+  predecessor either; it is ruled on its merits, not inherited
+  as backlog.
+
+Absence in the original is not an excuse: an intent the
+predecessor expressed and failed to build is still intent.
+Dead features split into *abandoned* (the intent was given up,
+on evidence) versus *attempted-but-failed* (the intent stands;
+the attempt is a failure mode for the catalogue). An intent
+the history implies but never expresses requires a gesture —
+a question to the owner — before the successor rules on it.
+
+## Failure-mode census verdicts
+
+Every mode in the dossier's failure-mode catalogue carries a
+coverage verdict in the successor: **covered**, **partial**,
+**missing**, **not applicable**, or **unproven** — each with
+its supporting file or record. A partial is a finding priced
+as its own work order, never counted as coverage. Each ported
+mode carries a regression test that fails against the unported
+behavior; its detection signals are carried in full (every
+place the signal can appear, not the one place it was seen);
+and the port is proven once against live behavior, not only
+against a fixture.
 
 ## Spec extraction
 
