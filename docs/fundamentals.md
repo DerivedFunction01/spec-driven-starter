@@ -76,6 +76,8 @@ Rules every project from this starter carries. Conditional
 rules live in their own section below, each gated on an intake
 answer; nothing there binds a project whose answer is no.
 
+### State, sources, and served truth
+
 - **Settings-as-policy.** A legitimate either/or behavior is
   an admin setting with a safe default, not a ruling:
   capabilities ship off, thresholds are admin numbers seeded
@@ -93,6 +95,30 @@ answer; nothing there binds a project whose answer is no.
   percentage, or an expectation is served only where both of
   its sides exist; where one side is missing, the surface
   serves the side it has and names the other absent.
+- **One source per constant.** Every changeable value — caps,
+  thresholds, budgets, cadences, ports, paths — has exactly
+  one machine source (the settings seam, a config file, a
+  scanner constant, a served payload), and that source is
+  where the value lives. Documents state the rule and its
+  intent and name the source; they never restate the value,
+  because a restated value is a second source that drifts
+  silently when the first changes. A test pinning its
+  source's value is a proof, not a copy; an external
+  standard's named level is a name, not a tunable — the
+  tunable numbers under it still live in the config source.
+  The gate's restated-value scan enforces this over the
+  docs.
+- **Environment separation for state.** Production,
+  development, and test resolve to distinct state roots and
+  distinct credentials through the settings seam. A dev or
+  test configuration that resolves to production state is
+  refused at resolution, not warned about after the fact.
+  The active environment's identity is a served fact on any
+  surface that shows state, so no reader can mistake which
+  data they are looking at.
+
+### Surfaces and safety
+
 - **Ports refuse honestly; assembly tells the truth.** A
   capability that is not graduated yet sits behind a port and
   refuses — a named error, never a stub that pretends. The
@@ -122,6 +148,9 @@ answer; nothing there binds a project whose answer is no.
   regression net, and a manual keyboard-plus-screen-reader
   pass over the core flows is a landing requirement — a clean
   scan is never reported as "accessible".
+
+### Words and work
+
 - **One instruction source.** The canonical agent
   instructions for a repo live in one file (`AGENTS.md`).
   Every other harness's file — a bridge file, an editor-rules
@@ -139,27 +168,6 @@ answer; nothing there binds a project whose answer is no.
   concept with no entry is named and entered before it is
   built on, and a term argued about is defined in the same
   pass that argues it.
-- **One source per constant.** Every changeable value — caps,
-  thresholds, budgets, cadences, ports, paths — has exactly
-  one machine source (the settings seam, a config file, a
-  scanner constant, a served payload), and that source is
-  where the value lives. Documents state the rule and its
-  intent and name the source; they never restate the value,
-  because a restated value is a second source that drifts
-  silently when the first changes. A test pinning its
-  source's value is a proof, not a copy; an external
-  standard's named level is a name, not a tunable — the
-  tunable numbers under it still live in the config source.
-  The gate's restated-value scan enforces this over the
-  docs.
-- **Environment separation for state.** Production,
-  development, and test resolve to distinct state roots and
-  distinct credentials through the settings seam. A dev or
-  test configuration that resolves to production state is
-  refused at resolution, not warned about after the fact.
-  The active environment's identity is a served fact on any
-  surface that shows state, so no reader can mistake which
-  data they are looking at.
 - **Nothing builds from a wish.** A wish states an outcome
   without rules; a spec states the rules, constraints, edge
   cases, and failure paths, and names its decisions. A wish

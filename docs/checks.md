@@ -129,7 +129,12 @@ A scanner lands as four pieces, all in one change:
    registry test fails if any registered scanner lacks one),
 4. its line in the table above.
 
-## The catch-net pair
+## Standing check practices
+
+Checks that run on a cadence or on a trigger, above the
+gate's per-change legs.
+
+### The catch-net pair
 
 Two nets sit above the unit tests, aimed at what units cannot
 see:
@@ -145,12 +150,11 @@ see:
   accessibility rule — a regression net, never an
   accessibility verdict (fundamentals, accessibility target).
 - **Route-coverage enrollment** — the `route_coverage`
-  scanner above: every served route is enrolled in
-  `spec/route-coverage.md` with the check that exercises it.
-  Exemptions are named in the registry with an expiry date;
-  an expired exemption fails like an unenrolled route.
+  scanner above, exercised as a net: enrollment in
+  `spec/route-coverage.md` names the check that exercises
+  each route, so coverage is a tested claim, not a list.
 
-## Misclick audit
+### Misclick audit
 
 Periodically — and whenever a surface gains committing
 controls — inventory every committing control and classify it
@@ -163,7 +167,7 @@ inventory exists: the absence of any confirm dialog on a
 committing surface is itself the headline — "no guards found"
 is the first row, not a pass.
 
-## Production-shaped fixtures
+### Production-shaped fixtures
 
 Test fakes are built from real captured payloads, preserving
 production structure — labelled pairs, grouped and composite
@@ -177,7 +181,7 @@ the builder's output to its shape). Refresh the capture when
 the real shape is learned to have changed, in the same change
 that learns it.
 
-## External asset preflight
+### External asset preflight
 
 An externally referenced image is shipped only after a
 browser-like probe passes: final 2xx, image content type and

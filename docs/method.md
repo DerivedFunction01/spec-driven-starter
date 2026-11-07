@@ -233,12 +233,11 @@ explicit exception *before* a substitute ships; honest absence
 value never is. The same test governs the live UI. Full standard:
 `docs/mockup-approval.md`.
 
-## Process additions
+The six moves assume the standing process rules that follow.
+Each names where its record lives; a practice with no record
+did not happen.
 
-Standing process rules the six moves assume. Each names where
-its record lives; a practice with no record did not happen.
-
-### Demo-first landing
+## Demo-first landing
 
 A portion is reported only after it deploys and passes a
 both-ends smoke *on the deployment itself*: the public routes,
@@ -247,7 +246,7 @@ Reports name the deployed commit and what to click. A local
 pass is a precondition, never the report. Record: the landing
 note in the portion's plan todo, with the deployed commit.
 
-### Study pattern
+## Study pattern
 
 Anything not solid — missing, or carrying friction — gets a
 before/after mockup study before it is built (move 6 governs
@@ -258,7 +257,7 @@ capture. The owner picks by a copy-back verdict payload, and
 the picked study is the spec for the build. Record: the study
 artifact and its verdict, in the plan that builds it.
 
-### Artifact lifecycle
+## Artifact lifecycle
 
 A study or mockup artifact is deleted when its subject is
 implemented, riding the landing change. Notes and screenshots
@@ -267,7 +266,7 @@ and scaffolding that outlives its build becomes a second,
 stale spec. Record: the deletion lands with the implementation
 it specified.
 
-### Worktree lanes
+## Worktree lanes
 
 Feature work builds in sibling worktrees on feature branches —
 typecheck and unit tests run in-tree, in the lane. Merges into
@@ -276,7 +275,7 @@ gate per merge. Lanes never commit to the shared branch; the
 coordinating agent gates, commits, and verifies. Record: the
 bundle's todo files, one per lane step.
 
-### Unit decomposition and build order
+## Unit decomposition and build order
 
 Work is cut into units: one visible, verifiable result, within
 one system boundary, buildable in one session. Adjacent units
@@ -287,7 +286,7 @@ real data; packages installed just-in-time, in the unit that
 first needs them. Record: the plan's step list is the unit
 list — a step that fails the unit test is re-cut, not endured.
 
-### Diagnosis loop
+## Diagnosis loop
 
 A hard bug or regression is worked in one fixed order: build a
 reproduction; minimise it; rank a few hypotheses; instrument
@@ -298,7 +297,7 @@ one step — an unreproduced fix is a guess wearing a patch.
 Record: a short post-mortem note with the fix (what reproduced
 it, which hypothesis held, what the regression test pins).
 
-### Verify in the target runtime
+## Verify in the target runtime
 
 Before an environment failure is diagnosed, name the process
 that will actually run the work — supervisor unit, cron,
@@ -311,7 +310,7 @@ the service. Reports separate target-proven from shell-proven.
 Record: the run record for the drive, marked with which kind
 of proof each claim carries.
 
-### Rendered-output verification
+## Rendered-output verification
 
 *Active when the intake answers yes to: ships layout-bearing
 deliverables.* Anything whose value is its layout — a page, a
@@ -322,7 +321,7 @@ A build that could not render is reported as unchecked in that
 respect, never as passed and never as absent content. Record:
 the rendered evidence cited in the landing note.
 
-### Release and rollback discipline
+## Release and rollback discipline
 
 Build once; promote the same artifact through every
 environment — only injected configuration differs. A release
@@ -336,7 +335,7 @@ the prepared rollback, not an improvised fix forward. Record:
 the release entry in the run record, naming artifact, config,
 and the rollback it prepared.
 
-### Alert on symptoms, budget the errors
+## Alert on symptoms, budget the errors
 
 *Active for always-on services (asked via the service
 flavor).* The service declares a small set of user-facing
@@ -348,7 +347,7 @@ tickets, never pages. An exhausted budget is a recorded state
 that changes what ships next. Record: the objectives and the
 budget state, in the service's run record.
 
-### Backup is a restore rehearsal
+## Backup is a restore rehearsal
 
 *Active when the intake answers yes to: persistent user data
 worth restoring.* The spec names a recovery objective — how
