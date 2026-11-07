@@ -23,7 +23,7 @@ class ModelTests(unittest.TestCase):
         )
 
     def test_contract_version(self):
-        self.assertEqual(self.model["contract"], "api/1")
+        self.assertEqual(self.model["contract"], "api/2")
 
 
 if __name__ == "__main__":

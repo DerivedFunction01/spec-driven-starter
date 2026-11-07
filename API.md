@@ -1,7 +1,8 @@
 # API — field-kit inventory: the backend/frontend contract
 
-Contract version: **`api/1`**
-Status: sample contract, sealed as drafted for the starter.
+Contract version: **`api/2`** (the amendment at the foot of
+this file; the `api/1` text above it is sealed as drafted).
+Status: sample contract.
 
 This contract is the only seam between the tracks. The frontend
 consumes exactly this surface; the backend implements exactly
@@ -55,3 +56,33 @@ GET /api/v1/model
 Errors are plain objects: `{ "error": "<machine-code>",
 "message": "<human sentence>" }` with a matching HTTP status.
 No raw stack traces or payload dumps cross the seam.
+
+## Amendment — `api/2` (2026-11-07)
+
+Supersedes the error shape of `api/1`; everything else in
+`api/1` stands. The `contract` field of every payload now
+reads `"api/2"`.
+
+Errors are **problem details** (RFC 9457), never the plain
+`{error, message}` object:
+
+```text
+  -> {
+       "type": "urn:problem:not-found",
+       "title": "Not Found",
+       "status": 404,
+       "detail": "No such route.",
+       "correlation_id": "<the X-Correlation-Id response header>"
+     }
+```
+
+- `type` is a URI naming the problem kind; clients switch on
+  it, never on the title or the detail.
+- `title` is constant per type. `status` matches the HTTP
+  status. `detail` is this occurrence, safe to show.
+- A validation failure adds `field_errors`:
+  `[{ "field": "<field>", "message": "<what is wrong>" }]`.
+- `correlation_id` matches the `X-Correlation-Id` response
+  header and the server's log record for the same request.
+- Stack traces, queries, and internal paths never cross the
+  seam.

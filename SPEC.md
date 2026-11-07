@@ -25,8 +25,9 @@ Mode: greenfield
 
 - **Backend track** — `spec/backend/` — Python. Gate 1B.
 - **Frontend track** — `spec/frontend/` — static client. Gate 1F.
-- **`API.md`** (repo root) — the contract (`api/1`), the only
-  seam between the tracks. Gate 1A.
+- **`API.md`** (repo root) — the contract (`api/2`; `api/1`
+  sealed above its amendment), the only seam between the
+  tracks. Gate 1A.
 
 No application code before its track's gate is ruled. For this
 sample the gates are recorded as ruled in the file map below so
@@ -41,6 +42,7 @@ owner rules.
 | `spec/backend/01-features.md` | backend features: model build, readiness, store |
 | `spec/backend/02-domain.md` | domain rules: kit completeness, status derivation |
 | `spec/frontend/01-features.md` | frontend features: kit list, kit detail, empty states |
+| `spec/route-coverage.md` | route enrollment registry (the route-coverage check) |
 
 ## Provenance
 

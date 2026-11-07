@@ -38,7 +38,7 @@ def build_model(store: Store, settings: Settings) -> dict:
             }
         )
     return {
-        "contract": "api/1",
+        "contract": "api/2",
         "generated_note": "Sample data; fiction.",
         "kits": kits,
         "totals": {"kits": len(kits), "ready": ready},

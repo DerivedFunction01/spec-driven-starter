@@ -1,6 +1,7 @@
 import json
 import threading
 import unittest
+import urllib.error
 import urllib.request
 from http.server import ThreadingHTTPServer
 
@@ -45,6 +46,31 @@ class ApiTests(unittest.TestCase):
             f"http://127.0.0.1:{self.port}/", timeout=5
         ) as res:
             self.assertIn(b"Field-Kit", res.read())
+
+    def test_unknown_route_answers_problem_details(self):
+        try:
+            self.get("/no-such-route")
+            self.fail("expected a 404")
+        except urllib.error.HTTPError as err:
+            body = json.loads(err.read())
+            self.assertEqual(err.code, 404)
+            self.assertEqual(body["type"], "urn:problem:not-found")
+            self.assertEqual(body["title"], "Not Found")
+            self.assertEqual(body["status"], 404)
+            self.assertEqual(body["detail"], "No such route.")
+            self.assertEqual(
+                body["correlation_id"], err.headers["X-Correlation-Id"]
+            )
+            self.assertNotIn("error", body)
+
+    def test_security_headers_on_every_surface(self):
+        for path in ("/health", "/api/v1/model", "/"):
+            with urllib.request.urlopen(
+                f"http://127.0.0.1:{self.port}{path}", timeout=5
+            ) as res:
+                self.assertEqual(res.headers["X-Content-Type-Options"], "nosniff")
+                self.assertEqual(res.headers["X-Frame-Options"], "DENY")
+                self.assertIn("default-src", res.headers["Content-Security-Policy"])
 
 
 if __name__ == "__main__":

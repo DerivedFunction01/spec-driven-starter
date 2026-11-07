@@ -27,7 +27,7 @@ cp -r spec-driven-starter my-project
 cd my-project
 
 # 2. Choose and apply a flavor (see flavors/README.md).
-python3 tools/apply_flavor.py service        # or: tool | full-stack
+python3 tools/apply_flavor.py service   # or: tool | full-stack | webapp
 
 # 3. Build the environment (stdlib-only sample: fast).
 python3 init_venv.py
@@ -56,13 +56,18 @@ bash ops/watchdog.sh       # the restore ladder; silent while healthy
 SPEC.md            index of the spec; carries no content of its own
 spec/              the spec, in small files, split by track
 API.md             the one seam between backend and frontend (versioned)
-docs/              the method, fundamentals, primitives, templates
+docs/              the method, fundamentals, primitives, checks,
+                   and templates: spec, plan, fundamentals,
+                   characterization, glossary, integration record,
+                   UI tokens, discoverability, inspiration pins,
+                   web-stack standards
 backend/           layered Python: foundation, domain, infra,
                    services, apps (imports point downward only)
 frontend/          a framework-free client; renders the API model,
                    recomputes nothing but arithmetic over served data
 tools/             the flavor applier (scanners live in the backend)
-flavors/           per-shape overlays over the shared core
+flavors/           per-shape overlays over the shared core:
+                   service, tool, full-stack, webapp (TypeScript)
 ops/               the supervision kit: unit template, installer,
                    serve script, watchdog (docs/primitives.md)
 deploy/            deploy script + the platform contracts it needs

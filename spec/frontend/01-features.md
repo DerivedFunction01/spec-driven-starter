@@ -13,3 +13,13 @@
 - **§1.4 No side channels.** The client calls only the
   endpoints `API.md` declares, at the base the page was served
   from (or the configured API base in `frontend/app.js`).
+- **§1.5 State matrix (kit list surface).** Per the state
+  matrix the spec template requires:
+
+  | State | Renders |
+  | --- | --- |
+  | populated | The kit sections in served order, with the totals line (§1.1, §1.2) |
+  | empty | "No kits captured yet." — the honest-absence state; totals read zero kits |
+  | loading | The shell (title, header) at once; the totals line reads "Loading…" until the model lands — the list is one portion, so no finer split exists |
+  | error | Last-good render kept where one exists, with the plain-language note (§1.3); with no last-good data, the note alone |
+  | partial | Not applicable to a one-model surface: the model arrives whole or the fetch fails — recorded here so the absence is a ruling, not an oversight |
