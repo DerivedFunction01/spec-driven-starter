@@ -13,6 +13,14 @@ import unittest
 import urllib.request
 from pathlib import Path
 
+import pytest
+
+# The drills spend real wall-clock time by design — poll
+# windows, bounded probes, a 20 s startup sweep are the
+# subjects under test — so the module's ceiling is sized
+# to the drills, not to the unit tests' default.
+pytestmark = pytest.mark.timeout(240)
+
 ROOT = Path(__file__).resolve().parents[1]
 UNIT = "field-kit-drill"
 COPY_DIRS = ("backend", "frontend", "ops", "flavors", "tools")
@@ -66,11 +74,13 @@ class SupervisionDrills(unittest.TestCase):
                 pass
         shutil.rmtree(self.tmp, ignore_errors=True)
 
-    def run_ops(self, script, *args, check=True, poll_secs=None):
+    def run_ops(self, script, *args, check=True, poll_secs=None, probe_secs=None):
         env = dict(self.env)
         if poll_secs is not None:
             env["FIELDKIT_POLL_SECS"] = str(poll_secs)
             env["FIELDKIT_RESTORE_POLL_SECS"] = str(poll_secs)
+        if probe_secs is not None:
+            env["FIELDKIT_PROBE_SECS"] = str(probe_secs)
         result = subprocess.run(
             ["bash", str(self.repo / "ops" / script), *args],
             cwd=self.repo,
@@ -251,7 +261,7 @@ class SupervisionDrills(unittest.TestCase):
         self.assertFalse(self.healthy_full())
         (self.fake_state / "wedge").unlink()
         started = time.monotonic()
-        self.run_ops("watchdog.sh", poll_secs=30)
+        self.run_ops("watchdog.sh", poll_secs=30, probe_secs=2)
         self.assertLess(time.monotonic() - started, 60)
         self.assertIn(f"restart {UNIT}.service", self.calls())
         self.assertTrue(self.healthy())
@@ -262,7 +272,9 @@ class SupervisionDrills(unittest.TestCase):
         self.run_ops("serve.sh", "start")
         self.assertFalse(self.healthy_full())
         started = time.monotonic()
-        result = self.run_ops("watchdog.sh", check=False, poll_secs=8)
+        result = self.run_ops(
+            "watchdog.sh", check=False, poll_secs=8, probe_secs=2
+        )
         elapsed = time.monotonic() - started
         self.assertNotEqual(result.returncode, 0)
         self.assertLess(elapsed, 90)
