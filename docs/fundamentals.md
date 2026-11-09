@@ -55,6 +55,9 @@ No upward imports, no cycles, no reexports: import from the leaf.
 
 ## Supervision
 
+Conforms to the restart-survival contract, `SPEC.md`,
+`survival-contract: v1`.
+
 An always-on server is supervised, never merely started.
 Hosts are replaceable: a deployment can replace the host
 wholesale — system configuration outside the repo is wiped

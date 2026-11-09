@@ -153,6 +153,16 @@ def _enable(unit: str) -> int:
     return 0
 
 
+def _loaded() -> set[str]:
+    # LoadState model: daemon-reload loads every unit file
+    # then present; a file removed afterwards is not loaded.
+    marker = _state() / "loaded"
+    if not marker.is_file():
+        return set()
+    names = marker.read_text(encoding="utf-8").split()
+    return {n for n in names if (_unit_dir() / f"{n}.service").is_file()}
+
+
 def main(argv: list[str]) -> int:
     _state().mkdir(parents=True, exist_ok=True)
     with open(_state() / "calls.log", "a", encoding="utf-8") as log:
@@ -163,6 +173,15 @@ def main(argv: list[str]) -> int:
     verb = positionals[0]
     unit = positionals[1] if len(positionals) > 1 else ""
     if verb == "daemon-reload":
+        names = [p.stem for p in _unit_dir().glob("*.service")]
+        (_state() / "loaded").write_text(
+            "\n".join(names), encoding="utf-8"
+        )
+        return 0
+    if verb == "show":
+        name = _name(positionals[-1])
+        loaded = name in _loaded()
+        print("loaded" if loaded else "not-found")
         return 0
     if verb == "start":
         return _start(unit)

@@ -167,7 +167,7 @@ class SupervisionDrills(unittest.TestCase):
         self.assertFalse(self.state_path(f"{UNIT}.pid").exists())
         self.assertTrue(self.wait_unhealthy())
 
-    def test_watchdog_reinstalls_missing_unit_without_restart(self):
+    def test_rung3_presence_before_health_quiet_reinstall(self):
         self.run_ops("install-unit.sh")
         self.run_ops("serve.sh", "start")
         self.assertTrue(self.wait_healthy())
@@ -179,7 +179,7 @@ class SupervisionDrills(unittest.TestCase):
         self.assertTrue(self.unit_file.is_file())
         self.assertEqual(self.fake_pid(), pid_before)
 
-    def test_watchdog_restarts_stopped_server(self):
+    def test_rung6_loaded_unit_restarts(self):
         self.run_ops("install-unit.sh")
         self.run_ops("serve.sh", "start")
         self.assertTrue(self.wait_healthy())
@@ -197,7 +197,7 @@ class SupervisionDrills(unittest.TestCase):
         self.assertNotEqual(self.fake_pid(), pid_before)
         self.assertIn(f"restart {UNIT}.service", self.calls())
 
-    def test_watchdog_restores_from_nothing(self):
+    def test_rung6_unloaded_unit_starts(self):
         self.assertFalse(self.unit_file.exists())
         self.run_ops("watchdog.sh")
         self.assertTrue(self.unit_file.is_file())
@@ -256,7 +256,7 @@ class SupervisionDrills(unittest.TestCase):
         self.assertIn(f"restart {UNIT}.service", self.calls())
         self.assertTrue(self.healthy())
 
-    def test_watchdog_wedged_persistent_fails_within_budget(self):
+    def test_rung5_bounded_probe_wedged_persistent(self):
         (self.fake_state / "wedge").write_text("", encoding="utf-8")
         self.run_ops("install-unit.sh")
         self.run_ops("serve.sh", "start")
@@ -267,7 +267,7 @@ class SupervisionDrills(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertLess(elapsed, 90)
 
-    def test_watchdog_fresh_restore_uses_restore_window(self):
+    def test_rung7_fresh_restore_uses_restore_window(self):
         (self.fake_state / "slowstart").write_text("20", encoding="utf-8")
         env = dict(self.env)
         env["FIELDKIT_POLL_SECS"] = "5"
@@ -288,6 +288,43 @@ class SupervisionDrills(unittest.TestCase):
         self.assertTrue(self.healthy())
         self.assertIn(f"start {UNIT}.service", self.calls())
         self.assertNotIn(f"restart {UNIT}.service", self.calls())
+
+    def test_rung4_render_when_invalid_rerenders(self):
+        self.run_ops("install-unit.sh")
+        self.run_ops("serve.sh", "start")
+        self.assertTrue(self.wait_healthy())
+        pid_before = self.fake_pid()
+        with open(self.unit_file, "a", encoding="utf-8") as fh:
+            fh.write("# stale local edit\n")
+        self.run_ops("watchdog.sh")
+        text = self.unit_file.read_text(encoding="utf-8")
+        self.assertNotIn("stale local edit", text)
+        self.assertEqual(self.fake_pid(), pid_before)
+
+    def test_rung8_episode_cap(self):
+        template = self.repo / "ops" / "server.service.tmpl"
+        text = template.read_text(encoding="utf-8")
+        template.write_text(
+            text.replace("backend.apps.server", "backend.apps.unstartable"),
+            encoding="utf-8",
+        )
+        first = self.run_ops("watchdog.sh", check=False, poll_secs=8)
+        self.assertNotEqual(first.returncode, 0)
+        verbs = [
+            line
+            for line in self.calls()
+            if line.startswith(("start ", "restart "))
+        ]
+        self.assertTrue(verbs)
+        second = self.run_ops("watchdog.sh", check=False, poll_secs=8)
+        self.assertNotEqual(second.returncode, 0)
+        self.assertIn("episode cap", second.stderr)
+        verbs_after = [
+            line
+            for line in self.calls()
+            if line.startswith(("start ", "restart "))
+        ]
+        self.assertEqual(verbs_after, verbs)
 
     def test_service_flavor_instance_renders(self):
         result = subprocess.run(

@@ -32,6 +32,15 @@ sed -e "s|@ROOT@|$ROOT|g" -e "s|@PYTHON@|$PYTHON|g" \
     -e "s|@PORT@|$PORT|g" -e "s|@UNIT@|$UNIT|g" \
     "$OPS_DIR/server.service.tmpl" > "$tmp"
 
+if [[ "${1:-}" == "--check" ]]; then
+  if [[ -f "$UNIT_FILE" ]] && cmp -s "$tmp" "$UNIT_FILE"; then
+    echo "install-unit: $UNIT.service matches the current render"
+    exit 0
+  fi
+  echo "install-unit: $UNIT.service missing or differs from the current render"
+  exit 1
+fi
+
 mkdir -p "$UNIT_DIR" "$ROOT/var/state"
 if [[ -f "$UNIT_FILE" ]] && cmp -s "$tmp" "$UNIT_FILE"; then
   echo "install-unit: $UNIT.service already installed (unchanged)"

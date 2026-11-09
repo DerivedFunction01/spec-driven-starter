@@ -13,17 +13,22 @@
 #   healthy + supervised: exit 0, silent.
 #   healthy + unit file missing (the wiped-unit-dir case):
 #     reinstall quietly, exit 0.
+#   healthy + unit present but not byte-equal to the current
+#     render: re-render quietly (render-when-invalid).
 #   healthy + unit installed but not active: a foreign process
 #     holds the port. Fail loud — the ladder never races a
 #     process it does not supervise; an operator stops it.
-#   down + unit absent at entry: install, then START (a unit
-#     that was never loaded is started, not restarted), and
-#     confirm on the long restore window — a fresh unit's
+#   down + unit not loaded at entry: install, then START (a
+#     unit that was never loaded is started, not restarted),
+#     and confirm on the long restore window — a fresh unit's
 #     first start may sweep before the port binds.
 #   down + unit loaded: RESTART — wedged (active, unresponsive)
 #     and stopped alike — confirm on the ordinary window.
 #   fallback: ops/serve.sh start, the direct path when no unit
 #     could be installed, then confirm again.
+# The ladder attempts once per episode: an attempt writes an
+# episode marker, and a pass that finds a fresh marker
+# escalates (exit 1, note) instead of re-running the ladder.
 # Exit 1: every rung failed, or the foreign shape — a failure
 # note is appended to the state log and printed to stderr;
 # surfacing it is the keeper's job. Invocation is by an
@@ -34,8 +39,9 @@
 #
 # Test seams (env): FIELDKIT_UNIT_DIR, FIELDKIT_SYSTEMCTL,
 # FIELDKIT_POLL_SECS (ordinary confirm window, default 60),
-# FIELDKIT_RESTORE_POLL_SECS (fresh-restore window, 240),
-# FIELDKIT_PROBE_SECS (hard probe budget, default 10).
+# FIELDKIT_RESTORE_POLL_SECS (fresh-restore window, 180),
+# FIELDKIT_PROBE_SECS (hard probe budget, default 10),
+# FIELDKIT_EPISODE_SECS (episode-cap window, default 900).
 set -uo pipefail
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
@@ -55,8 +61,10 @@ STATE_DIR="$ROOT/var/state"
 STATE_LOG="$STATE_DIR/$UNIT.log"
 HEALTH_URL="http://$HOST:$PORT/health"
 POLL_SECS="${FIELDKIT_POLL_SECS:-60}"
-RESTORE_POLL_SECS="${FIELDKIT_RESTORE_POLL_SECS:-240}"
+RESTORE_POLL_SECS="${FIELDKIT_RESTORE_POLL_SECS:-180}"
 PROBE_SECS="${FIELDKIT_PROBE_SECS:-10}"
+EPISODE_SECS="${FIELDKIT_EPISODE_SECS:-900}"
+EPISODE_MARKER="$STATE_DIR/$UNIT.episode"
 
 healthy() {
   timeout "$PROBE_SECS" curl -s --max-time 5 -o /dev/null "$HEALTH_URL"
@@ -64,6 +72,14 @@ healthy() {
 
 supervised_active() {
   "$SYSTEMCTL" is-active --quiet "$UNIT.service" 2>/dev/null
+}
+
+unit_loaded() {
+  [[ "$("$SYSTEMCTL" show -p LoadState --value "$UNIT.service" 2>/dev/null)" == "loaded" ]]
+}
+
+unit_current() {
+  bash "$OPS_DIR/install-unit.sh" --check >>"$STATE_LOG" 2>&1
 }
 
 wait_healthy() {
@@ -92,32 +108,44 @@ install_quiet() {
 mkdir -p "$STATE_DIR"
 UNIT_MISSING_AT_ENTRY=0
 [[ -f "$UNIT_FILE" ]] || UNIT_MISSING_AT_ENTRY=1
+LOADED_AT_ENTRY=0
+unit_loaded && LOADED_AT_ENTRY=1
 
 if healthy; then
   if (( UNIT_MISSING_AT_ENTRY )); then
     install_quiet || fail "server healthy but unit reinstall failed"
-    if supervised_active; then
-      exit 0
-    fi
-    fail "port answers at $HEALTH_URL but the responder is not the supervised unit's process; stop the foreign process and the ladder will restore supervision"
+  elif ! unit_current; then
+    install_quiet || fail "server healthy but unit re-render failed"
   fi
   if supervised_active; then
+    rm -f "$EPISODE_MARKER"
     exit 0
   fi
   fail "port answers at $HEALTH_URL but the responder is not the supervised unit's process; stop the foreign process and the ladder will restore supervision"
 fi
 
-# Down. (Re)install first: idempotent, and it loads the unit.
+# Down. One ladder attempt per episode: a fresh marker means
+# this episode already had its attempt — escalate, don't retry.
+if [[ -f "$EPISODE_MARKER" ]]; then
+  MARKER_AGE=$(( $(date +%s) - $(stat -c %Y "$EPISODE_MARKER") ))
+  if (( MARKER_AGE < EPISODE_SECS )); then
+    fail "episode cap: the ladder already attempted a restore this episode; escalating instead of retrying"
+  fi
+fi
+date +%s > "$EPISODE_MARKER"
+
+# (Re)install first: idempotent, and it loads the unit.
 if install_quiet; then
-  if (( UNIT_MISSING_AT_ENTRY )); then
-    VERB="start"
-    WINDOW="$RESTORE_POLL_SECS"
-  else
+  if (( LOADED_AT_ENTRY )); then
     VERB="restart"
     WINDOW="$POLL_SECS"
+  else
+    VERB="start"
+    WINDOW="$RESTORE_POLL_SECS"
   fi
   "$SYSTEMCTL" "$VERB" "$UNIT.service" >>"$STATE_LOG" 2>&1 || true
   if wait_healthy "$WINDOW" && supervised_active; then
+    rm -f "$EPISODE_MARKER"
     exit 0
   fi
 fi
@@ -125,6 +153,7 @@ fi
 # Fallback: the serve.sh path (direct start, or a retry).
 bash "$OPS_DIR/serve.sh" start >>"$STATE_LOG" 2>&1 || true
 if wait_healthy "$POLL_SECS"; then
+  rm -f "$EPISODE_MARKER"
   exit 0
 fi
 
