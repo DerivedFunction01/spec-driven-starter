@@ -74,6 +74,10 @@ ops/               the supervision kit: unit template, installer,
                    serve script, watchdog (docs/primitives.md)
 connector/         the harness-connector client stub + caller
                    registration (docs/connector-setup.md)
+skills/            tracked agent skills in the open SKILL.md
+                   format: the coding playbooks and the harsh
+                   UI critic; a consuming repo's harness links
+                   them into its own skill locations
 deploy/            deploy script + the platform contracts it needs
 tests/             the test suite (unittest style, run by pytest)
 check.py           the gate: ruff, policy scanners, tests (docs/checks.md)

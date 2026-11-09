@@ -15,10 +15,8 @@ from pathlib import Path
 
 import pytest
 
-# The drills spend real wall-clock time by design — poll
-# windows, bounded probes, a 20 s startup sweep are the
-# subjects under test — so the module's ceiling is sized
-# to the drills, not to the unit tests' default.
+# The drills spend real wall-clock time by design, so the
+# module's ceiling is sized to the drills, not the default.
 pytestmark = pytest.mark.timeout(240)
 
 ROOT = Path(__file__).resolve().parents[1]
