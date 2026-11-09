@@ -77,7 +77,11 @@ tests/             the test suite (unittest style, run by pytest)
 check.py           the gate: ruff, policy scanners, tests (docs/checks.md)
 pyproject.toml     the tooling seam: pins + ruff/pytest config
 init_venv.py       the environment builder (each repo owns its own)
-workbench.yaml     the workbench manifest for plan/todo tracking
+workbench.yaml     the workbench manifest for plan/todo tracking,
+                   classified under the shared catalog vocabulary
+examples/registry/ tracked placeholder specimens (a schedule
+                   entry, classified, parameters unfilled) that
+                   a repo born here adopts from
 ```
 
 ## The rules in one paragraph

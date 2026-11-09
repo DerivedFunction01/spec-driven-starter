@@ -1,0 +1,43 @@
+# Tracked placeholder — a specimen schedule entry for the
+# repo born from this starter, classified under the shared
+# catalog vocabulary (the classified-schedule-catalog plan).
+# It is a placeholder, not a live entry: classification is
+# descriptive, never activating. Adoption is an act — copy
+# the entry into the scheduler's live overlay, fill every
+# declared parameter, and run the scheduler's admission flow
+# (validate, proof run, migrated marker). Angle-bracketed
+# values are unfilled parameters; this file carries no
+# deployment values, which is why it can be tracked.
+id: example-watchdog-driver
+title: Example watchdog driver (placeholder — adopt, do not run as-is)
+kind: scripted
+status: placeholder
+cadence:
+  type: interval
+  every: <cadence>
+owner: goal:example
+run:
+  argv:
+    - bash
+    - ${REPO}/ops/watchdog.sh
+timeout_secs: 300
+report:
+  when: on_failure
+  route: <notify_route>
+state_paths:
+  - ${REPO}/var/state
+classification: fixed command; the watchdog is silent on success or restore and speaks only on ladder failure (exit 1 with a state-log note), so every outcome branches on the exit code
+lifetime: permanent
+migrated: false
+catalog:
+  origin: hand
+  generality: parameterized
+  use_case: fleet-health
+  parameters:
+    - name: cadence
+      required: true
+    - name: notify_route
+      required: true
+    - name: health_path
+      default: /health
+  source: null

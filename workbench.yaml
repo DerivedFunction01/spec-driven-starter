@@ -1,9 +1,31 @@
 # Workbench manifest: plans and todos for this project live
 # under the plans directory named here, one todo file per step,
 # created before work starts and moved at each transition.
+# The catalog block classifies this manifest under the shared
+# catalog vocabulary (the classified-schedule-catalog plan):
+# adopting a project is copying this specimen and filling its
+# declared parameters — the manifest's own fields.
 name: Spec-Driven Starter
 slug: spec-driven-starter
 registry: workbench/registry.db
 plans: .plans
 mockups: workbench/entries
 archive: workbench/archive
+catalog:
+  origin: hand
+  generality: parameterized
+  use_case: work-tracking
+  parameters:
+    - name: name
+      required: true
+    - name: slug
+      required: true
+    - name: registry
+      required: true
+    - name: plans
+      required: true
+    - name: mockups
+      required: true
+    - name: archive
+      required: true
+  source: null
