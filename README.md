@@ -72,6 +72,8 @@ flavors/           per-shape overlays over the shared core:
                    service, tool, full-stack, webapp (TypeScript)
 ops/               the supervision kit: unit template, installer,
                    serve script, watchdog (docs/primitives.md)
+connector/         the harness-connector client stub + caller
+                   registration (docs/connector-setup.md)
 deploy/            deploy script + the platform contracts it needs
 tests/             the test suite (unittest style, run by pytest)
 check.py           the gate: ruff, policy scanners, tests (docs/checks.md)
