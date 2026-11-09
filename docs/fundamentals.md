@@ -64,11 +64,24 @@ render at install time from the settings seam, an installer
 that can re-render the unit on a bare host, a serve script
 that delegates to the supervisor whenever the unit is
 installed, and a watchdog restore ladder that an external
-keeper polls. The supervisor contract is abstract — starts
-at boot, restarts on failure, health-probed by the keeper —
-so a non-systemd host supplies its own renderer behind the
-same ladder semantics. A successful restore is routine and
-silent; only ladder failure surfaces to the operator.
+keeper polls every few minutes (downtime is bounded by that
+cadence plus ladder time). The supervisor contract is
+abstract — starts at boot, restarts on failure,
+health-probed by the keeper — so a non-systemd host supplies
+its own renderer behind the same ladder semantics. A
+successful restore is routine and silent; only ladder
+failure surfaces to the operator.
+The ladder's verdict is supervision itself: an answering
+port alone never counts as recovered — the responder must
+be the supervised unit's own process, and a foreign process
+holding the port fails loud rather than being raced. The
+health probe bounds the whole read under a hard budget, so
+a wedged service (headers sent, body stalled) cannot hang
+the watchdog itself. Repair shapes are distinct: unit-absent
+is installed and *started* on a long restore window (a fresh
+unit's first start may sweep before the port binds), a
+loaded unit is *restarted*, and restarting a unit that was
+never loaded is spent motion.
 
 ## Standing rules
 

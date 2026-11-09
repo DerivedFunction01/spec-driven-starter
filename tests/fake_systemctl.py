@@ -76,6 +76,23 @@ def _open_log(cfg: dict, key: str):
     return subprocess.DEVNULL
 
 
+def _argv(cfg: dict) -> list[str]:
+    # State-dir drill flags reshape the spawn: `wedge` stalls
+    # the response; `slowstart` (content: seconds) delays it.
+    state = _state()
+    if (state / "wedge").is_file():
+        port = cfg["env"].get("FIELDKIT_PORT", "0")
+        wedge = Path(__file__).with_name("wedge_server.py")
+        return [sys.executable, str(wedge), port]
+    argv = shlex.split(cfg["exec"])
+    slow = state / "slowstart"
+    if slow.is_file():
+        secs = slow.read_text(encoding="utf-8").strip()
+        wrapper = Path(__file__).with_name("slow_start.py")
+        argv = [sys.executable, str(wrapper), secs, *argv]
+    return argv
+
+
 def _start(unit: str) -> int:
     name = _name(unit)
     if _pid(name) is not None:
@@ -88,7 +105,7 @@ def _start(unit: str) -> int:
     env.update(cfg["env"])
     try:
         proc = subprocess.Popen(
-            shlex.split(cfg["exec"]),
+            _argv(cfg),
             cwd=cfg.get("cwd"),
             env=env,
             stdout=_open_log(cfg, "out"),

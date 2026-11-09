@@ -70,6 +70,7 @@ class SupervisionDrills(unittest.TestCase):
         env = dict(self.env)
         if poll_secs is not None:
             env["FIELDKIT_POLL_SECS"] = str(poll_secs)
+            env["FIELDKIT_RESTORE_POLL_SECS"] = str(poll_secs)
         result = subprocess.run(
             ["bash", str(self.repo / "ops" / script), *args],
             cwd=self.repo,
@@ -194,6 +195,7 @@ class SupervisionDrills(unittest.TestCase):
         self.assertTrue(self.healthy())
         self.assertIsNotNone(self.fake_pid())
         self.assertNotEqual(self.fake_pid(), pid_before)
+        self.assertIn(f"restart {UNIT}.service", self.calls())
 
     def test_watchdog_restores_from_nothing(self):
         self.assertFalse(self.unit_file.exists())
@@ -214,6 +216,78 @@ class SupervisionDrills(unittest.TestCase):
         log = self.state_path(f"{UNIT}.log")
         self.assertTrue(log.is_file())
         self.assertIn("ladder failed", log.read_text(encoding="utf-8"))
+
+    def test_watchdog_foreign_responder_fails_loudly(self):
+        self.run_ops("serve.sh", "start")
+        self.assertTrue(self.wait_healthy())
+        pid_file = self.state_path(f"{UNIT}.pid")
+        foreign_pid = int(pid_file.read_text(encoding="utf-8").strip())
+        try:
+            self.run_ops("install-unit.sh")
+            result = self.run_ops("watchdog.sh", check=False)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("not the supervised", result.stderr)
+            self.assertNotIn(f"start {UNIT}.service", self.calls())
+            self.assertNotIn(f"restart {UNIT}.service", self.calls())
+        finally:
+            try:
+                os.kill(foreign_pid, 9)
+            except OSError:
+                pass
+
+    def healthy_full(self):
+        try:
+            url = f"http://127.0.0.1:{self.port}/health"
+            with urllib.request.urlopen(url, timeout=3) as res:
+                res.read()
+                return res.status == 200
+        except OSError:
+            return False
+
+    def test_watchdog_wedged_unit_restarts_and_recovers(self):
+        (self.fake_state / "wedge").write_text("", encoding="utf-8")
+        self.run_ops("install-unit.sh")
+        self.run_ops("serve.sh", "start")
+        self.assertFalse(self.healthy_full())
+        (self.fake_state / "wedge").unlink()
+        started = time.monotonic()
+        self.run_ops("watchdog.sh", poll_secs=30)
+        self.assertLess(time.monotonic() - started, 60)
+        self.assertIn(f"restart {UNIT}.service", self.calls())
+        self.assertTrue(self.healthy())
+
+    def test_watchdog_wedged_persistent_fails_within_budget(self):
+        (self.fake_state / "wedge").write_text("", encoding="utf-8")
+        self.run_ops("install-unit.sh")
+        self.run_ops("serve.sh", "start")
+        self.assertFalse(self.healthy_full())
+        started = time.monotonic()
+        result = self.run_ops("watchdog.sh", check=False, poll_secs=8)
+        elapsed = time.monotonic() - started
+        self.assertNotEqual(result.returncode, 0)
+        self.assertLess(elapsed, 90)
+
+    def test_watchdog_fresh_restore_uses_restore_window(self):
+        (self.fake_state / "slowstart").write_text("20", encoding="utf-8")
+        env = dict(self.env)
+        env["FIELDKIT_POLL_SECS"] = "5"
+        env["FIELDKIT_RESTORE_POLL_SECS"] = "60"
+        started = time.monotonic()
+        result = subprocess.run(
+            ["bash", str(self.repo / "ops" / "watchdog.sh")],
+            cwd=self.repo,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        elapsed = time.monotonic() - started
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertGreaterEqual(elapsed, 18)
+        self.assertTrue(self.unit_file.is_file())
+        self.assertTrue(self.healthy())
+        self.assertIn(f"start {UNIT}.service", self.calls())
+        self.assertNotIn(f"restart {UNIT}.service", self.calls())
 
     def test_service_flavor_instance_renders(self):
         result = subprocess.run(

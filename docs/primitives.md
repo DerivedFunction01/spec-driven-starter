@@ -46,13 +46,20 @@ install), `install-unit.sh` (the idempotent render into the
 supervisor's unit dir), `serve.sh` (start/stop/restart/status —
 delegates to the supervisor when the unit is installed, the
 direct pidfile path when it is not), and `watchdog.sh` (the
-restore ladder: probe health, reinstall a missing unit,
-restart under supervision, fall back to the serve path; silent
-on success, nonzero with a note in `var/state/<unit>.log` on
-failure). Values resolve from the settings seam via
-`backend/apps/ops_values.py`. An external keeper polls the
-watchdog; the kit ships the ladder and that contract, never a
-host-specific poller binding.
+restore ladder: a twice-bounded health probe; shape
+classification — healthy-supervised, unit-absent,
+foreign-responder, wedged, down; the repair verb keyed on
+load state, start for a freshly installed unit on the long
+restore window, restart for a loaded one; the serve path as
+fallback; silent on success, nonzero with a note in
+`var/state/<unit>.log` on failure — the foreign shape fails
+loud by design, never raced). Recovery counts only when the
+responder is the unit's own process. Values resolve from the
+settings seam via `backend/apps/ops_values.py`. An external
+keeper polls the watchdog every few minutes; the kit ships
+the ladder and that contract, never a host-specific poller
+binding. Drills for every shape live in
+`tests/test_supervision.py`.
 
 ## Plan file (see `docs/plan-template.md`)
 
