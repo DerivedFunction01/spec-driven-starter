@@ -109,6 +109,72 @@ this section first and bumps the version; conforming repos
 re-conform against the delta and restamp. No repo edits
 its copy of the pattern unilaterally.
 
+## File-registry contract — v1
+
+`file-registry: v1`
+
+The canonical pattern for knowing which files must exist
+after a host restart, and for putting back the ones that
+can be put back. Losses this contract exists to catch
+early: state directories wiped with a worktree closeout
+and no surviving copy, and truncated files left at zero
+bytes by a failed write — both read as merely missing
+downstream, far from the event that caused them. A
+conforming registry and checker hold all of these:
+
+1. **One manifest format.** A registry is a YAML manifest
+   of entries; each entry names a path or glob resolved
+   against a declared root anchor, a presence rule, a
+   restore class with its source, and the owner who is
+   flagged when the entry cannot be made good. The format
+   is the contract; the live manifest is untracked data,
+   seeded from the tracked specimen in
+   `examples/registry/`.
+2. **Presence is exact.** The rules are `exists`,
+   `non-empty`, and `sha256` (the entry carries the
+   expected digest). A missing file fails every rule; a
+   zero-byte file fails `non-empty` and `sha256` — a
+   truncated file is a failed file, never a present one.
+   A glob entry checks every match, and a glob matching
+   nothing fails unless the entry is marked optional.
+3. **Restore by class, from the declared source only:**
+   a tracked file is restored from its repo; a generated
+   file by re-running its declared generator; a live
+   untracked file from its declared backup. No class
+   restores from anywhere else, and no restore invents
+   content.
+4. **Flag-only is a class, not a failure of imagination.**
+   An entry with no restore source is flagged to its
+   owner and left alone: the checker never writes a
+   plausible substitute for a file it cannot restore.
+5. **Restart-triggered, restore-first.** The checker runs
+   when restart detection fires (an interval pass and a
+   manual pass are the same code path); it restores what
+   is restorable automatically, re-checks each restored
+   entry against its presence rule, and reports the rest.
+   A restore that does not satisfy the rule is a flag,
+   not a success.
+6. **The report names the exceptions.** One report per
+   pass: every entry not ok, with its verdict (restored,
+   or flagged with the reason) and the action taken.
+   Entries that pass are counted, not listed.
+7. **One contract, three workhorses.** The scheduler,
+   the workspace harness, and the session venue each run
+   a conforming checker over the registries anchored in
+   their own domain; a registry written for one parses
+   under any conforming checker, and no workhorse extends
+   the format unilaterally.
+8. **The seed list is a ruling, not a default.** Which
+   files are critical enough to register first is a named
+   decision in `docs/file-registry.md`, taken when the
+   first checker is commissioned; the candidates named
+   there are examples, not a list in force.
+
+`docs/file-registry.md` is this contract's full text: the
+manifest format field by field, the check contract, and
+the seed-list decision. A format change amends this
+section first and bumps the version.
+
 ## Provenance
 
 Authored for this starter as a fictional worked example.
