@@ -122,11 +122,11 @@
 
 - File census findings in the standard finding schema with the leg named as the category, and propose a scanner rule for every census class that is mechanically detectable — label collisions, prose-bullet lists carrying actions, and header crowding are DOM-checkable, and a class caught by eye once should not need a human eye twice.
 
-## Blind spots the polish census closes
+## Why the census is graded on evidence
 
-- The census exists because of a measured escape: on 2026-11-09 a project owner walked a shipped build on his phone and filed 13 structural-polish defect groups; scored against the previous run's own record, 0 of the 13 were fully caught, 3 were caught only by family (unstyled desktop tables; raw codes and ids rendered as UI; raw closure ranges), and 10 were missed outright — the run's legs had asked persona-journey questions, visited some surfaces at desktop width only, and only ever rendered filled data.
+- Persona journeys alone miss structural polish: they follow tasks, not surfaces — a surface visited only at desktop width, or only ever rendered with filled data, is effectively unvisited. The census legs close exactly those holes: surface-by-surface coverage, phone width, empty and filled renders.
 
-- The next run after this census lands is its proving run: it is graded not only on the build but on whether the census legs produce evidence on the surfaces the previous run missed; a census that finds nothing and evidences nothing has failed in the same way.
+- Every census run is graded on evidence, not findings: a run whose legs produce no rendered evidence on the surfaces they cover has failed, even when it reports no defects. A run that finds nothing and evidences nothing has not run the census.
 
 ## Stress with hostile data
 
