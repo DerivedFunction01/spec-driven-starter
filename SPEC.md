@@ -109,6 +109,80 @@ this section first and bumps the version; conforming repos
 re-conform against the delta and restamp. No repo edits
 its copy of the pattern unilaterally.
 
+## Stack-dump contract — v1
+
+`stackdump-contract: v1`
+
+The canonical instrumentation every always-on server
+built from this starter carries, so a wedged process
+names its own root cause before any external ladder
+restarts it and destroys the evidence. The dump is
+diagnostic only: it never restarts, kills, or mutates
+anything — recovery stays with the survival contract's
+ladders — and it adds no new authority and no new
+external surface. A server conforms when all of these
+hold:
+
+1. **In-process watchdog thread:** a dedicated daemon
+   thread, started with the server, performs an internal
+   health check on a fixed cadence (default 5 s): it
+   stamps a heartbeat, then verifies the server's own
+   health path answers from inside the process — the
+   same computation the external health route serves,
+   called directly, never an HTTP self-call, which would
+   measure the acceptor instead of the handlers.
+2. **Lag threshold:** when the internal check has not
+   completed within the threshold (default 15 s — three
+   missed cadences), the watchdog declares a lag event.
+   Cadence and threshold are config in the server's
+   existing config seam, with the contract defaults as
+   the shipped values.
+3. **The dump:** on a lag event the watchdog writes one
+   dump to the server's state/log area: a header line
+   (UTC timestamp, server name, contract version, lag
+   duration, heartbeat age) followed by every live
+   Python thread's stack — thread names, frame files,
+   line numbers, and function names only, never frame
+   locals or request data. The write goes through a
+   dedicated file handle opened at startup, in append
+   mode, taking no lock shared with request handling:
+   the watchdog's own work per cycle is a deadline check
+   plus an in-memory frame read and one append, so the
+   dump mechanism cannot hang on the wedge it diagnoses.
+4. **Repeat and size discipline:** while a lag persists,
+   dumps repeat at most once per 60 s; the first dump
+   after recovery begins a new event. Dumps are capped
+   in aggregate (default: the dump file rotates or
+   truncates at 16 MiB), so a long wedge cannot fill the
+   disk the recovery ladder needs.
+5. **Contract tests:** the server's suite carries (a) a
+   test that a handler deliberately parked past the
+   threshold produces a dump naming the parked frame,
+   with the watchdog thread itself never blocking on the
+   parked handler's locks; (b) a test that a healthy
+   server produces no dump over several cadences; (c) a
+   test that the dump file's size cap holds under
+   repeated lag events.
+6. **External legibility:** the dump file's location is
+   named in the server's supervision doc beside the
+   contract stamp, and the server's health payload or
+   state file reports the last dump's timestamp — one
+   field, no content — so an external watcher can tell
+   "wedged and dumped" from "wedged silently" without
+   reading the dump.
+7. **Version stamp:** the server's supervision or
+   architecture doc carries `stackdump-contract: v1`;
+   conformance is claimed only when 1–6 hold and the
+   suite carries 5.
+
+The sketch in `ops/stackdump.py` is this contract's
+reference shape; a conforming server adapts it to its own
+config seam and health computation. A contract change
+amends this section first and bumps the version;
+conforming repos re-conform against the delta and
+restamp. No repo edits its copy of the contract
+unilaterally.
+
 ## File-registry contract — v1
 
 `file-registry: v1`
