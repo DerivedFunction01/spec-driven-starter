@@ -22,6 +22,7 @@ class StackDumpWatchdog:
         self._repeat = repeat_s
         self._max_bytes = max_bytes
         self._last_ok = time.monotonic()
+        self._heartbeat = self._last_ok
         self._last_dump = 0.0
         self.last_dump_at = None
         self._handle = None
@@ -36,8 +37,13 @@ class StackDumpWatchdog:
 
     def _check(self):
         while True:
-            self._health()
-            self._last_ok = time.monotonic()
+            self._heartbeat = time.monotonic()
+            try:
+                ok = self._health()
+            except Exception:
+                ok = False
+            if ok:
+                self._last_ok = time.monotonic()
             time.sleep(self._cadence)
 
     def _watch(self):
@@ -55,9 +61,11 @@ class StackDumpWatchdog:
             self._handle.seek(0)
             self._handle.truncate()
         stamp = datetime.now(timezone.utc).isoformat()
+        heartbeat_age = time.monotonic() - self._heartbeat
         self._handle.write(
             f"\n=== stackdump {stamp} server={self._name} "
-            f"contract=v1 lag={lag:.1f}s ===\n")
+            f"contract=v1 lag={lag:.1f}s "
+            f"heartbeat_age={heartbeat_age:.1f}s ===\n")
         faulthandler.dump_traceback(file=self._handle)
         self._handle.flush()
         self.last_dump_at = stamp
