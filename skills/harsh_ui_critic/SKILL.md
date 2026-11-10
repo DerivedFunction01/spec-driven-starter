@@ -84,6 +84,50 @@
 
 - Build an input-pair matrix for any class that depends on data combinations (the pairs of values that co-occur), and automate the matrix where the project's harness allows it.
 
+## Run the polish census
+
+- Run this census on every run, over the same rendered surfaces as the rendered review: it is a conformance pass over structure — affordances, layout stability, sheets, lists, headers, labels, control chrome, and form structure — not a journey, and persona legs never substitute for it. A surface can pass every journey and fail this census; that failure is a verdict input like any other.
+
+- Produce rendered evidence at phone width for every leg: a leg that cannot produce evidence is recorded as unexercised, never passed, and an unexercised census leg is named in the report as plainly as an unexercised contract state.
+
+- Census leg — action affordances: within any card, row set, or sheet, actions of the same class render the same affordance; a navigation action styled as a bare text link beside a button-styled commit action is a finding, as is any same-class pair a user has to read twice to tell apart.
+
+- Census leg — empty-state layout stability: render every form and card twice, empty and filled, and compare control positions between the two renders; any control that moves, resizes, or changes row when a field is blank is a finding — layout is graded on the empty render as strictly as on the filled one, because first use is always empty.
+
+- Census leg — sheet conformance: exactly one sheet implementation serves every surface; measure each sheet against it — top-corner radius, grab handle, padding rhythm — and exercise every sheet with content tall enough to outgrow the viewport: a sheet that cannot scroll internally, or that traps or cuts off an entry, is a finding.
+
+- Census leg — list structure: a list that carries a per-item action renders as structured rows, never as prose bullets with the action embedded in the text; the action is sized to its row — an icon or a small button — and a full-width button inside a list item is a finding on its own.
+
+- Census leg — header actions: no full-size button shares a line with a section or page header; a header's actions live in a defined slot at icon or small-button size, or on their own row below the header — a button jammed against a heading is a finding even when nothing overflows.
+
+- Census leg — duplicate labels: within one menu, sheet, or page, identical visible labels must name the same destination or action; two different destinations sharing one label is a finding, and the census lists every label collision it finds, not just the first.
+
+- Census leg — control chrome, extended: the browser-default lens covers every control class, not only tables — segmented toggles, previous/today/next navigation groups, selects, and file inputs at every calendar, editor, and settings surface are the design system's control at the standard size; a default-looking control, or a bespoke control at a non-standard size, is a finding.
+
+- Census leg — parameter completeness: a row, chip, or label that names a state whose meaning depends on parameters shows the parameters — a behaviour named "extended break" with no date range on the row, a limit with no number, a schedule with no hours is a finding: the name alone is not the state.
+
+- Census leg — form structure: a multi-section form reads as grouped sections — dividers or visible grouping, one section vocabulary, and a per-section state summary (set, not set, needs attention) visible without opening the section; a stack of undifferentiated bars with no grouping and no state is a finding even when every field inside it works.
+
+- Coverage rule for the census: every admin and settings surface is exercised at phone width as well as desktop; a surface visited only at desktop width is unexercised for this census and is reported that way. Horizontal overflow at phone width is measured by the mechanical sweep's geometry leg — cite its output here rather than re-measuring it.
+
+- Anchor leg — external anchors: reference-first is the standing rule — a surface's design is anchored on the mass-market app whose pattern governs that surface class, unless the record shows a deliberate, ruled departure. Before judging any surface, name its anchor; the run report carries an anchor map (surface → anchor) for every surface exercised, including surfaces with no anchor finding.
+
+- Anchor leg — anchor provenance: take anchors from, in order, (1) the project's own record — a ruling or study that names the reference; then (2) the obvious platform governor for the class — the dominant calendar apps for calendars, the dominant payment dashboards for money forms, the operating-system settings idiom for settings, the spreadsheet app's workbook conventions for spreadsheets and exports, and the dominant accounting or payment dashboards for finance dashboards. A pattern proven in the owner's other shipped products and recorded for this project is also an anchor source: for a class with a named external governor it ranks below that governor, and above an unanchored invention. Familiarity or taste is not a source.
+
+- Anchor leg — UNANCHORED: a surface for which no anchor can be named is filed as UNANCHORED — an invented-shape risk. The finding proposes an anchor for the owner's ruling; the critic never silently adopts its own nomination.
+
+- Anchor leg — DIVERGENT: a surface that departs from its anchor's pattern with no ruled departure on record is filed as DIVERGENT. The finding names the anchor pattern and the divergence; a ruled departure, cited, closes it.
+
+- Anchor leg — anchor evidence: evidence the anchor pattern like any other appearance claim — a rendered capture or a precise, checkable description of the reference pattern, never an appeal to taste. Where the reference cannot be rendered in the run's environment, the anchor leg is unexercised for that surface, never passed on memory.
+
+- File census findings in the standard finding schema with the leg named as the category, and propose a scanner rule for every census class that is mechanically detectable — label collisions, prose-bullet lists carrying actions, and header crowding are DOM-checkable, and a class caught by eye once should not need a human eye twice.
+
+## Blind spots the polish census closes
+
+- The census exists because of a measured escape: on 2026-11-09 a project owner walked a shipped build on his phone and filed 13 structural-polish defect groups; scored against the previous run's own record, 0 of the 13 were fully caught, 3 were caught only by family (unstyled desktop tables; raw codes and ids rendered as UI; raw closure ranges), and 10 were missed outright — the run's legs had asked persona-journey questions, visited some surfaces at desktop width only, and only ever rendered filled data.
+
+- The next run after this census lands is its proving run: it is graded not only on the build but on whether the census legs produce evidence on the surfaces the previous run missed; a census that finds nothing and evidences nothing has failed in the same way.
+
 ## Stress with hostile data
 
 - Re-run the primary routes with hostile fixtures before verdict: the longest plausible names and titles, a full period's list at maximum realistic size, very large numbers, and translations or copy roughly a third longer than the default language.
