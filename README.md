@@ -67,7 +67,12 @@ backend/           layered Python: foundation, domain, infra,
                    services, apps (imports point downward only)
 frontend/          a framework-free client; renders the API model,
                    recomputes nothing but arithmetic over served data
-tools/             the flavor applier (scanners live in the backend)
+tools/             the flavor applier (scanners live in the
+                   backend) and the spec-file sync script, which
+                   keeps the repos that carry copies of the
+                   spec-form files byte-identical to this repo
+                   per an untracked registry
+                   (var/config/spec-sync.json)
 flavors/           per-shape overlays over the shared core:
                    service, tool, full-stack, webapp (TypeScript)
 ops/               the supervision kit: unit template, installer,
