@@ -33,6 +33,7 @@
 - Base the approach on the patterns found during exploration and follow them unless the plan explains why a deviation is better.
 - Weigh the trade-offs of the plausible approaches and record the decision and its cost in the plan.
 - Name the dependencies between steps and order the steps so each one can be built and checked on its own.
+- State the plan's parallelization as part of the design: which steps run as parallel lanes, the already-landed shared contracts those lanes rely on (kit primitives, served shapes, schemas), and — for every step kept serial — the named shared file or shared state that forces it. Plan numbering is not a dependency, and a step order is not a reason.
 - Anticipate the challenges, edge cases and failure modes the implementation is likely to hit and say how each one will be handled or tested.
 
 ## Detail the plan
@@ -46,6 +47,7 @@
   6. `## Open questions` — present only when questions remain; never leave the section empty.
   7. `## Subplans` — present only when the plan decomposes into subplans; omit it otherwise. One bullet per subplan, each a backticked path relative to the project's `.plans/` directory. The parent alone declares its subplans: a subplan declares nothing back — no `Parent:` field, no back-reference — and the viewer groups the Plans list on this declaration alone.
   8. `## Critical files` — the closing section (see below); nothing after it in the file.
+- State the parallelization in `## Rulings` as one ruling: the lane split (which steps run concurrently, and over which landed contracts) and each serial exception with its named shared file or state. A plan whose steps all run serially states the shared constraint that forces it; a plan with no parallelization ruling is unfinished.
 - Write each step as a `### Step N — Title` heading whose body names the files to create or change and what changes in each one. Close every step with three labeled lines, in this order: `files:` (the paths the step touches), `verify:` (the tests to add or run, with the exact test paths or commands where the codebase makes them known — or, when a step has no meaningful verification, the literal line `verify: unverifiable — <reason>`), and `done when:` (the observable condition that ends the step).
 - Plans carry decisions, not transcripts. Never quote the user's messages, or any part of the conversation, into the plan: a ruling enters as a decision statement under `## Rulings`, in the plan's own words, never as a quoted block. Reserve blockquotes (`>`) for verbatim material whose exact text is load-bearing: error output, excerpts from sources, contract or API text.
 - Keep the plan brief enough to follow at a glance — a verbose plan is hard to follow, and followability is the point. The objective in a few lines; each ruling one statement; each step's body only what the implementer needs to act (files, the change, the closing labels). No background narrative, no restated exploration, no justification essays: reasoning that matters compresses into the ruling or the step it affects. Detail an implementer genuinely needs lives in a linked record — link it, don't inline it.
