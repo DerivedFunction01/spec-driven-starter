@@ -261,4 +261,8 @@ stable; date the amendment and cite its ruling or evidence.
 A behavior change amends the spec in the same change that
 implements it. A contract change amends `API.md` under its own
 versioning rules. Material outgrowing a file (past the gate's
-length cap) gets its own file and a map row.
+length cap) gets its own file and a map row. Documents state
+the present: a stable amendment folds into the body it amends
+at a consolidation pass, and its dated layer retires to the
+change history; a versioned contract's amendment record keeps
+its layers.

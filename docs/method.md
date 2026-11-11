@@ -138,7 +138,12 @@ gate's length cap; material that outgrows a file gets its own file and a
 row in the index map. Section numbering, once published, is
 stable: amendments keep numbering, date themselves, and cite the
 ruling or evidence behind them. A behavior change amends the spec
-in the same change that implements it.
+in the same change that implements it. Tracked documents state
+the present: when a consolidation pass finds an amendment whose
+substance has been stable, it folds into the body it amends and
+its dated layer retires to the change history. The exception is
+named, not discovered — a versioned contract's amendment record
+keeps its layers, because there the layering is the discipline.
 
 ## 2. Split tracks, join them at one seam
 

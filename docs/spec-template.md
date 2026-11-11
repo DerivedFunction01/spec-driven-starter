@@ -69,7 +69,11 @@ owner — and wait there rather than being assumed away.
 Amend the small file that owns the section. Keep section
 numbering stable. Date the amendment and cite its ruling or
 evidence. A behavior change amends the spec in the same change
-that implements it. A contract change amends the seam document
+that implements it. Documents state the present: a stable
+amendment folds into the body it amends at a consolidation
+pass, and its dated layer retires to the change history; a
+versioned contract's amendment record keeps its layers. A
+contract change amends the seam document
 under its own versioning, never a spec file alone. Material
 that outgrows a file (past the gate's length cap) gets its own file and a map
 row; it does not inflate a neighbor.
