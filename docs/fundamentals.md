@@ -256,6 +256,14 @@ or a promise.
   field number. Images ship responsive in modern formats with
   dimensions set, fonts are self-hosted, third-party scripts
   load deferred.
+- **Result-preserving performance work** — an improvement that
+  preserves results needs no separate approval: identical
+  output is its proof burden, and output that differs makes it
+  a behavior change, ruled as one. The work runs as a named
+  pass (see `docs/method.md`, post-landing passes): profile
+  first, one variable at a time, identical output and the
+  measured gain proven in that order. An unmeasured speedup
+  claim is a wish, not a result.
 - **Imagery discipline** — applies when the intake answers
   yes to *ships imagery or accepts user media*. No
   AI-generated or watermarked binary graphics (SVG exempt);

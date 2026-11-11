@@ -266,6 +266,14 @@ and scaffolding that outlives its build becomes a second,
 stale spec. Record: the deletion lands with the implementation
 it specified.
 
+## Post-landing passes
+
+**Performance pass.** An improvement that preserves results
+runs without a separate approval (the standing rule sits in
+`docs/fundamentals.md`); as a pass it is: profile first,
+change one variable at a time, then prove identical output
+and the measured gain, in that order.
+
 ## Worktree lanes
 
 Feature work builds in sibling worktrees on feature branches —
