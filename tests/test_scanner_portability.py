@@ -4,8 +4,6 @@ from pathlib import Path
 
 from backend.foundation.scanners.portability import scan
 
-OWNER_NAME = ""
-
 
 def write(root, relpath, text):
     path = Path(root) / relpath
@@ -35,10 +33,6 @@ class PortabilityScannerTests(unittest.TestCase):
         findings = self.scan_text("config at ~/private.yaml\n")
         self.assertEqual(rules(findings), ["portability/home-path"])
 
-    def test_owner_name_is_a_finding(self):
-        findings = self.scan_text(f"maintained by {OWNER_NAME}\n")
-        self.assertEqual(rules(findings), ["portability/owner-name"])
-
     def test_specific_plan_file_is_a_finding(self):
         findings = self.scan_text("see .plans/2026-01-01-example.md\n")
         self.assertEqual(rules(findings), ["portability/untracked-ref"])
@@ -56,9 +50,11 @@ class PortabilityScannerTests(unittest.TestCase):
         self.assertEqual(rules(findings), ["portability/abs-path"])
 
     def test_findings_never_print_matched_content(self):
-        findings = self.scan_text(f"maintained by {OWNER_NAME}\n")
+        needle = "/h" + "ome/someone/x.py"
+        findings = self.scan_text(f"see {needle}\n")
+        self.assertTrue(findings)
         for finding in findings:
-            self.assertNotIn(OWNER_NAME, finding.message)
+            self.assertNotIn(needle, finding.message)
 
 
 if __name__ == "__main__":

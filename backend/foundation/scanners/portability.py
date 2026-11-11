@@ -1,8 +1,8 @@
 """Portability scanner: tracked text resolves inside the repo.
 
-No absolute or home-anchored paths, no owner's name, and no
-references to specific untracked plan files or dated memory
-logs. Findings never print matched content.
+No absolute or home-anchored paths and no references to
+specific untracked plan files or dated memory logs; personal
+literals are the denylist scanner's leg, never compiled here.
 """
 
 from __future__ import annotations
@@ -54,10 +54,6 @@ DRIVE_RE = re.compile(
 )
 TILDE_RE = re.compile(_BOUNDARY + r"~/[\w.-][\w./-]*")
 
-# The owner's name, carried split so this module's own text
-# never contains it; matching is case-insensitive.
-OWNER_NAME_RE = re.compile("", re.IGNORECASE)
-
 PLAN_FILE_RE = re.compile(
     r"\.plans/(?!finished/)[\w.-]+\.(?:md|json|ya?ml)"
     r"|\.plans/(?!finished/)[\w.-]+/"
@@ -72,7 +68,6 @@ GENERIC_LEGS = (
     ("portability/abs-path", ABS_TMP_RE),
     ("portability/abs-path", DRIVE_RE),
     ("portability/home-path", TILDE_RE),
-    ("portability/owner-name", OWNER_NAME_RE),
     ("portability/untracked-ref", PLAN_FILE_RE),
     ("portability/untracked-ref", DATED_MEMORY_RE),
 )
