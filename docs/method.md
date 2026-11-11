@@ -275,6 +275,17 @@ gate per merge. Lanes never commit to the shared branch; the
 coordinating agent gates, commits, and verifies. Record: the
 bundle's todo files, one per lane step.
 
+## Parallel by default
+
+Work that can run in parallel — lanes, tests, gates, compute —
+never runs serially for convenience. Serial order binds only
+where a shared reference makes it a correctness gate: merges
+into the main branch, one at a time, ancestry verified. A long
+serial run of parallelizable work is a defect to report, not a
+pace to accept. Concurrency inside the product is a different
+question: a product that is itself concurrent names its model
+in its spec.
+
 ## Unit decomposition and build order
 
 Work is cut into units: one visible, verifiable result, within
