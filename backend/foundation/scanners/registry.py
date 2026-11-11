@@ -34,6 +34,7 @@ from backend.foundation.scanners.privacy_pin import SCANNER as PRIVACY_PIN_SCANN
 from backend.foundation.scanners.prose_length import (
     SCANNER as PROSE_LENGTH_SCANNER,
 )
+from backend.foundation.scanners.restatement import SCANNER as RESTATEMENT_SCANNER
 from backend.foundation.scanners.route_coverage import (
     SCANNER as ROUTE_COVERAGE_SCANNER,
 )
@@ -70,6 +71,7 @@ ALL_SCANNERS: tuple[Scanner, ...] = (
     A11Y_STATIC_SCANNER,
     PERF_BUDGET_SCANNER,
     VALUE_SOURCE_SCANNER,
+    RESTATEMENT_SCANNER,
 )
 
 __all__ = ["ALL_SCANNERS"]

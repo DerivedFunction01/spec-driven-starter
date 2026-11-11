@@ -274,6 +274,19 @@ runs without a separate approval (the standing rule sits in
 change one variable at a time, then prove identical output
 and the measured gain, in that order.
 
+**Consolidation pass.** A named, recurring cleanup that
+dissolves what accretes in log shape — appended sections,
+flat rule lists, amendment tails — back into a document's own
+structure: appendix buckets dissolved, flat logs grouped under
+named heads, a rule restated in a second place trimmed to its
+delta or a pointer, finished history compressed out of tracked
+documents. It changes no rule's substance; a consolidation
+that would is an amendment, ruled as one. Deliberate layering
+is not accretion: a versioned contract's amendment record
+stays layered. Cadence is the project's own ruling, recorded
+in its spec. Record: the pass's landing note, naming what
+folded and what retired.
+
 ## Worktree lanes
 
 Feature work builds in sibling worktrees on feature branches —
