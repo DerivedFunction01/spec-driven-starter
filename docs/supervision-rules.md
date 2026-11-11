@@ -259,6 +259,26 @@ states. Work running past an hour while its thread stays
 active states itself under stalling — long-running is
 self-stated at the hour, not discovered after the fact.
 
+The per-state forms:
+
+- Working and Continue carry the full set: done; ongoing;
+  computed locally while a full-capacity venue is up;
+  serial work that should be parallel; stalling, and why,
+  and what would speed it up; duplicate-intent
+  consolidation; docs state.
+- Blocked-owner and Blocked-hard carry done-so-far plus
+  the blocker: the blocked item, why, the exact clearing
+  act, and whose it is.
+- Review carries done with its gate evidence, docs state,
+  and what awaits the decision.
+- Done carries done, docs state, and the tail — one line
+  per item with its owner: self (closeout the thread
+  clears itself) or owner-decision (offered follow-ups
+  awaiting accept, reject, or modify).
+- Closed carries done as one summary line plus docs state.
+- Parked carries done-so-far, why parked, and what resumes
+  it.
+
 The thread states are eight. Working: a work item is in
 progress. Done: all work items done, with closeout or a
 tail remaining. Closed: closeout landed and the tail
