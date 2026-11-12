@@ -192,6 +192,54 @@ row to the verifying party, as does a citation the
 verifying party has not stamped past one check cycle.
 Neither class waits on the fleet.
 
+## The goal contract
+
+Every programme runs under one goal contract: the template
+below, instantiated once per programme in each of the
+contract's two operational homes — the scheduler's job
+definitions, as the header block of every programme-serving
+job body, and the work record, on the programme's bundles
+and todos. No other home carries a contract: a record that
+runs nothing holds no programme's terms. The supervision
+layer reads the work-record-carried contract as its
+declaration source and dispatches continuation pings
+against it.
+
+The six fields:
+
+- **Objective** — the outcome, in one or two sentences.
+- **Complete when** — a verifiable condition: a landed
+  SHA, a verdict record, a measured count. Never an
+  impression.
+- **Blocked only when** — a named hard stop, a genuine
+  owner-only decision, or a verified external blocker.
+  The claim carries its cited basis, with its time, and a
+  verification stamp; an uncited or unverified claim is
+  void — the work resumes under its standing authorization
+  and the claim is surfaced as a defect. Sequencing
+  choices, agent-clearable waits, and matters already
+  decided are never blocked states.
+- **Work record** — where progress is measured: the record
+  the cadence reads.
+- **Cadence** — conforming progress-checkpoints every
+  15 minutes while doing; two missed intervals is a stall.
+- **Continuation** — a step landing staffs the next in the
+  same movement; a turn ends only with work in flight, a
+  complete report, or a blocked report satisfying the
+  Blocked only when clause. An acknowledgement does not
+  clear a stall; measured movement does.
+
+Fields-only variance: exactly four things differ per
+programme — the programme name, Objective, Complete when,
+and Work record. Blocked only when, Cadence, and
+Continuation are verbatim in every instantiation; a
+handwritten variant is a defect.
+
+Start gate: a job body or work-record item with any
+contract field empty is not created, armed, or staffed.
+The starting thread restates the Objective verbatim in its
+first progress checkpoint.
+
 ## Defect routing
 
 **Inline class — route at diagnosis.** A defect in one of
