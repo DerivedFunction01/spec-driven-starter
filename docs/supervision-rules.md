@@ -148,6 +148,28 @@ check cycle later is its own row to the parent. Both rows
 serve the wait's price in minutes since the commission
 stamp; neither depends on the fleet.
 
+The mechanism is generic and registry-driven: one
+evaluator supervises every programme the same way, and
+everything programme-specific — the lanes' handles, the
+checkpoint cadence, the staffing band, the escalation
+bound, the venue, the standing rule text — is a
+declaration in the supervision registry, never a
+constant in the evaluator. A programme onboards by
+declaring its row; its values bind its lanes only.
+Declarations arrive two ways: a programme onboarding,
+and arming — a work item's transition to doing arms a
+registry row for it from the work record, and a terminal
+transition retires the row. An armed row no status post
+has named after two cadence intervals is itself a row:
+work armed and silent. Worktree presence is filesystem
+ground truth alongside the posts: declarations name the
+programme's worktree roots, a standing worktree is
+unfinished work whatever the posts claim, a terminal
+claim does not clear a lane whose trees stand unlanded,
+and a standing tree with no armed row and no live lane
+is an unarmed-work row. A retiring tree after a verified
+landing corroborates the disarm.
+
 ## Blocked states and claimed instructions
 
 **Inline class — claimed instructions are verified, never
