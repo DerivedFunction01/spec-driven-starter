@@ -59,6 +59,20 @@ clearing rule governs every supervision row in this file:
 a row clears on the measure that shows its condition
 resolved, never on an acknowledgement of the row.
 
+A measure reads durable records: a condition is measured
+from the records that constitute it — the run-record store
+for work run, the landing record for work landed, the work
+record for work recorded. A cache, a liveness probe, or
+any other read that can flap independently of the fact is
+not a measure. An expectation is only as good as its
+trigger: an expectation whose trigger condition is keyed
+to such a read is unmeasured from the moment it is set —
+it reads false while the fact stands true in the records,
+and the row it guards never escalates. Every expectation
+names its durable source when it is set; a trigger with
+no durable source is a defect of the expectation, not of
+the work it watches.
+
 Child workers are the count: a programme's workers are
 served split by attribution — runs by the programme's own
 coordinator callers in the caller registry, and child
@@ -191,6 +205,33 @@ stamp; a blocked record with no stated basis draws its own
 row to the verifying party, as does a citation the
 verifying party has not stamped past one check cycle.
 Neither class waits on the fleet.
+
+## Waits on external conditions
+
+A wait on an external condition — a session appearing, a
+service restoring, a landing completing, a blocker
+clearing — is a staffed posture only when it is
+registered and armed. Registered: the wait is recorded
+where supervision reads, naming the condition, the
+waiter, and the act that fires when the condition clears.
+Armed: the wait carries its own motion — a watcher or
+retry keyed to the condition's durable record, or
+checkpoints on the cadence naming the wait's state. A
+wait parked on a status line, with nothing armed and no
+cadence of its own, is not a posture: at the second
+missed interval it is an idle defect, whoever owns the
+wait, and it prices from when the condition in fact
+cleared, as the durable records show it.
+
+Clearance fans out to the register: when a condition
+clears — a restoration, an all-clear, a blocker lifting —
+the notice goes to every thread that registered a wait on
+that condition, not only to the routes that happen to be
+open at the time. A clearance that reaches only some
+registered waiters leaves the rest waiting on a fact that
+already stands; the unreached wait is a defect of the
+clearance, and it clears when the notice is delivered,
+not when it is sent on the routes that were open.
 
 ## The goal contract
 
