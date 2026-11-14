@@ -259,7 +259,8 @@ the mock itself). Defaults in a mock are staged honestly: an
 off-by-default control is shown off. A before that cannot be
 captured is labeled a reproduction, never passed off as a
 capture. The owner picks by a copy-back verdict payload, and
-the picked study is the spec for the build. Record: the study
+the picked study is the spec for the build. Full protocol:
+`docs/study-rounds.md`. Record: the study
 artifact and its verdict, in the plan that builds it.
 
 ## Artifact lifecycle
