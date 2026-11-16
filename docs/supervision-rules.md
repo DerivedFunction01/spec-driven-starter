@@ -128,6 +128,20 @@ bindings layer) escalates to the parent thread and stays
 escalated until a measure shows the programme staffed.
 The parent step replaces endless direct re-pings.
 
+Replacement at the stall bound: a lane that misses two
+progress-checkpoint intervals is replaced, not
+re-steered. The programme's coordinator names a successor
+in the same movement the second miss is measured, on the
+same commission — the same work item, branch, and caller
+lineage — and the takeover is recorded in the programme's
+plan record; the stalled lane stands down on that
+commission under the one-executor rule when the successor
+claims it. Re-driving a stalled lane happens inside the
+two intervals, never as a further wait past the bound. A
+stall reaching a third missed interval with no successor
+named is a defect row naming the coordinator's
+non-response, addressed to the parent thread.
+
 The evidence is priced: every row serves its measured
 sentence — active workers, child workers, per-session run
 counts where a venue exists, idle-session minutes while
@@ -307,6 +321,24 @@ exception with its named shared file or shared state. A
 plan with no parallelization ruling is unfinished.
 Adoption executes the plan's stated split and does not
 re-derive one; plan numbering is not a dependency.
+
+Prerequisites are data, not prose. Every step carries a
+machine-readable block declaring the todos it mints and
+the prerequisites those todos carry — todo ids anywhere
+under the same goal — and its fan-out or its serial
+exception. Succession is read from the declared
+prerequisites, never from plan order or numbering.
+Adoption validates the plan first (wb plan-check: no
+prose-only steps, no undeclared prerequisites, no
+dangling or cross-goal edges, no cycles) and arms the
+initial frontier in the adoption act: every todo whose
+prerequisites already read satisfied is stamped armed,
+so the full parallel start is exposed at adoption, not
+discovered as work lands. A todo's move to done
+re-evaluates the goal's graph in the same act and arms
+what it completes. What stands armed and unstaffed is
+read from the one evaluator (wb due), never re-derived
+from plan prose by a watcher.
 
 Serial-plan detection at adoption: fan-out is measured
 when a plan is adopted, not when the owner audits it. An
