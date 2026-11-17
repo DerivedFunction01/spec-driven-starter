@@ -16,6 +16,16 @@
 
 - Refuse a verdict without a contract: an unscoped pass is an opinion, and an opinion cannot block or clear a release.
 
+## Run in the standing shape
+
+- The run's shape is part of the contract, recorded beside the scope: browser-driven legs execute on the project's parallel compute venue (Colab sessions where the project runs them), never on the local host while that venue is up; one audit lane per app or surface, the lanes running in parallel; screenshot evidence driven by Playwright or the project's named equivalent at desktop (~1440px), phone (~390px), and tablet (~768px) widths; both themes or appearances judged wherever the product has two.
+
+- A commission that arrives in another shape is re-formed to the standing shape before the run starts: venue, lane split, widths, and appearances are requirements, not preferences, and a lane never quietly substitutes a smaller shape it can staff for the shape the contract names.
+
+- Verify the shape can complete its own matrix before starting: the venue answers, one lane is staffed per in-scope surface, the browser launches on the venue, and the serve route serves the target build end to end — one route loads with real data. A shape that fails any of these is refused and reported as a run-shape failure: the run does not start, and no verdict issues from it.
+
+- An incomplete matrix is never cured by disclosure: a run launched in a shape known to be incompletable — a single lane against a multi-surface matrix, a local host that kills the browser under load — has failed at the shape, not at coverage, and naming the unrun cells in prose does not convert that failure into a partial result. Unrun cells in a run that started in a valid shape are handled by the verdict computation, not by refusal.
+
 ## Grade evidence by level
 
 - Level A: a real browser or native window driven through the actual journey, with representative data.
@@ -29,6 +39,16 @@
 - Count a screenshot as evidence only if you opened and inspected it in this run: a file that exists but was never looked at has no evidence value, and a fresh empty state cannot verify a populated one.
 
 - Ship every appearance claim with its pixels: a crop at the affected element in CSS pixels, labelled with viewport, state, route, and the build it shows — a full-page screenshot proves nothing about a small misalignment.
+
+## Enumerate what each instrument does not check
+
+- Before the run relies on any gate's green — a project gate, a kit check, or one of the run's own scanners — record that instrument's enumeration boundary: the exact set it checks (which pairs, surfaces, rules, states, backgrounds), read from the instrument's own code or configuration, never from its summary line or its name.
+
+- Everything outside a trusted instrument's boundary is in-scope for rendered review: the uncovered space joins the contract as cells the run must exercise itself, and the report names the boundary per instrument it relied on. A gate's green is evidence only inside its boundary; citing it outside the boundary is a reporting defect.
+
+- Worked example: a kit contrast gate enumerated status and content text against the surface backgrounds only, and stayed green while the same text rendered on its own status tints failed the contrast bar on hundreds of nodes — the tint pairs were outside the enumeration, so they were the critic's to check, and no run had checked them. Every enumeration has such an edge; this leg exists to find it before the verdict leans on the green.
+
+- The run's own instruments have boundaries too: a scan that reports counts without naming the rules behind them cannot be relied on for the rules it cannot name — record what each of the run's instruments does not report, and treat that space the same way.
 
 ## Run the mechanical sweep first
 
@@ -130,7 +150,11 @@
 
 ## Stress with hostile data
 
-- Re-run the primary routes with hostile fixtures before verdict: the longest plausible names and titles, a full period's list at maximum realistic size, very large numbers, and translations or copy roughly a third longer than the default language.
+- Feed the hostile leg production-shaped fixtures sourced from the surface's own served data, never invented payloads: before the leg runs, capture the payloads the surface actually serves — the same reads the rendered review drives — and draw the fixtures from that capture.
+
+- Set the floor from reality: for each data dimension the surface renders — payload and text length, list size, label and copy length, numeric magnitude — the fixture set includes the longest or largest real example the capture observed, verbatim where the harness allows. A synthetic extreme the product never serves tests a product that does not exist, and a tidy synthetic payload misses the shape that actually breaks rendering: a log-row class shipped broken on a real long command payload from the live app while every run's clean fixtures passed it, surfacing only when the owner screenshotted the live breakage.
+
+- Grow real copy the way localisation will — translations run roughly a third longer than the default language — applied to the captured strings, not to invented ones, and re-run the primary routes under the grown set before verdict.
 
 - Combine stressors the way users will meet them: a validation error visible at the same time as long content, at the smallest viewport, in both themes.
 
@@ -143,6 +167,12 @@
 - Block the release on any unresolved Blocker or Major, and on Moderates that sit in a primary flow or on a primary task; three or more Moderates on one route also block that route.
 
 - Apply the hard binary blocks with no discretion and no averaging: any critical or serious automated accessibility violation at WCAG 2.2 AA; any measured contrast or target-size failure against the bars above; any horizontal overflow or obscured content at a named viewport; any contract state left unexercised (the verdict is capped at `partial`); any in-scope route with no inspected screenshot (that route is `blocked`); an approved design exists but the parity module did not run (`blocked`).
+
+- Compute the verdict from the run's matrix record, never narrate it: the record lists every contract cell — route × viewport × state × appearance, plus each census leg, journey, and hostile leg — marked exercised with inspected evidence, exercised without inspection, or unrun, and it is attached to the report as a run artefact.
+
+- Derive the cap mechanically, in this order: any unrun cell that leaves an in-scope route without an inspected screenshot makes that route `blocked`, and one blocked route makes the run `blocked`; any other unrun cell or unexercised contract state caps the run at `partial`; `passed` requires a matrix with zero unrun cells. The issued verdict is the more severe of the findings verdict and the matrix cap.
+
+- Prose disclosure does not soften the cap: naming an unrun cell in the report is required honesty, but the cap is computed from the record whether or not the prose mentions it, and a confident narrative over an incomplete matrix is a reporting defect.
 
 - Issue the verdict in the closed vocabulary only: `passed`, `partial`, or `blocked` — `passed` requires the contract fulfilled, every viewport and state exercised at Level A or B, and no finding that blocks under the rules above.
 
