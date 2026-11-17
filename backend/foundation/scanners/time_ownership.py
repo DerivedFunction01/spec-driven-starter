@@ -52,13 +52,26 @@ SANCTIONED_COPIES: tuple[dict[str, str], ...] = ()
 FOREIGN_MODULES = ("dateutil", "calendar")
 
 PARSE_OK = {
-    "fromisoformat", "strptime", "replace", "strip",
-    "astimezone", "isinstance", "bool", "len", "str",
+    "fromisoformat",
+    "strptime",
+    "replace",
+    "strip",
+    "astimezone",
+    "isinstance",
+    "bool",
+    "len",
+    "str",
 }
 EPOCH_OK = PARSE_OK | {"timestamp", "fromtimestamp", "float", "int", "round"}
 NOW_OK = {
-    "now", "utcnow", "isoformat", "strftime",
-    "timestamp", "astimezone", "time", "replace",
+    "now",
+    "utcnow",
+    "isoformat",
+    "strftime",
+    "timestamp",
+    "astimezone",
+    "time",
+    "replace",
 }
 FORMAT_OK = {"isoformat", "strftime", "astimezone"}
 GMTIME_OK = {"strftime", "gmtime", "localtime", "time"}
@@ -89,8 +102,7 @@ def _scope_nodes(scope: ast.AST) -> list[ast.AST]:
 
 def _contains_call(node: ast.AST, names: tuple[str, ...]) -> bool:
     return any(
-        isinstance(sub, ast.Call) and _call_name(sub) in names
-        for sub in ast.walk(node)
+        isinstance(sub, ast.Call) and _call_name(sub) in names for sub in ast.walk(node)
     )
 
 
@@ -152,9 +164,7 @@ def _facts(fn: ast.FunctionDef | ast.AsyncFunctionDef) -> dict[str, object]:
         "returns_name": any(isinstance(r, ast.Name) for r in returns),
         "returns_arg": any(arg_derived(r) for r in returns),
         "gmtime": "gmtime" in names,
-        "returns_timestamp": any(
-            _contains_call(r, ("timestamp",)) for r in returns
-        ),
+        "returns_timestamp": any(_contains_call(r, ("timestamp",)) for r in returns),
         "returns_now": any(_contains_call(r, ("now", "utcnow")) for r in returns),
         "returns_format": any(
             _contains_call(r, ("isoformat", "strftime")) for r in returns
@@ -271,9 +281,7 @@ def _is_test_class(relpath: str) -> bool:
 
 
 def _homes() -> dict[str, set[str]]:
-    return {
-        family: {str(spec["home"])} for family, spec in FAMILIES.items()
-    }
+    return {family: {str(spec["home"])} for family, spec in FAMILIES.items()}
 
 
 def scan(root: Path) -> list[Finding]:

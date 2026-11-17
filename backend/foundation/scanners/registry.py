@@ -26,10 +26,10 @@ from backend.foundation.scanners.literal import SCANNER as LITERAL_SCANNER
 from backend.foundation.scanners.no_reexport import (
     SCANNER as NO_REEXPORT_SCANNER,
 )
-from backend.foundation.scanners.perf_budget import SCANNER as PERF_BUDGET_SCANNER
 from backend.foundation.scanners.path_discipline import (
     SCANNER as PATH_DISCIPLINE_SCANNER,
 )
+from backend.foundation.scanners.perf_budget import SCANNER as PERF_BUDGET_SCANNER
 from backend.foundation.scanners.port_boundary import (
     SCANNER as PORT_BOUNDARY_SCANNER,
 )

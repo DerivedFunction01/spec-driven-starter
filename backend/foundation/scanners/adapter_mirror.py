@@ -11,7 +11,6 @@ import ast
 from pathlib import Path
 
 from backend.foundation.scanners.base import Finding, Scanner
-from backend.foundation.scanners.files import rel
 
 # The mirror contract is data: the adapter modules under
 # scan, and the protocol class whose method set every
@@ -26,9 +25,7 @@ ALLOWLIST: tuple[dict[str, str], ...] = ()
 
 
 def _classes(tree: ast.Module) -> dict[str, ast.ClassDef]:
-    return {
-        node.name: node for node in tree.body if isinstance(node, ast.ClassDef)
-    }
+    return {node.name: node for node in tree.body if isinstance(node, ast.ClassDef)}
 
 
 def _methods(node: ast.ClassDef) -> set[str]:
@@ -64,8 +61,7 @@ def _scan_module(
         if not missing:
             continue
         allowlisted = any(
-            entry["module"] == relpath and entry["class"] == name
-            for entry in ALLOWLIST
+            entry["module"] == relpath and entry["class"] == name for entry in ALLOWLIST
         )
         if allowlisted:
             continue
