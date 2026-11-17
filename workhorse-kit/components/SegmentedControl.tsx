@@ -47,7 +47,7 @@ export type SegmentedControlProps<V extends string> = {
 const SEGMENT_CLASSES = [
   "inline-flex min-h-[38px] max-w-full min-w-0 cursor-pointer items-center rounded-[var(--wb-radius-sm)] border border-transparent px-3 py-1.5 text-sm [overflow-wrap:anywhere] [@media(pointer:coarse)]:min-h-[44px]",
   "text-(--wb-content-secondary) hover:text-(--wb-content-primary)",
-  "peer-checked:border-(--wb-border-default) peer-checked:bg-(--wb-surface-2) peer-checked:font-semibold peer-checked:text-(--wb-content-primary)",
+  "peer-checked:border-(--wb-field-border) peer-checked:bg-(--wb-surface-2) peer-checked:font-semibold peer-checked:text-(--wb-content-primary)",
   "peer-focus-visible:outline-2 peer-focus-visible:outline-solid peer-focus-visible:outline-offset-1 peer-focus-visible:outline-(--wb-focus-ring)",
   "peer-disabled:cursor-not-allowed",
 ].join(" ");

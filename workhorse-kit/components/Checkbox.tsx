@@ -60,7 +60,7 @@ export function Checkbox({ checked, onChange, label, disabled = false, className
   const style: CSSProperties = {
     ...LOCKED_BOX(24),
     backgroundColor: checked ? "var(--wb-status-done)" : "transparent",
-    border: `2px solid ${checked ? "var(--wb-status-done)" : "var(--wb-border-strong)"}`,
+    border: `2px solid ${checked ? "var(--wb-status-done)" : "var(--wb-field-border)"}`,
     color: "#fff",
     padding: 0,
   };
@@ -121,7 +121,7 @@ export function Radio({ checked, onSelect, label, disabled = false, className }:
   const style: CSSProperties = {
     ...LOCKED_BOX(24),
     backgroundColor: "transparent",
-    border: `2px solid ${checked ? "var(--wb-accent)" : "var(--wb-border-strong)"}`,
+    border: `2px solid ${checked ? "var(--wb-accent)" : "var(--wb-field-border)"}`,
     padding: 0,
   };
   return (

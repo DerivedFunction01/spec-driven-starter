@@ -22,7 +22,7 @@ export function Toggle({ checked, onChange, label, disabled = false, className }
       }
     : {
         backgroundColor: "var(--wb-surface-sunken)",
-        borderColor: hover && !disabled ? "var(--wb-accent)" : "var(--wb-border-strong)",
+        borderColor: hover && !disabled ? "var(--wb-accent)" : "var(--wb-field-border)",
         borderStyle: "solid",
         borderWidth: 1,
         borderRadius: "var(--wb-radius-pill)",

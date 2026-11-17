@@ -38,7 +38,7 @@ export function PaletteSelect({ value, options, onChange }: PaletteSelectProps) 
         style={{
           backgroundColor: "var(--wb-surface-2)",
           color: "var(--wb-content-primary)",
-          borderColor: "var(--wb-border-default)",
+          borderColor: "var(--wb-field-border)",
           borderStyle: "solid",
           borderWidth: 1,
           borderRadius: "var(--wb-button-radius)",

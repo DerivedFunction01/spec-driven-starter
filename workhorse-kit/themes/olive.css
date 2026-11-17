@@ -17,6 +17,7 @@
   --wb-on-accent: #ffffff;
   --wb-accent-soft: rgba(75, 83, 32, 0.12);
   --wb-focus-ring: var(--wb-accent);
+  --wb-field-border: var(--wb-olive-400);
   --wb-danger: #b03a22;
   --wb-press-shade: #000000;
   --wb-notify: #bb5300;
@@ -25,7 +26,7 @@
   --wb-highlight-selection-fill: rgba(75, 83, 32, 0.22);
   --wb-highlight-selection-bar: var(--wb-accent);
   --wb-highlight-annotation-fill: rgba(230, 159, 0, 0.32);
-  --wb-highlight-annotation-bar: #b97e00;
+  --wb-highlight-annotation-bar: #8f6100;
   --wb-shadow-overlay: 0 8px 24px rgb(34 37 26 / 0.14);
   --wb-status-canonical: var(--wb-okabe-blue);
   --wb-status-canonical-text: #005787;
@@ -88,13 +89,14 @@
   --wb-on-accent: #15170f;
   --wb-accent-soft: rgba(157, 180, 92, 0.22);
   --wb-focus-ring: var(--wb-accent);
+  --wb-field-border: var(--wb-olive-300);
   --wb-danger: #e07a5f;
   --wb-press-shade: #ffffff;
   --wb-notify: #bb5300;
   --wb-on-notify: #ffffff;
   --wb-unknown: #93a7ba;
   --wb-highlight-selection-fill: rgba(157, 180, 92, 0.38);
-  --wb-highlight-selection-bar: var(--wb-accent);
+  --wb-highlight-selection-bar: var(--wb-olive-100);
   --wb-highlight-annotation-fill: rgba(230, 159, 0, 0.30);
   --wb-highlight-annotation-bar: #e69f00;
   --wb-shadow-overlay: 0 8px 24px rgb(0 0 0 / 0.45);
@@ -160,13 +162,14 @@
     --wb-on-accent: #15170f;
     --wb-accent-soft: rgba(157, 180, 92, 0.22);
     --wb-focus-ring: var(--wb-accent);
+    --wb-field-border: var(--wb-olive-300);
     --wb-danger: #e07a5f;
     --wb-press-shade: #ffffff;
     --wb-notify: #bb5300;
     --wb-on-notify: #ffffff;
     --wb-unknown: #93a7ba;
     --wb-highlight-selection-fill: rgba(157, 180, 92, 0.38);
-    --wb-highlight-selection-bar: var(--wb-accent);
+    --wb-highlight-selection-bar: var(--wb-olive-100);
     --wb-highlight-annotation-fill: rgba(230, 159, 0, 0.30);
     --wb-highlight-annotation-bar: #e69f00;
     --wb-shadow-overlay: 0 8px 24px rgb(0 0 0 / 0.45);

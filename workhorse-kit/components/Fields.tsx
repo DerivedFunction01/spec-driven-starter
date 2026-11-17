@@ -6,8 +6,9 @@
 // own behaviour (IME, autofill, screen readers, the
 // platform picker) is the kit's, and the chrome is the
 // StateControls input/select row's — surface-2 fill,
-// 1px border-default, button radius, primary text, 38px
-// (44px coarse), the one focus ring, hover border-strong,
+// 1px field-border (the priced boundary role, contrast
+// gate Part 6 B1), button radius, primary text, 38px
+// (44px coarse), the one focus ring,
 // disabled surface-1 + opacity 0.55 + secondary text —
 // so StateControls' generated fields and the hand-built
 // forms render as one family. The appearance idiom lives
@@ -36,7 +37,7 @@ import {
 export const FIELD_STYLE: CSSProperties = {
   backgroundColor: "var(--wb-surface-2)",
   color: "var(--wb-content-primary)",
-  borderColor: "var(--wb-border-default)",
+  borderColor: "var(--wb-field-border)",
   borderStyle: "solid",
   borderWidth: 1,
   borderRadius: "var(--wb-button-radius)",

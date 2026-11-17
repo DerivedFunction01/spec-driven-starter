@@ -191,7 +191,7 @@ function OptionRows({
             <span
               className={[
                 "wb-segmented-segment flex min-h-[38px] flex-col justify-center gap-0.5 rounded-[var(--wb-radius-sm)] border border-transparent px-3 py-2 [@media(pointer:coarse)]:min-h-[44px]",
-                "peer-checked:border-(--wb-border-default) peer-checked:bg-(--wb-surface-2)",
+                "peer-checked:border-(--wb-field-border) peer-checked:bg-(--wb-surface-2)",
                 "peer-focus-visible:outline-2 peer-focus-visible:outline-solid peer-focus-visible:outline-offset-1 peer-focus-visible:outline-(--wb-focus-ring)",
                 "peer-disabled:cursor-not-allowed",
               ].join(" ")}
