@@ -1,5 +1,15 @@
 # UI context token file — template
 
+> **Superseded for kit projects.** A project carrying the
+> starter UI kit (`ui-kit/`, seeded by the webapp flavor as
+> `packages/ui-kit`) does not fill in this template: the
+> kit's `tokens/tokens.json` is this file's seeded form —
+> the same roles, filled, tiered, and priced by the kit's
+> contrast gate — and the project's design pass re-seeds
+> the kit's palette instead (see `ui-kit/README.md`). This
+> template remains the form for projects that do not carry
+> the kit.
+
 The design context a UI project seeds *before* features, so no
 feature invents visual values (the failure this prevents: a
 fixed per-theme value — a dark footer under a light theme —

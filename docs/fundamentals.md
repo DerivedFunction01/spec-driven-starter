@@ -163,7 +163,17 @@ answer; nothing there binds a project whose answer is no.
   Testing is two-layer: the automated scan in the gate is a
   regression net, and a manual keyboard-plus-screen-reader
   pass over the core flows is a landing requirement — a clean
-  scan is never reported as "accessible".
+  scan is never reported as "accessible". For a project
+  carrying the starter UI kit (`ui-kit/`), the floors are
+  mechanism, not prose: the kit's contrast gate
+  (`ui-kit/tools/verify-contrast.mjs`) auto-enumerates the
+  pairs from the token file — text on surfaces, tints, and
+  solids; focus and control boundaries; component mix
+  states — and fails the check on any miss, and the rendered
+  legs (`docs/checks.md`) measure the built page over the
+  surface census. This paragraph states the principle; a
+  kit project's compliance claim cites the gate's pair
+  counts and the legs' verdicts, not the paragraph.
 
 ### Words and work
 

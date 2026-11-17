@@ -37,6 +37,25 @@ pytest suite, fail-fast. The gate is the definition of "ready
 to land"; a red gate is never waived by narration. Full
 reference: `docs/checks.md`.
 
+## UI kit (`ui-kit/`)
+
+The generic design system a new UI project starts from:
+`tokens/tokens.json` (DTCG tiers — primitive scales,
+semantic roles per palette × mode with field-border and
+focus as their own roles, a status tier whose hue and text
+values are separate tokens, component tokens, density), a
+deterministic generator (`tools/gen-tokens.mjs`;
+byte-identical regeneration is the drift proof), the
+primitives in `components/` spending only kit tokens, a
+`Specimen` harness rendering every primitive in its
+contracted variants, and the contrast gate
+(`tools/verify-contrast.mjs`) that auto-enumerates its
+pairs from the token file and is fatal by default. The
+webapp flavor seeds the kit as `packages/ui-kit`, and the
+flavor's composed check runs its legs. A consuming project
+re-seeds the palette in a design pass; the gate and the
+primitives do not change. Full reference: `ui-kit/README.md`.
+
 ## Supervision kit (`ops/`)
 
 The always-on server's lifecycle, in four parts: the unit

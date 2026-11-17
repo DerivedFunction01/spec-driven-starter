@@ -56,6 +56,8 @@
 
 - The sweep's evidence source is the project's standing rendered legs (`docs/checks.md`, Rendered legs) where the project carries them — the axe leg, the geometry leg, the truncation ruler, the dead-click sweep, and the parity leg over the surface census, entered through the committed shard runner: cite each leg's raw output by leg name, and treat a leg the project has not seeded, or a census route it has not enrolled, as unexercised, never as passed.
 
+- Where the project carries the starter UI kit (`ui-kit/`), its contrast gate (`ui-kit/tools/verify-contrast.mjs`) is a pinned instrument of the sweep: cite its per-part pair counts from its own output, and record its enumeration boundary from its header — the pair classes it prices (text on surfaces, tints, and solids; focus and control boundaries; component mix states) and the spends its censuses classify rather than price. A kit surface the gate's census has not classified is uncovered space, in scope for the rendered review like any other instrument edge.
+
 - Treat a clean automated run as covering only the machine-checkable subset: it clears its own findings and nothing else, and is never reported as "accessible" or "finished".
 
 - Propose a scanner or detector rule for every confirmed defect class that is mechanically detectable, so a class caught once by eye becomes a class caught forever by the gate.

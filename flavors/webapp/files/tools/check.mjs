@@ -1,13 +1,23 @@
 // The webapp flavor's composed check: typecheck + build,
 // format, the no-any rule, the surface checks (raw elements,
 // value slots, dead classes — their allowlist data lives in
-// check-data.mjs), and the tests. One command, fail-fast —
-// the web-stack equivalent of the core gate's legs. Run it
-// from the repo root:  node tools/check.mjs   (or: pnpm check)
+// check-data.mjs), the kit legs (when the project carries
+// packages/ui-kit: token-regeneration byte-identity, the
+// contrast gate, and the kit's own typecheck served by its
+// package), and the tests. One command, aggregate-then-
+// verdict: every leg runs, every failure is reported, and
+// the verdict falls at the end — a red first leg no longer
+// hides the state of the rest. Before any leg, a pre-flight
+// parse guard runs `node --check` over this file, its data
+// file, and the e2e shard entry: a module or data file that
+// does not parse is a gate that silently never ran, so the
+// guard is pre-flight, not a leg. Run it from the repo
+// root:  node tools/check.mjs   (or: pnpm check)
 // Self-test:  node tools/check.mjs --self-test  runs the
 // surface checks against synthetic fixture trees and exits.
 import { spawnSync } from "node:child_process";
 import {
+  cpSync,
   existsSync,
   mkdirSync,
   mkdtempSync,
@@ -19,6 +29,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   DEAD_CLASS_ALLOWLIST,
   RAW_ELEMENT_ALLOWLIST,
@@ -28,9 +39,39 @@ import {
 function run(label, command, args) {
   console.log(`==> ${label}`);
   const result = spawnSync(command, args, { stdio: "inherit" });
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
+  return result.status ?? 1;
+}
+
+// ---------------------------------------------------------------------------
+// Pre-flight parse guard. `node --check` over the composed
+// check's own modules and data files, resolved beside this
+// file (never from the caller's cwd): check.mjs itself,
+// check-data.mjs (the ruled data the legs import), and
+// e2e-shard.mjs (the rendered legs' entry, a sibling tool
+// no import reaches). A parse failure here means a leg
+// would silently never run; the guard fails before any leg.
+// ---------------------------------------------------------------------------
+
+const GUARDED_FILES = ["check.mjs", "check-data.mjs", "e2e-shard.mjs"];
+
+function parseGuard() {
+  console.log("==> parse guard (node --check over the check's own modules)");
+  const here = dirname(fileURLToPath(import.meta.url));
+  let failures = 0;
+  for (const name of GUARDED_FILES) {
+    const result = spawnSync("node", ["--check", join(here, name)], {
+      encoding: "utf8",
+    });
+    if (result.status !== 0) {
+      failures += 1;
+      console.error(`    ${name}: does not parse — its legs would never run`);
+      console.error(result.stderr ?? "");
+    }
   }
+  if (failures === 0) {
+    console.log("==> parse guard clean");
+  }
+  return failures;
 }
 
 function* tsFiles(dir) {
@@ -65,8 +106,9 @@ function noAny() {
     }
   }
   if (failures > 0) {
-    process.exit(1);
+    return 1;
   }
+  return 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -467,9 +509,93 @@ function surfaceChecks(root) {
   }
   if (findings.length > 0) {
     console.error(`==> surface checks: ${findings.length} finding(s)`);
-    process.exit(1);
+    return 1;
   }
   console.log("==> surface checks clean");
+  return 0;
+}
+
+// ---------------------------------------------------------------------------
+// Kit legs. A project carrying the seeded UI kit at
+// packages/ui-kit is gated on the kit's own discipline,
+// in served-by form: the legs read the kit's declared
+// shape (its generator, its gate, its package scripts)
+// rather than restating it here. Absent kit, no legs —
+// the seed is the enrollment.
+// ---------------------------------------------------------------------------
+
+function kitByteIdentity(kitRoot) {
+  console.log("==> kit: token regeneration byte-identity");
+  const staging = mkdtempSync(join(tmpdir(), "webapp-check-kit-"));
+  try {
+    const staged = join(staging, "ui-kit");
+    cpSync(kitRoot, staged, {
+      recursive: true,
+      filter: (src) => {
+        const rel = relative(kitRoot, src);
+        return !rel.split(/[\\/]/).some((part) => part === "node_modules" || part === "dist");
+      },
+    });
+    const gen = spawnSync("node", [join(staged, "tools", "gen-tokens.mjs")], {
+      encoding: "utf8",
+    });
+    if (gen.status !== 0) {
+      console.error(`    the kit generator failed in a staged copy:\n${gen.stderr ?? ""}`);
+      return 1;
+    }
+    const realThemes = join(kitRoot, "themes");
+    const stagedThemes = join(staged, "themes");
+    const names = readdirSync(realThemes).sort();
+    const stagedNames = readdirSync(stagedThemes).sort();
+    if (JSON.stringify(names) !== JSON.stringify(stagedNames)) {
+      console.error(
+        `    regenerated theme set differs: checked in [${names.join(", ")}], regenerated [${stagedNames.join(", ")}]`,
+      );
+      return 1;
+    }
+    for (const name of names) {
+      const checkedIn = readFileSync(join(realThemes, name));
+      const regenerated = readFileSync(join(stagedThemes, name));
+      if (!checkedIn.equals(regenerated)) {
+        console.error(
+          `    themes/${name} differs from a fresh regeneration — the checked-in themes are stale; regenerate with the kit's gen-tokens and land the result`,
+        );
+        return 1;
+      }
+    }
+    console.log("==> kit themes regenerate byte-identically");
+    return 0;
+  } finally {
+    rmSync(staging, { recursive: true, force: true });
+  }
+}
+
+function kitLegs(root) {
+  const kitRoot = join(root, "packages", "ui-kit");
+  if (!existsSync(join(kitRoot, "tools", "verify-contrast.mjs"))) {
+    return [];
+  }
+  const legs = [];
+  legs.push(["kit: token regeneration byte-identity", kitByteIdentity(kitRoot)]);
+  legs.push([
+    "kit: contrast gate",
+    run("kit: contrast gate (verify-contrast)", "node", [
+      join(kitRoot, "tools", "verify-contrast.mjs"),
+    ]),
+  ]);
+  const pkg = JSON.parse(readFileSync(join(kitRoot, "package.json"), "utf8"));
+  if (pkg.scripts && typeof pkg.scripts.typecheck === "string") {
+    legs.push([
+      "kit: typecheck",
+      run(`kit: typecheck (served by ${pkg.name}'s own script)`, "pnpm", [
+        "--filter",
+        pkg.name,
+        "run",
+        "typecheck",
+      ]),
+    ]);
+  }
+  return legs;
 }
 
 // ---------------------------------------------------------------------------
@@ -593,25 +719,51 @@ function selfTest() {
 }
 
 if (process.argv.includes("--self-test")) {
+  if (parseGuard() > 0) {
+    process.exit(1);
+  }
   selfTest();
 } else {
-  run("typecheck + build (tsc -b)", "pnpm", ["exec", "tsc", "-b"]);
-  run("format check (prettier)", "pnpm", [
-    "exec",
-    "prettier",
-    "--check",
-    "apps",
-    "packages",
-    "tools",
-    "package.json",
-    "tsconfig.json",
-    "tsconfig.base.json",
+  if (parseGuard() > 0) {
+    console.error("==> webapp check FAILED at the parse guard — no leg ran");
+    process.exit(1);
+  }
+  const root = process.cwd();
+  const legs = [];
+  legs.push([
+    "typecheck + build (tsc -b)",
+    run("typecheck + build (tsc -b)", "pnpm", ["exec", "tsc", "-b"]),
   ]);
-  noAny();
-  surfaceChecks(process.cwd());
-  run("unit + smoke tests (node --test)", "node", [
-    "--test",
-    "apps/web/dist/server.test.js",
+  legs.push([
+    "format check (prettier)",
+    run("format check (prettier)", "pnpm", [
+      "exec",
+      "prettier",
+      "--check",
+      "apps",
+      "packages",
+      "tools",
+      "package.json",
+      "tsconfig.json",
+      "tsconfig.base.json",
+    ]),
   ]);
-  console.log("==> webapp check passed");
+  legs.push(["no-any rule", noAny()]);
+  legs.push(["surface checks", surfaceChecks(root)]);
+  legs.push(...kitLegs(root));
+  legs.push([
+    "unit + smoke tests (node --test)",
+    run("unit + smoke tests (node --test)", "node", [
+      "--test",
+      "apps/web/dist/server.test.js",
+    ]),
+  ]);
+  const failed = legs.filter(([, code]) => code !== 0);
+  if (failed.length > 0) {
+    console.error(
+      `==> webapp check FAILED: ${failed.map(([label]) => label).join("; ")}`,
+    );
+    process.exit(1);
+  }
+  console.log(`==> webapp check passed (all ${legs.length} legs)`);
 }
