@@ -102,6 +102,10 @@ reporting itself unconfigured).
 | perf_budget | frontend asset weight per class stays inside `frontend/budgets.json`, and the field-vitals thresholds live there as positive numbers (a notice, never a failure, while no budget file exists) |
 | value_source | no document restates a source constant: the length cap, the sample port (the README quickstart keeps one literal), or a field-vitals threshold — docs state the rule and name the source |
 | restatement | no sentence of ten words or more is restated across tracked documents — one home per rule, the second document carries its delta or a pointer; fenced specimens are not read, and deliberate duplication is named in the scanner's exception registry |
+| time_ownership | date/time derivations (parse, normalize, format, epoch, homed now wrappers) live in the one module the scanner's family map names; foreign calendar machinery and sliced instant fields outside the home are findings, and a sanctioned copy that stops matching its shape fails as stale |
+| path_discipline | climbs to a root, cwd-derived roots, and home-anchored literal roots occur only inside a paths module or under a declaration carried in the scanner's data; a declaration whose file lost the pattern fails as stale |
+| writer_uniqueness | writes that truncate a state-shaped target and hand-rolled stage-then-rename sequences occur only at the designated writer home or under a declared seam; a seam whose file lost the pattern fails as stale |
+| adapter_mirror | every class implementing the store protocol defines the protocol's whole method set, which the scanner reads from the protocol class itself; partial implementations need an allowlist entry, and an entry covering a class that now mirrors fully fails as stale |
 
 Portability exceptions: only files named in the scanner's
 `EXCEPTION_FILES` registry may carry a directive line naming
@@ -133,7 +137,11 @@ A scanner lands as four pieces, all in one change:
 ## Standing check practices
 
 Checks that run on a cadence or on a trigger, above the
-gate's per-change legs.
+gate's per-change legs. The adoption census for checks proven
+in the Steam Power and Workhorse superapp repos — each with
+its starter verdict and disposition — is
+`docs/check-adoption-census.md`; a candidate joins that census
+before it joins the starter.
 
 ### The catch-net pair
 
