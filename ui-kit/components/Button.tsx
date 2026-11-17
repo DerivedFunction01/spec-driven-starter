@@ -15,14 +15,17 @@
 // separator pair in Part 5a).
 //
 // COMPONENT MIX CONSTANTS — mirrored as data in the
-// contrast gate's Part 5b extension (Step 6 of the governing
-// plan); a change here owes the gate the same change, in
-// the same change. The press endpoint is the primitive
-// --ui-black token: the generic tokens carry no mode-aware
-// press-shade role (a recorded finding — the source kit's
-// press-shade token resolves black in light, white in
-// dark). Until that token decision lands, the press mixes
-// below shade toward black in both modes.
+// contrast gate's Part 5b (Step 6 of the governing plan);
+// a change here owes the gate the same change, in the
+// same change. The press endpoint is the semantic
+// --ui-press-shade role (black in light, white in dark —
+// the source kit's press-shade pattern): the Step 6
+// measurement settled the recorded finding against
+// shading toward black in both modes, which fails the
+// dark danger-active pair (3.63:1 against the 4.5 bar);
+// the mode-aware role holds every mix pair (worst
+// 6.42:1). The gate prices these mixes in Part 5b
+// families M1 (text) and M2 (the separator band).
 //   BUTTON_PRIMARY_ACTIVE_MIX_PCT = 88  (accent toward press)
 //   BUTTON_DANGER_HOVER_MIX_PCT    = 88  (danger toward press)
 //   BUTTON_DANGER_ACTIVE_MIX_PCT   = 78  (danger toward press)
@@ -32,7 +35,7 @@ export const BUTTON_PRIMARY_ACTIVE_MIX_PCT = 88;
 export const BUTTON_DANGER_HOVER_MIX_PCT = 88;
 export const BUTTON_DANGER_ACTIVE_MIX_PCT = 78;
 
-const PRESS_ENDPOINT = "var(--ui-black)";
+const PRESS_ENDPOINT = "var(--ui-press-shade)";
 
 export type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
 

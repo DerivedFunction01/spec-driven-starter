@@ -140,6 +140,101 @@
 // on their grounds, under the bar everywhere. The
 // decorative border tokens themselves are NOT retuned.
 //
+// Part 5b (Step 6 of the governing plan): the COMPOSITE
+// grounds join the net — every color-mix state a
+// component spends that carries text or a priced
+// indicator, computed at its worst case, in the Steam
+// overlay discipline (a stack is priced as the stack
+// actually rendered: tint over scrim over ground). The
+// mixes' constants are mirrored here as gate data (the
+// Step 3 rule; the census below machine-checks them
+// against the components' exported constants):
+//   M1 Button's mix states as TEXT grounds, at the
+//      text bar: on-accent on the primary-active mix,
+//      the danger-hover mix, and the danger-active mix
+//      (the fill mixed toward the press-shade role at
+//      the mirrored percentages). Rest and token-hover
+//      fills are Part 4's solid pairs.
+//   M2 the same composites as SEPARATOR grounds, at
+//      the non-text bar: the kit theme rule's inset
+//      on-accent band rides the solid Buttons in every
+//      state, so the band is priced against the mixes
+//      as well as Part 5a's token fills.
+//   M3 accent-soft grounds: content primary and
+//      secondary on the accent-soft composite over
+//      every surface (the AppShell active-nav ground).
+//   M4 the AppShell hot-count stack: the fail badge's
+//      mix text on its tint over accent-soft over
+//      surface-1 — the one ground the stack can occupy,
+//      because both SidebarNav containers spend
+//      surface-1 (recorded here as gate data; a nav
+//      ground change owes this family the same change).
+//      The phone presentation renders the same badge on
+//      surface-2 with no accent-soft beneath — that
+//      stack is Part 3 family B's enumeration.
+//   M5 the NoticeRow warn blend: warn text on
+//      color-mix(warn hue, 20%, surface-2) — the spend
+//      GroupedList actually ships. (Part 3 family C
+//      prices the fail blend and the pattern's stale
+//      blend; the shipped warn spend is priced here.)
+//   M6 the highlight fills under content text:
+//      content primary and secondary on the selection
+//      and annotation fills (alpha composites read
+//      from the tokens) over every surface. The priced
+//      voices are primary and secondary — Part 3
+//      family A2's precedent for tint grounds; muted
+//      is priced on the surface set (Parts 1–2) and is
+//      NOT a priced voice on a fill: a component that
+//      needs meta text on a fill spends secondary
+//      there. Measured at the seed's dark alpha (0.30)
+//      the fills failed even secondary (worst 4.04:1,
+//      sage/dark); the cure moved the dark fills to
+//      0.22 — the light selection strength — not the
+//      hues.
+//   M7 the highlight BARS as indicators, at the
+//      non-text bar: each bar against every surface
+//      and against its own fill composited over every
+//      surface (the bar sits on the fill it bounds).
+//      Cures, both moves along the tokens' own scales:
+//      the light annotation-bar moved one step darker
+//      (yellow-700 -> yellow-800; it measured 2.98:1
+//      on its own fill over sunken), and the dark
+//      selection-bar re-pointed from the accent alias
+//      to each palette's 100 step (the accent step
+//      measures 2.46:1 against its own sage fill —
+//      a bar cannot be its own fill's hue at strength
+//      and read against it).
+// The press endpoint is the semantic press-shade role
+// (black in light, white in dark). Step 4's finding —
+// Button shading toward primitive black in both modes
+// for want of the role — is settled here by
+// measurement: black in dark fails the danger-active
+// text pair (3.63:1, sage/dark), while the mode-aware
+// role holds every M1/M2 pair (worst 6.42:1). The role
+// was added to the tokens and Button re-pointed at it;
+// the gate prices the shipped role, per mode.
+// Two composite classes are CLASSIFIED, not priced,
+// with their reasons recorded in the census data
+// below: the Sheet backdrop (it carries no text, and
+// no text pair over it is well-formed) and muted on a
+// highlight fill (above). The disabled-state opacity
+// dimming (opacity-55 in Button/Checkbox/Fields/
+// SegmentedControl/Toggle) is not a color-mix spend
+// and is outside this census: an inactive control's
+// dimming is the state indication itself, not a ground
+// text must read against.
+// The color-mix census (below, in code) scans the same
+// tree as Part 5a's census at gate time: every
+// color-mix( occurrence in ui-kit/components/ and
+// ui-kit/themes/ must carry a classification in
+// COLOR_MIX_SPENDS as priced by a named family or
+// classified with its reason; an unclassified or stale
+// spend is a finding. The census also machine-checks
+// the mirrored constants against the components'
+// exported values — a component that changes its
+// constant without the gate fails here, which is the
+// Step 3 rule enforced rather than restated.
+//
 // Usage: node ui-kit/tools/verify-contrast.mjs [--verbose]
 // Exit 1 on any failure.
 
@@ -735,6 +830,259 @@ for (const key of Object.keys(BORDER_SPENDS)) {
   if (!borderSpendKeys.has(key)) censusFail(`stale border-spend classification: ${key}`);
 }
 
+// Part 5b — composite grounds: component mix states,
+// overlay stacks, and the highlight fills (see the
+// header note). Text families hold the 4.5:1 bar,
+// indicator families the 3:1 non-text bar, all fatal.
+// The mix constants are mirrored gate data; the census
+// below machine-checks them against the components.
+const BUTTON_PRIMARY_ACTIVE_MIX_PCT = 88;
+const BUTTON_DANGER_HOVER_MIX_PCT = 88;
+const BUTTON_DANGER_ACTIVE_MIX_PCT = 78;
+const SHEET_BACKDROP_MIX_PCT = 45;
+const NOTICE_WARN_TINT_PCT = 20;
+let mixChecked = 0;
+let mixFailures = 0;
+function checkMix(family, label, fgRgb, bgRgb) {
+  const r = ratioRgb(fgRgb, bgRgb);
+  mixChecked += 1;
+  const ok = r >= 4.5;
+  if (!ok) mixFailures += 1;
+  if (verbose || !ok) {
+    console.log(
+      `${ok ? "PASS" : "FAIL"} [${family}] ${label}: ` +
+        `${rgbToHex(fgRgb)} on ${rgbToHex(bgRgb)}: ${r.toFixed(2)}:1`,
+    );
+  }
+}
+let mixNtChecked = 0;
+let mixNtFailures = 0;
+function checkMixNT(family, label, fgRgb, bgRgb) {
+  const r = ratioRgb(fgRgb, bgRgb);
+  mixNtChecked += 1;
+  const ok = r >= NON_TEXT_BAR;
+  if (!ok) mixNtFailures += 1;
+  if (verbose || !ok) {
+    console.log(
+      `${ok ? "PASS" : "FAIL"} [${family}] ${label}: ` +
+        `${rgbToHex(fgRgb)} on ${rgbToHex(bgRgb)}: ${r.toFixed(2)}:1`,
+    );
+  }
+}
+// An rgba() token literal (accent-soft, the highlight
+// fills) parsed to its channels + alpha; the composite
+// over a ground is the same per-channel blend as a
+// color-mix at the alpha's percentage.
+function parseRgba(raw) {
+  const m = raw.match(/rgba?\(([^)]+)\)/);
+  if (!m) throw new Error(`cannot parse rgba value: ${raw}`);
+  const parts = m[1].split(",").map((s) => parseFloat(s));
+  return { rgb: parts.slice(0, 3), a: parts[3] ?? 1 };
+}
+const semRgba = (palette, mode, path) => {
+  let node = tokens.semantic[palette][mode];
+  for (const part of path.split(".")) node = node[part];
+  // resolveSemantic stops at hex literals; an rgba()
+  // literal is followed here (through any DTCG alias).
+  let v = node.$value;
+  while (typeof v === "string" && v.startsWith("{")) {
+    let target = tokens;
+    for (const part of v.slice(1, -1).split(".")) target = target[part];
+    v = target.$value;
+  }
+  return parseRgba(v);
+};
+const overRgba = (rgba, bgRgb) => mixRgb(rgba.rgb, rgba.a * 100, bgRgb);
+
+// M1/M2 — Button's mix states: the fill mixed toward
+// the press-shade role at the mirrored percentages,
+// priced as a text ground (on-accent, M1) and as the
+// separator band's ground (on-accent, M2).
+for (const palette of Object.keys(tokens.semantic)) {
+  for (const mode of ["light", "dark"]) {
+    const onAccent = hexToRgb(semHex(palette, mode, "on-accent"));
+    const press = hexToRgb(semHex(palette, mode, "press-shade"));
+    const states = [
+      ["primary-active", semHex(palette, mode, "accent"), BUTTON_PRIMARY_ACTIVE_MIX_PCT],
+      ["danger-hover", semHex(palette, mode, "danger"), BUTTON_DANGER_HOVER_MIX_PCT],
+      ["danger-active", semHex(palette, mode, "danger"), BUTTON_DANGER_ACTIVE_MIX_PCT],
+    ];
+    for (const [state, fillHex, pct] of states) {
+      const comp = mixRgb(hexToRgb(fillHex), pct, press);
+      checkMix("M1", `on-accent on Button ${state} mix ${pct}% / ${palette}/${mode}`, onAccent, comp);
+      checkMixNT("M2", `separator on-accent on Button ${state} mix ${pct}% / ${palette}/${mode}`, onAccent, comp);
+    }
+  }
+}
+// M3 — accent-soft grounds: content primary and
+// secondary on the accent-soft composite over every
+// surface.
+for (const palette of Object.keys(tokens.semantic)) {
+  for (const mode of ["light", "dark"]) {
+    const soft = semRgba(palette, mode, "accent-soft");
+    for (const voice of ["primary", "secondary"]) {
+      const text = hexToRgb(contentHex(palette, mode, voice));
+      for (const surface of SURFACES) {
+        checkMix(
+          "M3",
+          `content-${voice} on accent-soft / ${palette}/${mode}/surface-${surface}`,
+          text,
+          overRgba(soft, hexToRgb(surfaceHex(palette, mode, surface))),
+        );
+      }
+    }
+  }
+}
+// M4 — the AppShell hot-count stack: the fail badge's
+// mix text on its tint over accent-soft over surface-1
+// (the SidebarNav ground — see the header note).
+for (const palette of Object.keys(tokens.semantic)) {
+  for (const mode of ["light", "dark"]) {
+    const hue = hexToRgb(resolveColor(tokens.status.fail.hue.$value, mode));
+    const primary = hexToRgb(contentHex(palette, mode, "primary"));
+    const text = mixRgb(hue, BADGE_FG_HUE_PCT, primary);
+    const soft = semRgba(palette, mode, "accent-soft");
+    const ground = overRgba(soft, hexToRgb(surfaceHex(palette, mode, "1")));
+    checkMix(
+      "M4",
+      `fail badge text on tint ${BADGE_TINT_PCT}% over accent-soft / ${palette}/${mode}/surface-1`,
+      text,
+      mixRgb(hue, BADGE_TINT_PCT, ground),
+    );
+  }
+}
+// M5 — the NoticeRow warn blend: warn text on the
+// warn hue mixed into surface-2 at the mirrored
+// percentage (the fail blend is Part 3 family C).
+for (const palette of Object.keys(tokens.semantic)) {
+  for (const mode of ["light", "dark"]) {
+    const hue = hexToRgb(resolveColor(tokens.status.warn.hue.$value, mode));
+    const text = hexToRgb(resolveColor(tokens.status.warn.text[mode].$value, mode));
+    const s2 = hexToRgb(surfaceHex(palette, mode, "2"));
+    checkMix(
+      "M5",
+      `warn text on NoticeRow blend ${NOTICE_WARN_TINT_PCT}% / ${palette}/${mode}`,
+      text,
+      mixRgb(hue, NOTICE_WARN_TINT_PCT, s2),
+    );
+  }
+}
+// M6 — the highlight fills under content text: content
+// primary and secondary on the selection/annotation
+// fill composites over every surface. (Muted is not a
+// priced voice on a fill — see the header note.)
+for (const palette of Object.keys(tokens.semantic)) {
+  for (const mode of ["light", "dark"]) {
+    for (const fillName of ["selection-fill", "annotation-fill"]) {
+      const fill = semRgba(palette, mode, `highlight.${fillName}`);
+      for (const voice of ["primary", "secondary"]) {
+        const text = hexToRgb(contentHex(palette, mode, voice));
+        for (const surface of SURFACES) {
+          checkMix(
+            "M6",
+            `content-${voice} on ${fillName} / ${palette}/${mode}/surface-${surface}`,
+            text,
+            overRgba(fill, hexToRgb(surfaceHex(palette, mode, surface))),
+          );
+        }
+      }
+    }
+  }
+}
+// M7 — the highlight bars as indicators: each bar
+// against every surface, and against its own fill
+// composited over every surface.
+for (const palette of Object.keys(tokens.semantic)) {
+  for (const mode of ["light", "dark"]) {
+    for (const kind of ["selection", "annotation"]) {
+      const bar = hexToRgb(semHex(palette, mode, `highlight.${kind}-bar`));
+      const fill = semRgba(palette, mode, `highlight.${kind}-fill`);
+      for (const surface of SURFACES) {
+        const bg = hexToRgb(surfaceHex(palette, mode, surface));
+        checkMixNT("M7", `${kind}-bar on surface-${surface} / ${palette}/${mode}`, bar, bg);
+        checkMixNT(
+          "M7",
+          `${kind}-bar on own fill / ${palette}/${mode}/surface-${surface}`,
+          bar,
+          overRgba(fill, bg),
+        );
+      }
+    }
+  }
+}
+
+// Part 5b census — every color-mix spend in the tree,
+// scanned at gate time over the same files as Part
+// 5a's census. Each spend is classified below as
+// priced by a named family or classified with its
+// reason; the per-file occurrence count must match
+// the classifications, and each classification's
+// needle must still be present (a vanished spend
+// makes its classification stale — itself a finding).
+const COLOR_MIX_SPENDS = [
+  { file: "Button.tsx", needle: "var(--ui-accent) ${BUTTON_PRIMARY_ACTIVE_MIX_PCT}%", as: "priced — M1/M2 (primary-active mix)" },
+  { file: "Button.tsx", needle: "var(--ui-danger) ${BUTTON_DANGER_HOVER_MIX_PCT}%", as: "priced — M1/M2 (danger-hover mix)" },
+  { file: "Button.tsx", needle: "var(--ui-danger) ${BUTTON_DANGER_ACTIVE_MIX_PCT}%", as: "priced — M1/M2 (danger-active mix)" },
+  { file: "GroupedList.tsx", needle: "var(--ui-status-fail) ${NOTICE_FAIL_TINT_PCT}%", as: "priced — Part 3 family C (NoticeRow fail blend)" },
+  { file: "GroupedList.tsx", needle: "var(--ui-status-warn) ${NOTICE_WARN_TINT_PCT}%", as: "priced — M5 (NoticeRow warn blend)" },
+  { file: "Badge.tsx", needle: "${hue} ${BADGE_TINT_PCT}%", as: "priced — Part 3 family B (badge tint ground)" },
+  { file: "Badge.tsx", needle: "${hue} ${BADGE_FG_HUE_PCT}%", as: "priced — Part 3 family B (badge text mix); the fail tone's stack is M4" },
+  { file: "StatusChip.tsx", needle: "CHIP_PRESSED_TINT_PCT : CHIP_TINT_PCT", as: "priced — Part 3 family A (chip tints, rest 14% / pressed 22%)" },
+  { file: "AppShell.tsx", needle: "var(--ui-status-fail) ${BADGE_TINT_PCT}%", as: "priced — Part 3 family B; on the active nav row the stack is M4" },
+  { file: "AppShell.tsx", needle: "var(--ui-status-fail) ${BADGE_FG_HUE_PCT}%", as: "priced — Part 3 family B; on the active nav row the stack is M4" },
+  {
+    file: "Sheet.tsx",
+    needle: "var(--ui-content-primary) ${SHEET_BACKDROP_MIX_PCT}%",
+    as: "classified — the backdrop composite carries no text and no text pair over it is well-formed: the dismiss control is aria-labelled only (no visible glyph), the panel it serves is opaque surface-3 (its text is priced in Parts 1-2), and the page behind an aria-modal sheet is deliberately obscured and inert — subordination is the composite's job, so no pair is invented for it",
+  },
+];
+let mixCensusFailures = 0;
+function mixCensusFail(label) {
+  mixCensusFailures += 1;
+  console.log(`FAIL [census-5b] ${label}`);
+}
+let mixSpendsClassified = 0;
+for (const file of scannedFiles) {
+  const found = (file.text.match(/color-mix\(/g) || []).length;
+  const expected = COLOR_MIX_SPENDS.filter((c) => c.file === file.name);
+  if (found !== expected.length) {
+    mixCensusFail(
+      `${file.name}: ${found} color-mix spend(s), ${expected.length} classification(s)`,
+    );
+  }
+  for (const c of expected) {
+    if (!file.text.includes(c.needle)) {
+      mixCensusFail(`${file.name}: stale color-mix classification (needle not found)`);
+    } else {
+      mixSpendsClassified += 1;
+      if (verbose) console.log(`PASS [census-5b] ${file.name}: color-mix ${c.as}`);
+    }
+  }
+}
+// The mirrored constants, machine-checked against the
+// components' exported values: a component that
+// changes its constant without this gate fails here.
+const MIRRORED_CONSTANTS = {
+  BUTTON_PRIMARY_ACTIVE_MIX_PCT,
+  BUTTON_DANGER_HOVER_MIX_PCT,
+  BUTTON_DANGER_ACTIVE_MIX_PCT,
+  SHEET_BACKDROP_MIX_PCT,
+  NOTICE_WARN_TINT_PCT,
+  BADGE_TINT_PCT,
+  BADGE_FG_HUE_PCT,
+};
+const componentText = scannedFiles.map((f) => f.text).join("\n");
+for (const [name, value] of Object.entries(MIRRORED_CONSTANTS)) {
+  const m = componentText.match(new RegExp(`export const ${name} = (\\d+);`));
+  if (!m) {
+    mixCensusFail(`mirrored constant ${name}: no component export found`);
+  } else if (Number(m[1]) !== value) {
+    mixCensusFail(
+      `mirrored constant ${name}: components export ${m[1]}, the gate declares ${value}`,
+    );
+  }
+}
+
 console.log(
   `verify-contrast: ${checked} status-text/surface pairs checked, ` +
     `${contentChecked} content/surface pairs checked, ` +
@@ -757,8 +1105,28 @@ console.log(
     `${focusSpends} focus spends, ${outlineNoneCount} outline-none classified, ` +
     `${borderSpendKeys.size} border spends classified, ${censusFailures} failure(s)`,
 );
+console.log(
+  `verify-contrast: ${mixChecked} composite text pairs checked (Part 5b), ` +
+    `${mixFailures} failure(s)`,
+);
+console.log(
+  `verify-contrast: ${mixNtChecked} composite non-text pairs checked (Part 5b), ` +
+    `${mixNtFailures} failure(s)`,
+);
+console.log(
+  `verify-contrast: color-mix census (Part 5b): ${scannedFiles.length} files scanned, ` +
+    `${mixSpendsClassified} color-mix spends classified, ${mixCensusFailures} failure(s)`,
+);
 process.exit(
-  failures || contentFailures || tintFailures || solidFailures || ntFailures || censusFailures
+  failures ||
+    contentFailures ||
+    tintFailures ||
+    solidFailures ||
+    ntFailures ||
+    censusFailures ||
+    mixFailures ||
+    mixNtFailures ||
+    mixCensusFailures
     ? 1
     : 0,
 );
