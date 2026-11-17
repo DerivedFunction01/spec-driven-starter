@@ -8,6 +8,9 @@ Consumers import ``ALL_SCANNERS`` from this leaf module.
 from __future__ import annotations
 
 from backend.foundation.scanners.a11y_static import SCANNER as A11Y_STATIC_SCANNER
+from backend.foundation.scanners.adapter_mirror import (
+    SCANNER as ADAPTER_MIRROR_SCANNER,
+)
 from backend.foundation.scanners.asset_manifest import (
     SCANNER as ASSET_MANIFEST_SCANNER,
 )
@@ -24,6 +27,9 @@ from backend.foundation.scanners.no_reexport import (
     SCANNER as NO_REEXPORT_SCANNER,
 )
 from backend.foundation.scanners.perf_budget import SCANNER as PERF_BUDGET_SCANNER
+from backend.foundation.scanners.path_discipline import (
+    SCANNER as PATH_DISCIPLINE_SCANNER,
+)
 from backend.foundation.scanners.port_boundary import (
     SCANNER as PORT_BOUNDARY_SCANNER,
 )
@@ -47,8 +53,14 @@ from backend.foundation.scanners.settings_seam import (
 from backend.foundation.scanners.tests_tracked_only import (
     SCANNER as TESTS_TRACKED_ONLY_SCANNER,
 )
+from backend.foundation.scanners.time_ownership import (
+    SCANNER as TIME_OWNERSHIP_SCANNER,
+)
 from backend.foundation.scanners.tracking import SCANNER as TRACKING_SCANNER
 from backend.foundation.scanners.value_source import SCANNER as VALUE_SOURCE_SCANNER
+from backend.foundation.scanners.writer_uniqueness import (
+    SCANNER as WRITER_UNIQUENESS_SCANNER,
+)
 
 ALL_SCANNERS: tuple[Scanner, ...] = (
     LENGTH_SCANNER,
@@ -72,6 +84,10 @@ ALL_SCANNERS: tuple[Scanner, ...] = (
     PERF_BUDGET_SCANNER,
     VALUE_SOURCE_SCANNER,
     RESTATEMENT_SCANNER,
+    TIME_OWNERSHIP_SCANNER,
+    PATH_DISCIPLINE_SCANNER,
+    WRITER_UNIQUENESS_SCANNER,
+    ADAPTER_MIRROR_SCANNER,
 )
 
 __all__ = ["ALL_SCANNERS"]
