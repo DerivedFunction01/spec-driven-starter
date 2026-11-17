@@ -29,7 +29,27 @@
 // un-truncated message, the served facts, and an optional
 // entity routing row. Nothing beyond the two lines is ever
 // squeezed into the row to make room for them.
+//
+// Payload clamp (owner ruling 2026-11-16, from the
+// Scheduler Overview log flooding on a long exec payload):
+// a headline that exceeds the payload budget
+// (lib/log-payload — a pure predicate over the served
+// string, never a DOM measurement) renders clamped to
+// the line budget, with a "Show full payload" control
+// below the meta line. The control expands the row in
+// place to the full headline verbatim; a second tap
+// collapses it. A headline inside the budget renders
+// exactly as before — no control, no visual change.
+// Where the row itself is a control (the drawer-opening
+// button), the toggle is its OWN button, a sibling below
+// the row's button, so the two never fight: the row's
+// tap opens the drawer, the toggle's tap only expands.
 import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";
+import {
+  LOG_PAYLOAD_MAX_LINES,
+  clampLogPayload,
+  logPayloadOverflows,
+} from "../lib/log-payload";
 
 export type LogRowTone = "ok" | "info" | "warn" | "fail" | "idle";
 
@@ -76,6 +96,26 @@ export interface LogRowEntry {
   meta?: string;
   /** Present ⇒ the row opens the drawer (and wears a chevron). */
   detail?: LogRowDetail;
+}
+
+/** The payload toggle's chevron (10×6): points down
+ *  while clamped (more below), up once expanded. */
+function ClampChevron({ expanded }: { expanded: boolean }) {
+  return (
+    <svg
+      width="10"
+      height="6"
+      viewBox="0 0 10 6"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      aria-hidden="true"
+      style={{ transform: expanded ? "rotate(180deg)" : undefined }}
+    >
+      <path d="M1 1 5 5 9 1" />
+    </svg>
+  );
 }
 
 /** The mockup's chevron (8×13, 2px round-cap stroke) —
@@ -135,7 +175,11 @@ function KindBadge({ kind }: { kind: LogRowKind }) {
       className="inline-flex max-w-full items-center gap-1.5 whitespace-nowrap"
       style={{
         backgroundColor: `color-mix(in srgb, ${hue} 16%, transparent)`,
-        color: `color-mix(in srgb, ${hue} 78%, var(--wb-content-primary))`,
+        // Text mix step 43%: the step on the hue -> primary
+        // scale where the word clears 4.5:1 on its own tint
+        // over every surface, both modes (contrast gate
+        // Part 3, family B — tools/verify-contrast.mjs).
+        color: `color-mix(in srgb, ${hue} 43%, var(--wb-content-primary))`,
         borderRadius: 999,
         padding: "2.5px 9px",
         fontSize: 12,
@@ -162,7 +206,18 @@ export type LogRowProps = {
 export function LogRow({ entry, onOpen, className }: LogRowProps) {
   const [hover, setHover] = useState(false);
   const [active, setActive] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const interactive = Boolean(entry.detail && onOpen);
+  const overflows = logPayloadOverflows(entry.headline);
+  const clamped = overflows && !expanded;
+  const clampStyle: CSSProperties = clamped
+    ? {
+        display: "-webkit-box",
+        WebkitBoxOrient: "vertical",
+        WebkitLineClamp: LOG_PAYLOAD_MAX_LINES,
+        overflow: "hidden",
+      }
+    : {};
   const style: CSSProperties = {
     backgroundColor: interactive
       ? active
@@ -192,9 +247,9 @@ export function LogRow({ entry, onOpen, className }: LogRowProps) {
         </span>
         <span
           className="min-w-0 flex-1 [overflow-wrap:anywhere]"
-          style={{ fontSize: 14, fontWeight: 550, lineHeight: 1.38 }}
+          style={{ fontSize: 14, fontWeight: 550, lineHeight: 1.38, ...clampStyle }}
         >
-          {entry.headline}
+          {clamped ? clampLogPayload(entry.headline) : entry.headline}
         </span>
         {entry.kind ? (
           <span style={{ flex: "0 0 auto", marginTop: 1 }}>
@@ -225,30 +280,90 @@ export function LogRow({ entry, onOpen, className }: LogRowProps) {
       </span>
     </>
   );
+  const toggle = overflows ? (
+    <button
+      type="button"
+      aria-expanded={expanded}
+      onClick={(e) => {
+        e.stopPropagation();
+        setExpanded((v) => !v);
+      }}
+      className="flex cursor-pointer items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-1 focus-visible:outline-(--wb-focus-ring)"
+      style={{
+        marginLeft: 56,
+        marginTop: 4,
+        minHeight: 24,
+        padding: "2px 8px 2px 0",
+        backgroundColor: "transparent",
+        color: "var(--wb-accent)",
+        fontSize: 12.5,
+        fontWeight: 600,
+      }}
+    >
+      {expanded ? "Show less" : "Show full payload"}
+      <ClampChevron expanded={expanded} />
+    </button>
+  ) : null;
   const classes = ["block", className ?? ""].filter(Boolean).join(" ");
   if (!interactive) {
     return (
       <div className={classes} style={style}>
         {inner}
+        {toggle}
       </div>
     );
   }
+  if (!overflows) {
+    return (
+      <button
+        type="button"
+        onClick={onOpen}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => {
+          setHover(false);
+          setActive(false);
+        }}
+        onMouseDown={() => setActive(true)}
+        onMouseUp={() => setActive(false)}
+        className={`${classes} cursor-pointer focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-1 focus-visible:outline-(--wb-focus-ring)`}
+        style={style}
+      >
+        {inner}
+      </button>
+    );
+  }
+  // Interactive AND overflowing: the toggle cannot nest
+  // inside the row's own button, so the box becomes a div
+  // carrying the same style and hover ground, the open
+  // control is its own button over the row content, and
+  // the toggle is a sibling below it. The two controls
+  // never share an element, so their taps never fight.
   return (
-    <button
-      type="button"
-      onClick={onOpen}
+    <div
+      className={classes}
+      style={style}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => {
         setHover(false);
         setActive(false);
       }}
-      onMouseDown={() => setActive(true)}
-      onMouseUp={() => setActive(false)}
-      className={`${classes} cursor-pointer focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-1 focus-visible:outline-(--wb-focus-ring)`}
-      style={style}
     >
-      {inner}
-    </button>
+      <button
+        type="button"
+        onClick={onOpen}
+        onMouseDown={() => setActive(true)}
+        onMouseUp={() => setActive(false)}
+        className="block w-full cursor-pointer text-left focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-1 focus-visible:outline-(--wb-focus-ring)"
+        style={{
+          backgroundColor: "transparent",
+          color: "inherit",
+          padding: 0,
+        }}
+      >
+        {inner}
+      </button>
+      {toggle}
+    </div>
   );
 }
 

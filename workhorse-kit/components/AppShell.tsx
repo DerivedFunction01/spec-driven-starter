@@ -126,8 +126,11 @@ function CountBadge({ item }: { item: AppShellNavItem }) {
           ? {
               backgroundColor:
                 "color-mix(in srgb, var(--wb-okabe-vermilion) 16%, transparent)",
+              // 43%: the mix-badge text step the contrast
+              // gate's Part 3 family B verifies (see LogRow's
+              // KindBadge, the same formula).
               color:
-                "color-mix(in srgb, var(--wb-okabe-vermilion) 78%, var(--wb-content-primary))",
+                "color-mix(in srgb, var(--wb-okabe-vermilion) 43%, var(--wb-content-primary))",
             }
           : {
               backgroundColor: "var(--wb-surface-sunken)",

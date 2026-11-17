@@ -30,6 +30,13 @@ export type SegmentedControlProps<V extends string> = {
 // 1.0px from the top border); single-line pills are
 // unchanged — their height is the min-height either way.
 //
+// Focus: the radio is visually hidden, so the segment
+// carries the focus indication — the peer-focus-visible
+// utilities below, and the kit-owned rule in the generated
+// themes (.wb-segmented-input:focus-visible +
+// .wb-segmented-segment) that holds even where a consumer's
+// Tailwind build never generated the peer utilities.
+//
 // Target size: the pill is the visible control, and the
 // label wrapping it is the native radio's hit area — both
 // carry the control's full contract height (38px, 44px
@@ -88,9 +95,9 @@ export function SegmentedControl<V extends string>({
             checked={opt.value === value}
             disabled={disabled}
             onChange={() => onChange(opt.value)}
-            className="peer sr-only"
+            className="peer sr-only wb-segmented-input"
           />
-          <span className={SEGMENT_CLASSES}>{opt.label}</span>
+          <span className={`${SEGMENT_CLASSES} wb-segmented-segment`}>{opt.label}</span>
         </label>
       ))}
     </fieldset>

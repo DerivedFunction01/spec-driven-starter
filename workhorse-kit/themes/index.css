@@ -123,6 +123,11 @@ body {
   vertical-align: -0.12em;
 }
 
+.wb-segmented-input:focus-visible + .wb-segmented-segment {
+  outline: 2px solid var(--wb-focus-ring);
+  outline-offset: 1px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

@@ -256,6 +256,15 @@ const indexCss =
   // the box from tokens.
   '\n.wb-prose li:has(> input[type="checkbox"]) {\n  list-style: none;\n}\n' +
   '\n.wb-prose li > input[type="checkbox"] {\n  accent-color: var(--wb-accent);\n  margin-right: var(--wb-space-8);\n  vertical-align: -0.12em;\n}\n' +
+  // Segmented controls (SegmentedControl, StateControls
+  // option rows): the native radio is visually hidden, so
+  // its keyboard focus indication must land on the visible
+  // segment. The components also carry peer-focus-visible
+  // utilities, but a utility only exists if the consumer's
+  // Tailwind build generated it from kit sources (the
+  // @source seam in the kit README) — this kit-owned rule
+  // ships in the kit's own CSS and holds regardless.
+  '\n.wb-segmented-input:focus-visible + .wb-segmented-segment {\n  outline: 2px solid var(--wb-focus-ring);\n  outline-offset: 1px;\n}\n' +
   "\n@media (prefers-reduced-motion: reduce) {\n  *, *::before, *::after {\n    animation-duration: 0.01ms !important;\n    transition-duration: 0.01ms !important;\n  }\n}\n" +
   densityCss;
 
