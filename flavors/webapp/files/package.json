@@ -1,5 +1,7 @@
 {
   "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "@playwright/test": "1.49.1",
     "prettier": "3.4.2",
     "typescript": "5.7.2"
   },

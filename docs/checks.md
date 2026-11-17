@@ -163,6 +163,106 @@ see:
   `spec/route-coverage.md` names the check that exercises
   each route, so coverage is a tested claim, not a list.
 
+### Rendered legs
+
+The gate's legs read source; these legs read the built,
+served page in a real browser. They run on a trigger — a
+landing that touches a rendered surface, and on whatever
+cadence the project sets for its census — through the
+shard entry below, not inside `check.py`. The webapp
+flavor seeds them: the specs and config under
+`tests/e2e/`, the runner at `tools/e2e-shard.mjs`. Every
+leg carries a synthetic capability test in its own file —
+a page seeded with the leg's defect class must come back
+flagged, a clean page empty — and runs it as part of the
+family: a ruler that has never been seen red is not a
+guard, and a leg that cannot produce its measurement has
+not run.
+
+- **Entry.** `node tools/e2e-shard.mjs <family>` is the
+  one committed invocation. It checks its partition first
+  (every spec file on disk claimed by exactly one family;
+  an unassigned, double-assigned, or missing file fails
+  before anything runs), gives each shard its own port and
+  scratch directory, ensures the browser binary, and
+  requires the port free before the run and again after it
+  — a port still bound at the end is a teardown failure.
+  With `--sha`, HEAD and the tracked tree must match the
+  named commit before a leg measures anything: a verdict
+  names the tree it was measured on. Families: `qa` (the
+  legs below) and `app` (the project's own surface specs).
+- **The census.** `tests/e2e/surface-routes.ts` enrolls
+  every user-facing route — its pattern, the concrete
+  seeded path the legs drive, whether it renders, and the
+  navigation landmarks it carries. The legs iterate the
+  census and nothing else. A route joins when it is built,
+  not after it breaks; a route that cannot yet pass is
+  enrolled with its measured failure recorded beside it,
+  and the record carries the defect without excusing it.
+- **Axe leg** (`qa-axe.spec.ts`) — the rendered
+  accessibility verdict above the static floor: axe-core
+  under the WCAG 2.2 AA tag set over the census, at the
+  contract widths (390, 768, 1440) and in every appearance
+  mode the product carries. Bar: zero critical or serious
+  violations, per route, width, and mode.
+- **Geometry leg** (`qa-geometry.spec.ts`) — no horizontal
+  overflow at the contract widths, no interactive element
+  obscured by another, no target under the 24×24 floor,
+  and primary targets at 44×44 at phone width. The first
+  mode runs every width; each further mode runs the phone
+  pass, where mode-specific geometry breaks first.
+- **Truncation ruler** (`qa-truncation.spec.ts`) — rendered
+  text against its full text under ellipsis, clip, and
+  line-clamp, plus text painted over by an interactive
+  element. Failures are reported per viewport class, never
+  pooled, and the bar is zero clipped or overlapped values.
+  A drive that reaches no rendered surface measures zero
+  text elements and reports a drive failure, not a pass.
+  This is the rendered complement of the value-slots rule
+  in the flavor's composed check: that rule bans the
+  clipping shape in source, this ruler catches the clipping
+  that arrives by layout instead of by declaration.
+- **Dead-click sweep** (`qa-dead-click.spec.ts`) — every
+  visible, enabled control in each route's declared
+  landmarks is clicked for real, and a click counts only on
+  an observable effect: a navigation, a hash change, a
+  dialog opening or closing, the control's own state
+  flipping, a popup, or its landmark closing. Controls are
+  re-found by identity, never by collection position.
+  Mutating or session controls are skipped with the reason
+  in the verdict — the sweep never mutates state to prove a
+  control alive — and scheme links and self-links are
+  verified by their href contract instead of a click. This
+  is the rendered complement of the misclick audit below:
+  the audit inventories committing controls, the sweep
+  proves the chrome's controls answer.
+- **Parity leg** (`qa-parity.spec.ts`) — where an approved
+  design reference exists, the built surface is captured
+  and pixel-diffed against it. The manifest
+  (`tests/e2e/parity-views.ts`) carries each view's
+  reference, its mismatch-ratio limit where it argues one
+  (the default is 0.02 of the diff canvas), and its masked
+  regions in fractional coordinates, each with a reason;
+  masks shrink the priced surface, never forgive pixels
+  elsewhere. The per-pixel threshold is 16/255 per channel.
+  Rows a shorter capture never renders count as
+  mismatched, so height drift is priced in. A `pending`
+  view is skipped by name with its owning work named;
+  audit mode (`PARITY_AUDIT=1`) diffs every view and prints
+  the table without failing, and a view is proven in audit
+  mode before its status flips to asserted. References are
+  approved artefacts and are never auto-updated: a
+  reference changes only through the approval that changes
+  the design.
+- **Findings become pins.** A rendered defect confirmed by
+  a critic run or by use becomes a spec in the `qa` family
+  pinning the behaviour, landing with the fix where the fix
+  is the project's — the family grows from findings, so a
+  class caught once is caught by the gate thereafter. For
+  a project on the generic UI kit, the kit's Specimen is
+  the first surface enrolled: it joins the census and,
+  once its render is approved, the parity manifest.
+
 ### Misclick audit
 
 Periodically — and whenever a surface gains committing

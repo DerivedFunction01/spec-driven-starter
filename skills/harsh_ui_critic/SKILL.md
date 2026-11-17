@@ -54,6 +54,8 @@
 
 - Run the automated legs before the rendered review and attach their raw outputs to the report, never summarised away: a rendered layout sweep per viewport (overlap, overflow, geometry), an accessibility scan configured to the WCAG 2.2 AA rule set, and any deterministic rule detector the project pins.
 
+- The sweep's evidence source is the project's standing rendered legs (`docs/checks.md`, Rendered legs) where the project carries them — the axe leg, the geometry leg, the truncation ruler, the dead-click sweep, and the parity leg over the surface census, entered through the committed shard runner: cite each leg's raw output by leg name, and treat a leg the project has not seeded, or a census route it has not enrolled, as unexercised, never as passed.
+
 - Treat a clean automated run as covering only the machine-checkable subset: it clears its own findings and nothing else, and is never reported as "accessible" or "finished".
 
 - Propose a scanner or detector rule for every confirmed defect class that is mechanically detectable, so a class caught once by eye becomes a class caught forever by the gate.
