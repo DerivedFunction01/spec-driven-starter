@@ -276,8 +276,11 @@ The six fields:
   decided are never blocked states.
 - **Work record** — where progress is measured: the record
   the cadence reads.
-- **Cadence** — conforming progress-checkpoints every
-  15 minutes while doing; two missed intervals is a stall.
+- **Cadence** — conforming progress-checkpoints on the
+  armed cadence while doing; two missed intervals is a
+  stall. The cadence is a mechanism default; its value is
+  owned by the bindings layer and substituted at
+  instantiation.
 - **Continuation** — a step landing staffs the next in the
   same movement; a turn ends only with work in flight, a
   complete report, or a blocked report satisfying the
@@ -370,6 +373,37 @@ rebase and re-gate cost — and execute it. An ordering
 choice differs only in sequence, not scope or outcome, and
 is never escalated as an owner blocker; only scope,
 outcome, and the hard-stop classes go to the owner.
+
+## Gates
+
+A gate scopes to the change: a lane's gate runs the tests
+for its delta's affected modules — the gate tool's
+change-aware selection, widened to every surface sharing
+a changed contract — and never the full suite as a
+requirement. Per-lane full gates are the slowness this
+abolishes. Lanes fan in as union trees, and where a full
+run is owed it happens once, on the union tree.
+
+Gate work shards across the available parallel capacity:
+independent gates run concurrently on separate venues,
+and within a gate the parts that can run in parallel do —
+across venues first, workers second. Serial is allowed
+only for a named, recorded shared-state dependency.
+No-venue: the capacity is the local machine's own
+parallelism, and the same scoping binds.
+
+A full run is a proof instrument, not a landing gate:
+where one is owed it runs last, and even it may skip
+areas the delta does not touch. A proof whose subject is
+a tree-wide condition keeps its full run over its
+subject's own surfaces — the subject's surfaces always
+run.
+
+Landings gate on compilation: a landing proceeds on the
+tree building; test and end-to-end runs execute in
+parallel, report after, and their defects land as
+follow-up fixes. Waiting on a test run to land is a
+scheduling defect.
 
 ## Venue use
 
