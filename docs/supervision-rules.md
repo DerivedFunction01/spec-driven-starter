@@ -392,6 +392,16 @@ only for a named, recorded shared-state dependency.
 No-venue: the capacity is the local machine's own
 parallelism, and the same scoping binds.
 
+Union once, gate once: when several deltas are
+landing-bound and their pre-states are measured — each
+delta's tree hash-verified into the union, disjoint files
+blob-identical — form the one union and run the one gate
+on it; gating each delta separately and then re-running
+the overlapping tests on the union is double work.
+Formation hash-verification stays — it is what makes the
+pre-state known; per-delta gates remain only for deltas
+whose pre-state is not yet known.
+
 A full run is a proof instrument, not a landing gate:
 where one is owed it runs last, and even it may skip
 areas the delta does not touch. A proof whose subject is
