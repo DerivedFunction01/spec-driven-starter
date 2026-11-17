@@ -123,9 +123,27 @@ body {
   vertical-align: -0.12em;
 }
 
+.wb-prose a {
+  color: var(--wb-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+}
+
 .wb-segmented-input:focus-visible + .wb-segmented-segment {
   outline: 2px solid var(--wb-focus-ring);
   outline-offset: 1px;
+}
+
+.wb-toggle:focus-visible .wb-toggle-track {
+  outline: 2px solid var(--wb-focus-ring);
+  outline-offset: 1px;
+  box-shadow: inset 0 0 0 2px var(--wb-on-accent);
+}
+
+.wb-checkbox:focus-visible {
+  outline: 2px solid var(--wb-focus-ring);
+  outline-offset: 1px;
+  box-shadow: inset 0 0 0 2px #fff;
 }
 
 @media (prefers-reduced-motion: reduce) {

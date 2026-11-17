@@ -98,6 +98,15 @@
   white-space: pre;
 }
 
+/* The block is a scrollable region (overflow-x above):
+   PlanBody renders it focusable (tabindex), and its
+   focus indication is the kit's one ring — the same
+   treatment every focusable surface carries. */
+.wb-codeblock:focus-visible {
+  outline: 2px solid var(--wb-focus-ring);
+  outline-offset: 1px;
+}
+
 /* The diff grammar's own add/del classes (distinct from
    the diff views' row tinting, which is the primary
    signal and lives in the components). */

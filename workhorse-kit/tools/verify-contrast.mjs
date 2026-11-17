@@ -55,6 +55,44 @@
 // 12/20 inline) — a component that changes its mix owes
 // this file the same change.
 //
+// Part 4 (2026-11-16 superapp critic confirmation,
+// finding F-2): the SOLID pairs join the net. Parts 1–3
+// check text against surfaces and tints; a solid fill is
+// neither — it is an opaque token fill carrying its own
+// on- token. The confirmation pass measured the client
+// Launcher's AppTile count badge (white text on the raw
+// Okabe vermilion primitive the component read directly)
+// at 3.87:1 while this gate stood green over its
+// enumeration. Part 4 enumerates the token-defined solid
+// text pairs: the notify badge pair (on-notify on
+// notify) and Button's rest-state pairs (on-accent on
+// accent, accent-hover, danger), both palettes x both
+// modes, same fatal 4.5:1 bar. A solid text fill reads
+// its token pair, never a primitive — that is what keeps
+// the pair inside this enumeration. (Button's
+// hover/active color-mix states are the component's own
+// constants, not token pairs; they join the net in
+// Part 5 below, mirrored as data the way Part 3 mirrors
+// the mix badges.)
+//
+// Part 5 (2026-11-17 superapp critic confirmation
+// follow-up — the Button danger active state F9 measured
+// at 3.92:1 olive/dark and 3.67:1 teal/dark and named
+// outside its scope): the BUTTON STATE pairs join the
+// net. Button (components/Button.tsx) paints its primary
+// and danger fills per state from the accent/danger
+// tokens and color-mix steps toward a shade endpoint;
+// the text is on-accent in every state. Part 4 covers
+// the rest-state token pairs; this part enumerates the
+// full state matrix as the component defines it — rest,
+// hover, active for both variants, both palettes x both
+// modes, same fatal 4.5:1 bar. The mix percentages are
+// the component's own constants, mirrored here as data
+// (BTN_* below) — a component that changes its state
+// mixes owes this file the same change, exactly as
+// Part 3's badge mixes do; the shade endpoint is the
+// press-shade token, resolved per palette x mode.
+//
 // Usage: bun viewer/tools/verify-contrast.mjs [--verbose]
 // Exit 1 on any failure.
 
@@ -319,6 +357,113 @@ for (const palette of Object.keys(tokens.semantic)) {
   }
 }
 
+// Part 4 — text on solid fills (finding F-2; see the
+// header note). The fills are opaque, so the pair is the
+// whole story: the fill token and its on- token, read
+// straight from the semantic tokens (DTCG aliases
+// resolved), per palette x mode.
+function resolveSemantic(raw) {
+  let v = raw;
+  while (typeof v === "string" && v.startsWith("{")) {
+    let node = tokens;
+    for (const part of v.slice(1, -1).split(".")) node = node[part];
+    v = node.$value;
+  }
+  return v;
+}
+let solidChecked = 0;
+let solidFailures = 0;
+function checkSolid(label, fgHex, bgHex) {
+  const r = ratio(fgHex, bgHex);
+  solidChecked += 1;
+  const ok = r >= 4.5;
+  if (!ok) solidFailures += 1;
+  if (verbose || !ok) {
+    console.log(
+      `${ok ? "PASS" : "FAIL"} [solid] ${label}: ` +
+        `${fgHex} on ${bgHex}: ${r.toFixed(2)}:1`,
+    );
+  }
+}
+for (const palette of Object.keys(tokens.semantic)) {
+  for (const mode of ["light", "dark"]) {
+    const sem = tokens.semantic[palette][mode];
+    checkSolid(
+      `on-notify on notify / ${palette}/${mode}`,
+      resolveSemantic(sem["on-notify"].$value),
+      resolveSemantic(sem.notify.$value),
+    );
+    for (const fill of ["accent", "accent-hover", "danger"]) {
+      checkSolid(
+        `on-accent on ${fill} / ${palette}/${mode}`,
+        resolveSemantic(sem["on-accent"].$value),
+        resolveSemantic(sem[fill].$value),
+      );
+    }
+  }
+}
+
+// Part 5 — Button state pairs (see the header note).
+// The component's state mixes, mirrored as data:
+// primary active = accent at BTN_PRIMARY_ACTIVE_PCT
+// toward the shade endpoint; danger hover = danger at
+// BTN_DANGER_HOVER_PCT; danger active = danger at
+// BTN_DANGER_ACTIVE_PCT. Rest and primary-hover states
+// are the plain tokens (already in Part 4's net as
+// pairs; they repeat here so the family reads whole, as
+// the component defines it).
+const BTN_PRIMARY_ACTIVE_PCT = 88;
+const BTN_DANGER_HOVER_PCT = 88;
+const BTN_DANGER_ACTIVE_PCT = 78;
+// The component's mix endpoint: the press-shade token
+// (black in light modes, white in dark), resolved per
+// palette x mode in the loop below, the way Part 4
+// resolves its pairs. The step direction is the
+// token's, per mode — the same discipline as
+// accent-hover, which steps darker under white text and
+// lighter under dark text. A fixed step toward black
+// spends the dark modes' contrast against their own
+// dark on-accent text: at the uncured endpoint the
+// danger active state (78% toward black) measured
+// 3.92:1 olive/dark and 3.67:1 teal/dark — the failure
+// this part was added to pin (see gate-red in the F9b
+// evidence) — and danger hover cleared the bar by only
+// 0.03 in teal/dark.
+let buttonChecked = 0;
+let buttonFailures = 0;
+function checkButton(label, fgRgb, bgRgb) {
+  const r = ratioRgb(fgRgb, bgRgb);
+  buttonChecked += 1;
+  const ok = r >= 4.5;
+  if (!ok) buttonFailures += 1;
+  if (verbose || !ok) {
+    console.log(
+      `${ok ? "PASS" : "FAIL"} [button] ${label}: ` +
+        `${rgbToHex(fgRgb)} on ${rgbToHex(bgRgb)}: ${r.toFixed(2)}:1`,
+    );
+  }
+}
+for (const palette of Object.keys(tokens.semantic)) {
+  for (const mode of ["light", "dark"]) {
+    const sem = tokens.semantic[palette][mode];
+    const onAccent = hexToRgb(resolveSemantic(sem["on-accent"].$value));
+    const shade = hexToRgb(resolveSemantic(sem["press-shade"].$value));
+    const accent = hexToRgb(resolveSemantic(sem.accent.$value));
+    const danger = hexToRgb(resolveSemantic(sem.danger.$value));
+    const states = [
+      ["primary rest", accent],
+      ["primary hover", hexToRgb(resolveSemantic(sem["accent-hover"].$value))],
+      ["primary active", mixRgb(accent, BTN_PRIMARY_ACTIVE_PCT, shade)],
+      ["danger rest", danger],
+      ["danger hover", mixRgb(danger, BTN_DANGER_HOVER_PCT, shade)],
+      ["danger active", mixRgb(danger, BTN_DANGER_ACTIVE_PCT, shade)],
+    ];
+    for (const [label, fill] of states) {
+      checkButton(`on-accent on ${label} / ${palette}/${mode}`, onAccent, fill);
+    }
+  }
+}
+
 console.log(
   `verify-contrast: ${checked} status-text/surface pairs checked, ` +
     `${contentChecked} content/surface pairs checked, ` +
@@ -328,4 +473,14 @@ console.log(
   `verify-contrast: ${tintChecked} text-on-tint pairs checked (Part 3), ` +
     `${tintFailures} failure(s)`,
 );
-process.exit(failures || contentFailures || tintFailures ? 1 : 0);
+console.log(
+  `verify-contrast: ${solidChecked} text-on-solid pairs checked (Part 4), ` +
+    `${solidFailures} failure(s)`,
+);
+console.log(
+  `verify-contrast: ${buttonChecked} button-state pairs checked (Part 5), ` +
+    `${buttonFailures} failure(s)`,
+);
+process.exit(
+  failures || contentFailures || tintFailures || solidFailures || buttonFailures ? 1 : 0,
+);

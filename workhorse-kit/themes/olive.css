@@ -18,6 +18,9 @@
   --wb-accent-soft: rgba(75, 83, 32, 0.12);
   --wb-focus-ring: var(--wb-accent);
   --wb-danger: #b03a22;
+  --wb-press-shade: #000000;
+  --wb-notify: #bb5300;
+  --wb-on-notify: #ffffff;
   --wb-unknown: #5b6b7a;
   --wb-highlight-selection-fill: rgba(75, 83, 32, 0.22);
   --wb-highlight-selection-bar: var(--wb-accent);
@@ -86,6 +89,9 @@
   --wb-accent-soft: rgba(157, 180, 92, 0.22);
   --wb-focus-ring: var(--wb-accent);
   --wb-danger: #e07a5f;
+  --wb-press-shade: #ffffff;
+  --wb-notify: #bb5300;
+  --wb-on-notify: #ffffff;
   --wb-unknown: #93a7ba;
   --wb-highlight-selection-fill: rgba(157, 180, 92, 0.38);
   --wb-highlight-selection-bar: var(--wb-accent);
@@ -155,6 +161,9 @@
     --wb-accent-soft: rgba(157, 180, 92, 0.22);
     --wb-focus-ring: var(--wb-accent);
     --wb-danger: #e07a5f;
+    --wb-press-shade: #ffffff;
+    --wb-notify: #bb5300;
+    --wb-on-notify: #ffffff;
     --wb-unknown: #93a7ba;
     --wb-highlight-selection-fill: rgba(157, 180, 92, 0.38);
     --wb-highlight-selection-bar: var(--wb-accent);

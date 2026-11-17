@@ -76,7 +76,7 @@ export function Checkbox({ checked, onChange, label, disabled = false, className
         onChange?.(!checked);
       }}
       className={[
-        "flex items-center justify-center focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-1 focus-visible:outline-(--wb-focus-ring)",
+        "wb-checkbox flex items-center justify-center focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-1 focus-visible:outline-(--wb-focus-ring)",
         disabled ? "cursor-not-allowed opacity-55" : onChange ? "cursor-pointer" : "",
         className ?? "",
       ]

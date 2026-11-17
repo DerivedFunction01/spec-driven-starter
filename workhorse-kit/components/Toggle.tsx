@@ -39,7 +39,7 @@ export function Toggle({ checked, onChange, label, disabled = false, className }
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       className={[
-        "group inline-flex min-h-[38px] items-center gap-2 focus-visible:outline-none [@media(pointer:coarse)]:min-h-[44px]",
+        "wb-toggle group inline-flex min-h-[38px] items-center gap-2 focus-visible:outline-none [@media(pointer:coarse)]:min-h-[44px]",
         disabled ? "cursor-not-allowed opacity-55" : "cursor-pointer",
         className ?? "",
       ]
@@ -48,7 +48,7 @@ export function Toggle({ checked, onChange, label, disabled = false, className }
     >
       <span
         aria-hidden="true"
-        className="relative inline-block h-6 w-10 shrink-0 group-focus-visible:outline-2 group-focus-visible:outline-solid group-focus-visible:outline-offset-1 group-focus-visible:outline-(--wb-focus-ring)"
+        className="wb-toggle-track relative inline-block h-6 w-10 shrink-0 group-focus-visible:outline-2 group-focus-visible:outline-solid group-focus-visible:outline-offset-1 group-focus-visible:outline-(--wb-focus-ring)"
         style={trackStyle}
       >
         <span

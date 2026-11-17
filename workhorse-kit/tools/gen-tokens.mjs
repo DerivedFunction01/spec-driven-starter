@@ -256,6 +256,20 @@ const indexCss =
   // the box from tokens.
   '\n.wb-prose li:has(> input[type="checkbox"]) {\n  list-style: none;\n}\n' +
   '\n.wb-prose li > input[type="checkbox"] {\n  accent-color: var(--wb-accent);\n  margin-right: var(--wb-space-8);\n  vertical-align: -0.12em;\n}\n' +
+  // Prose links (plan syntax standard): marked emits
+  // bare anchors into the prose scope, and the document
+  // preflight leaves them inheriting the body colour
+  // with no underline — a link inside a block of prose
+  // is then distinguishable from its surrounding text
+  // by nothing at all (the reader-chrome form of the
+  // same shape was measured by axe as
+  // link-in-text-block, serious; critic F13,
+  // 2026-11-17). The prose scope gives its anchors the
+  // app's link colour plus the non-colour cue: an
+  // underline with a small offset. The accent token is
+  // already per-palette and per-mode, so one rule
+  // covers every appearance.
+  '\n.wb-prose a {\n  color: var(--wb-accent);\n  text-decoration: underline;\n  text-underline-offset: 0.14em;\n}\n' +
   // Segmented controls (SegmentedControl, StateControls
   // option rows): the native radio is visually hidden, so
   // its keyboard focus indication must land on the visible
@@ -265,6 +279,50 @@ const indexCss =
   // @source seam in the kit README) — this kit-owned rule
   // ships in the kit's own CSS and holds regardless.
   '\n.wb-segmented-input:focus-visible + .wb-segmented-segment {\n  outline: 2px solid var(--wb-focus-ring);\n  outline-offset: 1px;\n}\n' +
+  // Toggle (components/Toggle.tsx): the visible focus
+  // indicator lands on the track span, not the button —
+  // the button suppresses its own outline so the ring
+  // hugs the switch. The track also carries
+  // group-focus-visible utilities, but as with the
+  // segmented rule above, a utility only exists if the
+  // consumer's Tailwind build generated it; this
+  // kit-owned rule ships the guarantee in the kit's own
+  // CSS. It adds one thing the utility form cannot
+  // express: the inset separator ring. The focus-ring
+  // token IS the accent, and a checked track's fill is
+  // the accent too, so the accent ring alone camouflages
+  // against the checked fill — the 2026-11-16 critic
+  // confirmation pass read the digest switches as
+  // painting no indicator. The separator must contrast
+  // with the FILL, and the one token guaranteed to do
+  // that is the fill's own on- colour, so the ring is
+  // inset: 2px of on-accent inside the track's edge,
+  // legible in both modes and both switch states. (An
+  // outset separator would need contrast with the
+  // backdrop instead, which the kit cannot know — the
+  // track sits on cards, rows, and canvas alike.)
+  '\n.wb-toggle:focus-visible .wb-toggle-track {\n  outline: 2px solid var(--wb-focus-ring);\n  outline-offset: 1px;\n  box-shadow: inset 0 0 0 2px var(--wb-on-accent);\n}\n' +
+  // Checkbox (components/Checkbox.tsx): the same
+  // camouflage shape as the Toggle, one component over.
+  // The visible element IS the button — a locked circle
+  // whose checked fill is the status-done hue — and its
+  // focus outline is the focus-ring token, i.e. the
+  // accent, which measures only 1.49–2.40:1 against the
+  // checked fill across palettes x modes (teal light:
+  // #0f766e on #009e73, 1.60:1), so the ring reads as
+  // part of the disc. The component also carries
+  // focus-visible utilities, but as with the rules
+  // above, a utility only exists if the consumer's
+  // Tailwind build generated it; this kit-owned rule
+  // ships the guarantee in the kit's own CSS. The inset
+  // separator is the fill's own on- colour — the white
+  // the component paints its check in (Checkbox.tsx's
+  // color: "#fff", mirrored here as data): the fill is
+  // a constant primitive in every palette and mode, so
+  // its on- colour is constant too, and the band holds
+  // against the fill the same 3.42:1 the check itself
+  // does, in both modes.
+  '\n.wb-checkbox:focus-visible {\n  outline: 2px solid var(--wb-focus-ring);\n  outline-offset: 1px;\n  box-shadow: inset 0 0 0 2px #fff;\n}\n' +
   "\n@media (prefers-reduced-motion: reduce) {\n  *, *::before, *::after {\n    animation-duration: 0.01ms !important;\n    transition-duration: 0.01ms !important;\n  }\n}\n" +
   densityCss;
 
