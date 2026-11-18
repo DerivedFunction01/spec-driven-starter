@@ -325,6 +325,16 @@ plan with no parallelization ruling is unfinished.
 Adoption executes the plan's stated split and does not
 re-derive one; plan numbering is not a dependency.
 
+One executor per plan: an adopted plan names its executing
+lane in its header, before its first edit — that edit is
+the claim. A lane that finds a plan claimed by another
+lane, or uncommitted changes on a plan's critical files,
+stands down and surfaces the collision rather than
+building in parallel on the same files. An open offer to
+execute is completed by naming the executing lane when the
+offer is taken up; an offer taken up in two places executes
+on the first claim.
+
 Prerequisites are data, not prose. Every step carries a
 machine-readable block declaring the todos it mints and
 the prerequisites those todos carry — todo ids anywhere
@@ -407,13 +417,24 @@ where one is owed it runs last, and even it may skip
 areas the delta does not touch. A proof whose subject is
 a tree-wide condition keeps its full run over its
 subject's own surfaces — the subject's surfaces always
-run.
+run. A full run runs only on the owner's explicit
+consent, and under exactly one conditional: the proof's
+subject is itself a tree-wide condition. Every other
+gate is change-aware scoped to the delta's affected
+modules, whatever the delta's size or the tree's status;
+a gate template whose default is a full run is a defect
+of the template, not of the lane that fired it.
 
 Landings gate on compilation: a landing proceeds on the
 tree building; test and end-to-end runs execute in
 parallel, report after, and their defects land as
 follow-up fixes. Waiting on a test run to land is a
 scheduling defect.
+
+Markdown carries no gate beyond the scanners that read
+it: a markdown step lands on scanner-clean — or on
+nothing, where no scanner reads the file — and never
+queues behind test runs or gate draws.
 
 ## Venue use
 
@@ -565,6 +586,18 @@ persisted; precedence runs command-line over environment,
 and stored configuration over defaults. The seam module
 and provider paths are the adopting repo's binding.
 
+One owner per recognizer or helper: a shared recognizer,
+pattern, helper, or date/time derivation has exactly one
+homed module per intent. A consumer that needs more of it
+extends the home; it never defines a local copy, however
+small the difference looks. This extends the one-source
+rule beyond constants: the governed thing is the behavior,
+not only the value. Enforcement is shape-based at the
+gate — the scanner knows the family-to-home map and flags
+the local definition's shape wherever it appears — and
+duplication is measured per family, with the census of
+private copies trending to zero.
+
 Every package README carries a Purpose section, a
 Contracts list of bolded invariants, and a Deliberate gaps
 list — neither as a table. It states intent rather than
@@ -589,7 +622,14 @@ figures, project vocabulary, or a restated rule. Changing
 code does not license growing its prose.
 
 Fixture discipline: default unit tests are offline,
-deterministic, and fast. Committed fixtures are sanitized,
+deterministic, and fast. There are no nondeterministic
+tests: a test that flakes is changed or dropped, never
+quarantined, never skipped into silence, and never
+retried into green. Tests fake their live and timing
+dependencies — no test waits on a real clock, a real
+network, or a real external state — and the determinism
+proof is repeated parallel runs, green every time.
+Committed fixtures are sanitized,
 minimal golden references. Data a production module
 consumes is not a fixture and lives beside its owning
 module in the package. Generated test outputs use

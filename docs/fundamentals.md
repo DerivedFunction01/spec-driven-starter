@@ -111,6 +111,23 @@ answer; nothing there binds a project whose answer is no.
   percentage, or an expectation is served only where both of
   its sides exist; where one side is missing, the surface
   serves the side it has and names the other absent.
+- **Presence checks do not fail loud.** Honest absence is a
+  semantics rule — what a missing value *means*. This is the
+  mechanism rule beside it: a presence check never answers
+  with an exception. Where a field or a source is missing,
+  the surface serves what it has, the missing part as null,
+  and a partial marker saying the answer is incomplete; the
+  reader decides what the partial answer is worth. Failing
+  loud remains the shape for integrity and safety refusals —
+  a corrupt record, a refused write — never for "this field
+  was not there".
+- **Heavy APIs are decomposed.** A heavy read is never one
+  monolithic call: it is paginated or batched, each portion
+  its own call with its own result, so a portion can load,
+  fail, and retry on its own. The client side matches: a web
+  surface has no singular loading state — each portion
+  renders when its own call lands, and a slow portion never
+  holds the portions that already arrived.
 - **One source per constant.** Every changeable value — caps,
   thresholds, budgets, cadences, ports, paths — has exactly
   one machine source (the settings seam, a config file, a
@@ -204,6 +221,21 @@ answer; nothing there binds a project whose answer is no.
   builder's assumption. This rule is stated here, in the
   project's own fundamentals, so it survives handover: an
   owner reading a fresh clone learns it from the repo.
+- **One interpreter.** All of a repo's automation — its
+  gate, its scripts, its scheduled and ad-hoc runs —
+  executes under the repo's own interpreter, built by the
+  repo's init step into its own environment; the system
+  interpreter is never the runtime for repo work. A result
+  produced under any other interpreter is not evidence
+  about the repo.
+- **The cap is a backstop.** A file approaching its size
+  cap is already a defect, not a file with room left: the
+  cap exists to catch a decomposition that was missed, not
+  as a target to live under. When a file nears the cap,
+  decompose it along its real seams as defect work; never
+  route new code around a near-cap file as the resolution,
+  and never let "the next change forces the split" stand
+  as the plan.
 
 ## Conditional rules (intake-gated)
 

@@ -251,6 +251,15 @@ Reports name the deployed commit and what to click. A local
 pass is a precondition, never the report. Record: the landing
 note in the portion's plan todo, with the deployed commit.
 
+**A demo is a working fake.** Where a demo or specimen surface
+exists, it runs a fake persona against fake served data, and
+every control on it is functional against the fake — it
+navigates, filters, saves, and refuses exactly as the real
+surface does, against the fake's data. An inert control on a
+demo is a defect of the demo, not a simplification: a demo
+that cannot be driven proves nothing about the surface it
+stands for.
+
 ## Study pattern
 
 Anything not solid — missing, or carrying friction — gets a
@@ -293,12 +302,25 @@ stays layered. Cadence is the project's own ruling, recorded
 in its spec. Record: the pass's landing note, naming what
 folded and what retired.
 
+**Findings become plans.** A sweep, audit, or review is not a
+result: it becomes an implementation plan whose every step
+lands a change, with result preservation as the proof burden
+where a step claims it. A finding with no step behind it is
+an observation, reported as one — findings are results only
+when code has landed behind them.
+
 ## Worktree lanes
 
 Feature work builds in sibling worktrees on feature branches —
 typecheck and unit tests run in-tree, in the lane. Merges into
 the main branch stay serial, ancestry-checked, with the full
-gate per merge. Lanes never commit to the shared branch; the
+gate per merge. Ship by SHA, and verify the ancestry first:
+before merging a batch, list the commits since the gated tip
+(`git log <gated-tip>..<merge-SHA>`) and read the list — a
+lane may have stacked a commit under the merge SHA, and
+merging by that SHA freezes the batch against later commits
+but does not exclude commits already stacked under it. Check
+the ancestry, then merge. Lanes never commit to the shared branch; the
 coordinating agent gates, commits, and verifies. Record: the
 bundle's todo files, one per lane step.
 
@@ -334,6 +356,16 @@ reproduction exists, and two variables are never changed in
 one step — an unreproduced fix is a guess wearing a patch.
 Record: a short post-mortem note with the fix (what reproduced
 it, which hypothesis held, what the regression test pins).
+
+## Redesign lens
+
+A class that has grown bloated or friction-causing is
+redesigned, not patched around: the redesign names the
+fitting Gang-of-Four pattern for the friction — the pattern
+is the design's statement, chosen for the shape of the
+problem, and the redesign is judged against it. A redesign
+proposal that names no pattern has not yet said what it is
+doing.
 
 ## Verify in the target runtime
 
