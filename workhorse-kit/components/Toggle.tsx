@@ -38,8 +38,20 @@ export function Toggle({ checked, onChange, label, disabled = false, className }
       onClick={() => onChange(!checked)}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      // `relative` is load-bearing, not cosmetic: the
+      // label span below is absolutely positioned
+      // whenever a consumer visually hides it (the
+      // GroupedList switch row passes
+      // [&>span:last-of-type]:sr-only). Without a
+      // positioned ancestor the span's containing block
+      // escapes to the page's outer scroller and its
+      // static position deep in a scroll region extends
+      // that scroller's overflow — the phantom body
+      // scroll of owner defect D5 (2026-11-17). The
+      // button as containing block keeps the span's
+      // overflow inside the region that owns the row.
       className={[
-        "wb-toggle group inline-flex min-h-[38px] items-center gap-2 focus-visible:outline-none [@media(pointer:coarse)]:min-h-[44px]",
+        "wb-toggle group relative inline-flex min-h-[38px] items-center gap-2 focus-visible:outline-none [@media(pointer:coarse)]:min-h-[44px]",
         disabled ? "cursor-not-allowed opacity-55" : "cursor-pointer",
         className ?? "",
       ]

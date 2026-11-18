@@ -63,8 +63,21 @@ export function SegmentedControl<V extends string>({
   const name = useId();
   return (
     <fieldset
+      // `relative` is load-bearing, not cosmetic: the
+      // legend and the radio inputs are sr-only
+      // (position: absolute). Without a positioned
+      // ancestor their containing block escapes to the
+      // page's outer scroller, and a control sitting
+      // deep in a scroll region extends that scroller's
+      // overflow by its full static depth — the phantom
+      // body scroll of owner defect D5 (2026-11-17,
+      // measured at +2539px on the workbench entries
+      // route). The fieldset as containing block keeps
+      // their overflow inside the region that owns the
+      // control; their rendered (clipped, 1px) boxes do
+      // not move.
       className={[
-        "m-0 inline-flex min-h-[38px] flex-wrap items-center gap-1 border-0 p-0 [@media(pointer:coarse)]:min-h-[44px]",
+        "relative m-0 inline-flex min-h-[38px] flex-wrap items-center gap-1 border-0 p-0 [@media(pointer:coarse)]:min-h-[44px]",
         disabled ? "opacity-55" : "",
         className ?? "",
       ]

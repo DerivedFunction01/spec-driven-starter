@@ -204,11 +204,12 @@
 // finding), the presence of the kit-owned focus rules
 // in the generated themes, every border token spend
 // (each classified as priced by a Part 6 family,
-// decorative with its reason, or — one entry —
-// provisional: Button's secondary boundary, whose
-// re-point is owed by the in-flight Button cure that
-// owns that file; the census prints it as a NOTE on
-// every run until the spend moves), and every
+// decorative with its reason, or provisional: a
+// re-point owed elsewhere, which the census prints as
+// a NOTE on every run until the spend moves — the one
+// entry of that kind, Button's secondary boundary,
+// retired when its re-point to field-border landed),
+// and every
 // color-mix spend (each classified as priced by a named
 // part or classified with its reason — the two backdrop
 // composites). This kit's mix percentages are inline
@@ -896,7 +897,7 @@ const OUTLINE_NONE6 = [
   },
   {
     file: "Toggle.tsx",
-    needle: "wb-toggle group inline-flex",
+    needle: "wb-toggle group relative inline-flex",
     by: "group ring on the track span (group-focus-visible outline utilities) + the kit theme rule .wb-toggle:focus-visible .wb-toggle-track, whose inset on-accent separator band is priced in F3",
   },
 ];
@@ -921,9 +922,11 @@ for (const file of componentFiles6) {
 // Border spends: every var(--wb-*) spent on a border
 // property, per file, classified below as priced (by a
 // Part 6 family), decorative (with its reason), or
-// provisional (one entry: a re-point owed by another
-// programme's in-flight cure, printed as a NOTE on
-// every run until the spend moves). A hue spent through
+// provisional (a re-point owed elsewhere, printed as a
+// NOTE on every run until the spend moves — the one
+// entry this class carried, Button's secondary
+// boundary, retired when its re-point to field-border
+// landed). A hue spent through
 // a `var(--wb-status-${…})` template is keyed
 // status-<dynamic>.
 const BORDER_SPENDS6 = {
@@ -939,10 +942,7 @@ const BORDER_SPENDS6 = {
     "decorative",
     "outline pill in the status hue on a transparent ground — the badge is identified by its priced status text and glyph; the hue edge is same-hue reinforcement",
   ],
-  "Button.tsx|border-strong": [
-    "provisional",
-    "the secondary variant's boundary — the variant's only edge, and border-strong measures 1.66–1.83:1 on its grounds. Button.tsx carries another programme's in-flight cure and is not edited by this sync; the re-point to field-border is owed by that landing, and this entry retires the run it lands",
-  ],
+  "Button.tsx|field-border": ["priced", "secondary variant's boundary — B1"],
   "Card.tsx|border-default": [
     "decorative",
     "card frame — the card is identified by its surface-2 ground, not its edge",

@@ -1,5 +1,9 @@
 // Button — the kit's only button. Sections never hand-roll one.
 // Variants × states per context/component-contracts.md#button.
+// Labels never truncate: no nowrap / overflow clipping anywhere
+// in the chain — a squeezed button wraps its label and grows
+// (owner rule, 2026-11-17: a truncated button is a defect,
+// cured by sizing/layout, never by clipping).
 import { type CSSProperties, type MouseEvent, type ReactNode, useState } from "react";
 
 export type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
@@ -26,7 +30,7 @@ function variantStyle(variant: ButtonVariant, hover: boolean, active: boolean): 
       return {
         ...base,
         backgroundColor: active
-          ? "color-mix(in srgb, var(--wb-accent) 88%, black)"
+          ? "color-mix(in srgb, var(--wb-accent) 88%, var(--wb-press-shade))"
           : hover
             ? "var(--wb-accent-hover)"
             : "var(--wb-accent)",
@@ -37,9 +41,9 @@ function variantStyle(variant: ButtonVariant, hover: boolean, active: boolean): 
       return {
         ...base,
         backgroundColor: active
-          ? "color-mix(in srgb, var(--wb-danger) 78%, black)"
+          ? "color-mix(in srgb, var(--wb-danger) 78%, var(--wb-press-shade))"
           : hover
-            ? "color-mix(in srgb, var(--wb-danger) 88%, black)"
+            ? "color-mix(in srgb, var(--wb-danger) 88%, var(--wb-press-shade))"
             : "var(--wb-danger)",
         color: "var(--wb-on-accent)",
         borderWidth: 0,
@@ -53,7 +57,7 @@ function variantStyle(variant: ButtonVariant, hover: boolean, active: boolean): 
             ? "var(--wb-surface-1)"
             : "var(--wb-surface-2)",
         color: "var(--wb-content-primary)",
-        borderColor: "var(--wb-border-strong)",
+        borderColor: "var(--wb-field-border)",
         borderStyle: "solid",
         borderWidth: 1,
       };
@@ -87,7 +91,7 @@ export function Button({
     throw new Error("Button: iconOnly requires ariaLabel");
   }
   const classes = [
-    "inline-flex min-h-[38px] max-w-full min-w-0 items-center justify-center gap-2 overflow-hidden text-sm font-medium whitespace-nowrap select-none [@media(pointer:coarse)]:min-h-[44px]",
+    "inline-flex min-h-[38px] max-w-full min-w-0 items-center justify-center gap-2 text-center text-sm font-medium select-none [@media(pointer:coarse)]:min-h-[44px]",
     iconOnly ? "w-[38px] px-0 [@media(pointer:coarse)]:w-[44px]" : "px-4",
     disabled ? "cursor-not-allowed opacity-55" : "cursor-pointer",
     FOCUS,
@@ -120,11 +124,11 @@ export function Button({
       style={variantStyle(variant, !disabled && hover, !disabled && active)}
     >
       {typeof children === "string" ? (
-        <span className="min-w-0 truncate">{children}</span>
+        <span className="min-w-0 [overflow-wrap:anywhere]">{children}</span>
       ) : Array.isArray(children) ? (
         children.map((child, i) =>
           typeof child === "string" ? (
-            <span key={i} className="min-w-0 truncate">
+            <span key={i} className="min-w-0 [overflow-wrap:anywhere]">
               {child}
             </span>
           ) : (
