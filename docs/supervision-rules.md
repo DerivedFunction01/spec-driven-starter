@@ -316,6 +316,101 @@ acknowledged. The class does not depend on the fleet. The
 bindings layer names the shared systems and their owning
 threads.
 
+## Gap closure
+
+The sweep that closes gaps is the tick itself: its
+measure classes live in the workbench as their
+permanent home, and the workbench is their sender.
+A gap is a measured condition, never a thread's
+self-report — the records that constitute it are the
+work record's todo files and checkpoint stamps, the
+run-record store, and the fleet capacity source
+(Staffing). Only a measure clears a gap row (Staffing);
+an acknowledgement clears nothing.
+
+The classes: idle, serial, stall/seam, orphan,
+unreported. Idle is armed or doing work with no
+conforming checkpoint past the stall bound and no
+verified blocked basis (Blocked states and claimed
+instructions); serial is a programme with
+parallelizable work running fewer than two active
+workers while a live session sits idle (Staffing);
+stall/seam is a step complete at lane level whose
+successor is unstaffed, or a landed hand-back nobody
+consumed (Plan shape and fan-out).
+
+Orphan, two shapes. The derived shape: a run record
+with no payload finish whose evidence is stale past
+the programme's window — the launch-lost shape (a
+launch that died while the runner still holds the
+record) and the stuck shape (a non-terminal record
+whose evidence stopped advancing). A record in
+flight on fresh evidence is not an orphan; a
+finished record is not one either. The
+underivable shape: a terminal record whose result
+was never collected. The record alone cannot tell
+"nothing to pull" from "never pulled" — a job that
+declares no outputs pulls nothing — so that shape
+stays a coordinator act until the record carries
+the job's outputs declaration, and is named as a
+residual wherever the orphan class is reported,
+never silently dropped.
+
+Unreported: work landed or complete that has not
+been surfaced to its waiter. The owner-waiting rows
+carry it: a waiter with an unanswered ask outranks
+queue position.
+
+The actuator ladder, in order; a message alone is
+the weakest form and never counts as the act by
+itself. Self-collect: for a terminal-but-uncollected
+record, read the result and deliver it with its
+verdict — since the underivable orphan shape is not
+derived, this rung stays a coordinator act. Direct
+commission: steer the owning coordinator carrying
+the concrete next act, drawn from the programme's
+own plan and records — the named step, its inputs,
+and the output that proves it started; never a
+status request. No direct-to-lane channel is
+invented: lanes are ephemeral and no registry route
+names them, so the direct-lane rung routes via the
+coordinator. Successor staffing: when a step's
+landing is verified in the record, the successor
+step is staffed in the same movement — the seam
+never waits for a coordinator's next movement.
+Verify the act: every actuation records an
+expectation — the specific ground-truth change that
+must appear by the next run (a new run record, a
+moved checkpoint stamp, a worker count up, a
+hand-back consumed). The next run checks it; an
+unmet expectation escalates the channel
+(coordinator note, then defect report to the parent
+thread naming the non-response) and re-actuates in
+the same run. An acknowledgement is not movement;
+only the measured change closes the gap. A gap
+actuates at most once per hour while unchanged,
+unless its expectation failed verification — a
+failed expectation always re-actuates immediately.
+Utilization accounting: each run, per programme,
+whether it had at least one active worker while
+open work stood. The hourly roll-up reports the
+fraction of the last four hours each programme
+spent doing nothing while work stood open — that
+number trending to zero is the sweep's success
+measure. The fraction is computed at report time
+from the todo files' full checkpoint history plus
+the run records: the tick's state carries only the
+latest checkpoint per lane, no history, so it is
+not a tick-served field.
+
+The scheduler-registry progress entries are retired
+with this section: the tick's armed rows are the
+check, and the workbench only deletes lingering
+entries. The limits are the hard-stop floor
+(Hard-stop floor): never push, never send anything
+external, never approve a hard stop, never start
+or kill a session.
+
 ## Plan shape and fan-out
 
 Every plan carries its parallelization as a ruling: the
