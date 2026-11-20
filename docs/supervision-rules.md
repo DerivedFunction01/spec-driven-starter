@@ -93,7 +93,7 @@ and this rule binds vacuously.
 
 Idle with work complete is its own class: a programme
 whose work record shows its referenced work done while
-its status stays non-terminal and nothing is in flight is
+its work stands unlanded and nothing is in flight is
 surfaced as idle-with-unlanded-work, with the minutes
 since its last activity evidence.
 
@@ -109,7 +109,7 @@ cross-checks ground truth — the run-record store and the
 work record's modified stamps on its referenced plans.
 Work moving while the record stands frozen is a
 missing-record defect of its own class, carrying the
-checkpoint gap: the age of the lane's newest status post
+checkpoint gap: the age of the lane's newest checkpoint
 against the armed progress-checkpoint cadence (a mechanism
 default; its value is owned by the bindings layer).
 
@@ -158,12 +158,12 @@ Owner-waiting outranks queue position: a deliverable the
 owner has commissioned and asked for by name is not
 ordinary queued work. Its commission stamp is a
 first-class fact, tracked apart from the queue it sits in:
-a status post may carry an owner-waiting declaration —
-the deliverable's name and its commission time — and a
-terminal status clears it. Routine machinery cycles never
-legitimately hold an unstaffed owner-waiting item, and an
-authoring-class deliverable (no venue, no gate) has no
-capacity excuse at all. A declaration with no staffing
+an owner-waiting declaration lives in the work-record
+goal store — the deliverable's name and its commission
+time, sticky until cleared explicitly. Routine machinery
+cycles never legitimately hold an unstaffed owner-waiting
+item, and an authoring-class deliverable (no venue, no
+gate) has no capacity excuse at all. A declaration with no staffing
 measure for its programme and no lane record newer than
 the declaration, one check cycle past the commission, is
 a defect row addressed to the parent thread from the
@@ -187,16 +187,16 @@ declaring its row; its values bind its lanes only.
 Declarations arrive two ways: a programme onboarding,
 and arming — a work item's transition to doing arms a
 registry row for it from the work record, and a terminal
-transition retires the row. An armed row no status post
+transition retires the row. An armed row no checkpoint
 has named after two cadence intervals is itself a row:
 work armed and silent. Worktree presence is filesystem
-ground truth alongside the posts: declarations name the
+ground truth alongside the records: declarations name the
 programme's worktree roots, a standing worktree is
-unfinished work whatever the posts claim, a terminal
-claim does not clear a lane whose trees stand unlanded,
-and a standing tree with no armed row and no live lane
-is an unarmed-work row. A retiring tree after a verified
-landing corroborates the disarm.
+unfinished work whatever any earlier claim said, a
+programme that reads done does not clear while its trees
+stand unlanded, and a standing tree with no armed row and
+no done work is an unarmed-work row. A retiring tree after
+a verified landing corroborates the disarm.
 
 ## Blocked states and claimed instructions
 
@@ -517,6 +517,66 @@ a follow-up, improvement, or consolidation proposed in
 prose alone does not exist, and a prose-only offer is a
 reporting defect.
 
+## Retiring the status-code transport
+
+No thread posts an attention status code, and no thread
+is asked for one either: the transport is removed, not
+shimmed — the command-line verb, the client call, the
+server route, and the ingest writer are deleted, and a
+call to any of them is an error, never a silent no-op.
+Staleness is computed, never requested: every
+programme's state measures from records alone.
+
+The record sources, one per question. Topics come from
+the registry's programme declarations plus the armed
+work-record entries — a topic with no armed entries has
+no live work. Liveness and completion come from todo
+statuses, checkpoint stamps, and worktree presence: a
+standing worktree is unfinished work whatever any
+earlier claim said, and a programme is complete only
+when its armed entries are terminal and no worktree
+stands unlanded. Blocked claims come from blocked
+todos: the todo's status is `blocked`, its basis is in
+its body, and its citation is a body line naming the
+owner's message thread and the time — a claim without
+one is unverified, never a state. Owner-waiting
+declarations come from the work-record goal store,
+where they already stand as a sticky field. Armed work
+with no checkpoint is unsupervised work, measured from
+the checkpoint stamps, not from any post naming the
+todo. The serial-plan row is retired: the plan-frontier
+shortfall row subsumes it, measuring declared fan-out
+against the actual in-flight set.
+
+The surfaces that read records alone once the transport
+is retired are the sends ledger — the steers and
+escalations the tick sends — and the staffing rows the
+measure serves. No live surface reads a status code.
+
+Named remainder, not silently left: the digest's
+historical rendering of posted records and the waits
+engine's terminal-code facts still read the store's
+existing status records — no new posts arrive — and
+the goal record's own post store is an adjacent
+surface with its own writer rules. The status
+vocabulary above remains the language of those
+historical records and the waits engine; it no longer
+describes anything a thread posts.
+
+## Surface structure
+
+Items and elements are separated by structure, never by
+characters and never by where a line happens to wrap.
+A surface never joins items into one dot-separated
+string: each item gets its own row, or the surface
+compacts to a summary — a count, tap to expand. A space
+is not a valid separator: items are separated by rows
+and layout, never by spaces inside a string, and
+wrapping behaviour is consistent across surfaces of a
+kind. A summary never repeats its title: title and
+summary are separate elements on a row, and the summary
+carries what the title does not say.
+
 ## Hard-stop floor
 
 **Inline class — the floor is not declarable.** Permission
@@ -546,13 +606,12 @@ stay engine data):
 
 - A defect item clears when its subject reaches a terminal
   state.
-- A stale status draws a status request.
+- A stale record draws a record-gap row.
 - A performance clearance is served as for-information,
   not as a decision.
-- A done report that conflicts with the work record's
-  derivation returns to its lane; the trigger reads that
-  derivation at evaluation time.
-- A done report on a user-interface-surface handler
+- Work that reads done while its trees stand unlanded is
+  reported against the tree, not taken.
+- Work done on a user-interface-surface handler
   dispatches a critic commission; the surface mark is a
   flag on the handler registration.
 - A completion proposes a consolidation pass; the trigger
