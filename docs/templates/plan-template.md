@@ -85,6 +85,11 @@ memory, carries why the new machinery appears.
   blockers, and completion only.
 - Verify means run it: each step's `verify:` is executed and
   its result recorded, not asserted.
+- Gate scope is ruled: verification runs the change-aware
+  gate scoped to the delta's affected modules. A full check
+  (`check.py --all` or an equivalent whole-suite run) is run
+  only when the user stated it for that work — never as a
+  default, and never written into a plan unbidden.
 
 ## Closeout
 

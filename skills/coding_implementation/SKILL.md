@@ -24,7 +24,7 @@
 
 - Complete one step successfully before starting a batch of similar changes, then continue only when the result supports the rest.
 
-- Run the tests that cover the changed area, using the exact test paths or commands the repo prescribes, and run broader checks when the change crosses layers.
+- Run the tests that cover the changed area, using the exact test paths or commands the repo prescribes, and run the repo's gate change-aware, scoped to the delta's affected modules — including when the change crosses layers. A full check (`check.py --all` or an equivalent whole-suite run) runs only when the user stated it for that work, never as a default.
 
 - Read failures before retrying. Fix the cause the output supports and check the state a failed run left behind before repeating an action that may have taken effect.
 
