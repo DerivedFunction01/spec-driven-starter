@@ -329,7 +329,7 @@ run-record store, and the fleet capacity source
 an acknowledgement clears nothing.
 
 The classes: idle, serial, stall/seam, orphan,
-unreported. Idle is armed or doing work with no
+unreported, terminal. Idle is armed or doing work with no
 conforming checkpoint past the stall bound and no
 verified blocked basis (Blocked states and claimed
 instructions); serial is a programme with
@@ -360,6 +360,32 @@ Unreported: work landed or complete that has not
 been surfaced to its waiter. The owner-waiting rows
 carry it: a waiter with an unanswered ask outranks
 queue position.
+
+Terminal: a run record in a terminal failed state
+that its owning programme has not consumed. The
+record is the runner's, and recording is not
+consumption: the collector stamps a terminal
+failure within seconds, and the failure then sits
+silent unless the launching seat polls for it.
+Consumption is the owning programme's own record —
+a todo, a pass record, a lane or coordinator record
+at the programme's declared locations — citing the
+run in its terminal state. A failed run at least
+one checkpoint interval old (the programme's
+declared cadence) with no such citation raises the
+row to the owning coordinator; it re-surfaces every
+run of the measure until the citation lands, and
+escalates under the programme's declared escalation
+bound like every other class. A completed run never
+raises it; a non-terminal record is the orphan
+class's ground, not this one's. The tick is the
+class's only consumer — no per-programme watcher
+and no second surfacing surface is built for it.
+Attribution is by caller, and a programme whose
+runs ride a caller that is not its slug stem
+declares its caller stems in the registry, so the
+attribution stays data, never a measure-side
+special case.
 
 The actuator ladder, in order; a message alone is
 the weakest form and never counts as the act by
