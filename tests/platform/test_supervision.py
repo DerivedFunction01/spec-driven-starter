@@ -19,7 +19,7 @@ import pytest
 # module's ceiling is sized to the drills, not the default.
 pytestmark = pytest.mark.timeout(240)
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 UNIT = "field-kit-drill"
 COPY_DIRS = ("backend", "frontend", "ops", "flavors", "tools")
 FAKE = ROOT / "tests" / "fake_systemctl.py"

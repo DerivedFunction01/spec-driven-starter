@@ -78,7 +78,7 @@ settings seam via `backend/apps/ops_values.py`. An external
 keeper polls the watchdog every few minutes; the kit ships
 the ladder and that contract, never a host-specific poller
 binding. Drills for every shape live in
-`tests/test_supervision.py`.
+`tests/platform/test_supervision.py`.
 
 ## Plan file (see `templates/plan-template.md`)
 

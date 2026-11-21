@@ -18,7 +18,8 @@ venv does not exist it prints the init_venv.py instruction and exits
 2. Build it with:  python3 init_venv.py
 
 Targeted pytest (default mode): changed Python files (git status,
-untracked included) map to their flat mirror tests under tests/;
+untracked included) map to their mirror tests under tests/ (flat,
+or grouped by subject under tests/served/ and tests/platform/);
 changes to the scanners/checks harness, check.py, init_venv.py, or
 pyproject.toml pull in the whole suite. When targeting is impossible
 (git unavailable), the gate runs the full suite; a clean tree runs
@@ -147,16 +148,23 @@ def changed_files() -> list[str] | None:
 
 
 def mirror_test_for(source: str) -> str | None:
-    """backend/<...>/y.py or tools/y.py -> tests/test_y.py, if it exists."""
+    """backend/<...>/y.py or tools/y.py -> its mirror test, if it exists.
+
+    Mirror tests live flat under tests/ or grouped by subject
+    under tests/served/ and tests/platform/.
+    """
     parts = Path(source).parts
     if parts[0] == "backend" and len(parts) >= 3:
-        candidate = Path(TESTS_ROOT, f"test_{Path(parts[-1]).stem}.py")
+        name = f"test_{Path(parts[-1]).stem}.py"
     elif parts[0] == "tools" and len(parts) == 2:
-        candidate = Path(TESTS_ROOT, f"test_{Path(parts[-1]).stem}.py")
+        name = f"test_{Path(parts[-1]).stem}.py"
     else:
         return None
-    if (REPO_ROOT / candidate).is_file():
-        return candidate.as_posix()
+    folders = (TESTS_ROOT, f"{TESTS_ROOT}/served", f"{TESTS_ROOT}/platform")
+    for folder in folders:
+        candidate = Path(folder, name)
+        if (REPO_ROOT / candidate).is_file():
+            return candidate.as_posix()
     return None
 
 

@@ -11,7 +11,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from unittest import mock
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 SPEC = importlib.util.spec_from_file_location(
     "connector_client", ROOT / "connector" / "client.py"
 )

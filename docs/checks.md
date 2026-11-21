@@ -161,7 +161,7 @@ Two nets sit above the unit tests, aimed at what units cannot
 see:
 
 - **Surface-sanity net** — a test over the shipped surface
-  itself (the sample's is `tests/test_surface_net.py`): the
+  itself (the sample's is `tests/served/test_surface_net.py`): the
   furniture is present (title, landmarks, status region), the
   viewport is declared, no fixed width overflows a 320 px
   viewport, and every declared text color meets the contrast
@@ -297,7 +297,7 @@ flattens that structure is rejected: it can pass while the
 real shape fails. Each parser, join, and serializer keeps at
 least one production-shaped specimen (the sample's is
 `tests/fixtures/model-payload.json`, captured from the model
-builder over the sample store; `tests/test_fixtures.py` pins
+builder over the sample store; `tests/platform/test_fixtures.py` pins
 the builder's output to its shape). Refresh the capture when
 the real shape is learned to have changed, in the same change
 that learns it.

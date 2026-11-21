@@ -2,7 +2,7 @@ import re
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 HTML = (ROOT / "frontend" / "index.html").read_text(encoding="utf-8")
 CSS = (ROOT / "frontend" / "app.css").read_text(encoding="utf-8")
 

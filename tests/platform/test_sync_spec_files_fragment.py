@@ -9,7 +9,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-SCRIPT = Path(__file__).resolve().parents[1] / "tools" / \
+SCRIPT = Path(__file__).resolve().parents[2] / "tools" / \
     "sync_spec_files.py"
 BEGIN = "<!-- spec-sync:supervision-rules -->"
 END = "<!-- /spec-sync:supervision-rules -->"

@@ -7,7 +7,7 @@ from backend.infra.sample_data import SAMPLE_KITS
 from backend.infra.store import MemoryStore
 from backend.services.model import build_model
 
-FIXTURE = Path(__file__).parent / "fixtures" / "model-payload.json"
+FIXTURE = Path(__file__).parent.parent / "fixtures" / "model-payload.json"
 
 
 def shape(value):

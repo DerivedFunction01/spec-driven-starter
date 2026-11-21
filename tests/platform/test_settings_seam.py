@@ -4,7 +4,7 @@ foundation/settings.py reads the environment."""
 import pathlib
 import unittest
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
+ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 
 class SettingsSeamTests(unittest.TestCase):
