@@ -1,9 +1,8 @@
 """Folder-density scanner: the file cap in ``MAX_FILES``.
 
-Counts every tracked file of any kind, direct children only; over the cap is a
-finding, the creep band a notice, additions over ``HEAD`` an error. The cure is
-grouping along real seams: the band is a warning state on the way to a grouping,
-never a steady state, and a family scattered to dodge the count is a workaround.
+Counts tracked files, direct children only; over cap is a finding, the band a notice,
+additions over ``HEAD`` an error. The cure is grouping along real seams: the band is
+a warning state, never a steady one; a scattered family is the same workaround.
 """
 
 from __future__ import annotations
