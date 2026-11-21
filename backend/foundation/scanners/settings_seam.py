@@ -2,7 +2,7 @@
 
 Production under ``backend/`` must not touch the process
 environment or dotenv outside ``foundation/settings.py``.
-Named exemption: ``scanners/denylist.py``, the harness's seam.
+Only the settings module itself is exempt.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ from backend.foundation.scanners.base import Finding, Scanner
 from backend.foundation.scanners.files import python_files, rel
 
 SETTINGS_PATH = "backend/foundation/settings.py"
-EXEMPT_PATHS = frozenset({SETTINGS_PATH, "backend/foundation/scanners/denylist.py"})
+EXEMPT_PATHS = frozenset({SETTINGS_PATH})
 
 ENV_ATTRS = frozenset({"environ", "getenv", "putenv", "unsetenv"})
 ENV_NAMES = frozenset({"environ", "getenv", "putenv", "unsetenv"})

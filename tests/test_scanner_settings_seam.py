@@ -35,12 +35,6 @@ class SettingsSeamScannerTests(unittest.TestCase):
             write(tmp, "backend/apps/server.py", "import dotenv\n")
             self.assertEqual(len(scan(Path(tmp))), 1)
 
-    def test_denylist_scanner_is_the_named_exemption(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            path = "backend/foundation/scanners/denylist.py"
-            write(tmp, path, "import os\nos.environ\n")
-            self.assertEqual(scan(Path(tmp)), [])
-
 
 if __name__ == "__main__":
     unittest.main()

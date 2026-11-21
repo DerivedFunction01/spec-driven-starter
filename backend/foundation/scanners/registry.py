@@ -16,7 +16,6 @@ from backend.foundation.scanners.asset_manifest import (
 )
 from backend.foundation.scanners.base import Scanner
 from backend.foundation.scanners.clean_exit import SCANNER as CLEAN_EXIT_SCANNER
-from backend.foundation.scanners.denylist import SCANNER as DENYLIST_SCANNER
 from backend.foundation.scanners.folder_density import (
     SCANNER as FOLDER_DENSITY_SCANNER,
 )
@@ -68,7 +67,6 @@ from backend.foundation.scanners.writer_uniqueness import (
 ALL_SCANNERS: tuple[Scanner, ...] = (
     LENGTH_SCANNER,
     PORTABILITY_SCANNER,
-    DENYLIST_SCANNER,
     LAYERS_SCANNER,
     NO_REEXPORT_SCANNER,
     SETTINGS_SEAM_SCANNER,

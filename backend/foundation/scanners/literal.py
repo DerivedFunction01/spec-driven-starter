@@ -2,7 +2,6 @@
 
 Generic legs only: SSN shape, credential-shaped assignments
 with a non-placeholder value, and GitHub-style token shapes.
-The personal denylist is a separate scanner (``denylist.py``).
 """
 
 from __future__ import annotations

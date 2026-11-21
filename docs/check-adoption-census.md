@@ -33,7 +33,7 @@ Enforcement below is the gate-wired mode, not the standalone default.
 | `contrast-pairs.mjs` | Ruled token pairs from shipped CSS hold WCAG bars (focus, field border, doc kicker, alert tones); report-only in Steam's gate wiring | Partial — Workhorse `verify-contrast.mjs` is fatal and wider, but kit-only | Adapt — Steps 3/5/6: its pair classes cross into the generic gate; the hand-listed, report-only form does not |
 | `dead-classes.mjs` | A class referenced in tsx is defined in some stylesheet; report-only in Steam's wiring | Absent | Adopt — Step 8 frontend lane, fatal in the starter's form |
 | `e2e-shard.mjs` | Committed 3-shard Playwright entry: HEAD + clean-tree assertion, per-shard ports/scratch, partition completeness (every spec in exactly one family) | Absent — no Playwright runner | Adapt — Step 9: the shard and partition discipline is the rendered legs' entry form |
-| `employee-data.mjs` | No tracked file matching real crew-data basenames | Partial — `denylist`/`literal`/`tracking` cover literals and `var/`, not data-file basenames | Decline — crew-data basenames are Steam's domain; the generic literal machinery is already present |
+| `employee-data.mjs` | No tracked file matching real crew-data basenames | Partial — `literal`/`tracking` cover literals and `var/`, not data-file basenames | Decline — crew-data basenames are Steam's domain; the generic literal machinery is already present |
 | `file-input-chrome.mjs` | Upload surfaces use capture tiles, never visible file-input chrome | Absent | Decline — a Steam surface rule; the generic form is the kit's file primitive (Step 4), not a scanner |
 | `file-length.mjs` | No source file over cap; header states it is a port of the starter's length scanner | Present — `length` scanner is the origin | None — already carried |
 | `platform-branching.mjs` | No platform branching in apps — platform is an ambient token axis only | Absent | Decline for now — the platform axis is left out of the generic kit by the adopted ruling; this row rejoins the census if the axis is adopted |
@@ -94,7 +94,7 @@ declarations through `pipeline/gate/runner.py`; a red leg is fatal.
 | Candidate | Verifies | Starter verdict | Disposition |
 |---|---|---|---|
 | `linecap` | No tracked source file over the line cap | Present — `length` scanner, same rule | None — already carried |
-| `portability` (+ root coverage rows) | Tracked files reference nothing outside the repo; denylist fails when provisioned | Present — `portability` + `denylist` scanners, same provisioning semantics | None — already carried |
+| `portability` (+ root coverage rows) | Tracked files reference nothing outside the repo | Present — the `portability` scanner | None — already carried |
 | `pathdiscipline` | No root-climb path derivations, no cwd roots, no hardcoded home roots outside the one paths spine | Partial — `portability` bans home-anchored literals; the derivation-shape scan is absent | Adopt — Step 8 gate-shape lane |
 | `importisolation` | A package imports nothing from sibling packages (declared bootstrap exceptions) | Partial — `layers` enforces backend tier direction only | Adapt — Step 8 gate-shape lane, as the webapp flavor's package form |
 | `writeruniqueness` | One homed stage+rename writer; no truncate-writes to state-shaped paths elsewhere | Absent — `docs/checks.md` lists governed-literal scanners as noted, not implemented | Adopt — Step 8 gate-shape lane |
