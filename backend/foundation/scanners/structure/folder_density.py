@@ -3,6 +3,12 @@
 Counts every tracked file of any kind, direct children per
 folder; over the cap is a finding, and the creep band lists
 as a notice with additions over the ``HEAD`` count an error.
+Compliance is achieved by grouping: a family that would push
+a folder over the cap gets its own grouped home along the
+module's real seams. The band is a warning state on the way
+to a grouping, never a steady state to park in, and
+scattering a family's files across folders to stay under a
+count is the same workaround under another shape.
 """
 
 from __future__ import annotations
