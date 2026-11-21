@@ -1,7 +1,7 @@
 """Restated-value scanner: docs carry intent, sources carry values.
 
 A document that restates a source constant's literal (the
-length cap, the sample port, a vitals threshold) is a finding.
+length and folder caps, the port, a vitals threshold) is one.
 """
 
 from __future__ import annotations
@@ -11,6 +11,7 @@ from pathlib import Path
 
 from backend.foundation.scanners.base import Finding, Scanner
 from backend.foundation.scanners.files import rel, walk_files
+from backend.foundation.scanners.folder_density import CREEP_FILES, MAX_FILES
 from backend.foundation.scanners.length import MAX_LINES
 from backend.foundation.settings import Settings
 
@@ -29,11 +30,27 @@ def _markdown_files(root: Path) -> list[Path]:
     return found
 
 
+def _folder_patterns() -> tuple[re.Pattern[str], ...]:
+    values = rf"(?:{MAX_FILES}|{CREEP_FILES})"
+    return (
+        re.compile(rf"\b{values}\b\s+(?:code\s+)?files\b"),
+        re.compile(
+            rf"(?:folder|density)[^\n]{{0,48}}?(?:cap|band|limit)"
+            rf"[^\n]{{0,24}}?\b{values}\b"
+        ),
+        re.compile(
+            rf"\b{values}\b[^\n]{{0,24}}?(?:folder|density)"
+            rf"[^\n]{{0,48}}?(?:cap|band|limit)"
+        ),
+    )
+
+
 def scan(root: Path) -> list[Finding]:
     cap = str(MAX_LINES)
     port = str(Settings().port)
     cap_re = re.compile(rf"\b{cap}\b")
     port_re = re.compile(rf"\b{port}\b")
+    folder_res = _folder_patterns()
     findings: list[Finding] = []
     for path in _markdown_files(root):
         try:
@@ -53,6 +70,20 @@ def scan(root: Path) -> list[Finding]:
                             "document restates the length cap; the length "
                             "scanner's constant is the only source — name "
                             "the rule, not the value"
+                        ),
+                    )
+                )
+            if any(pattern.search(line) for pattern in folder_res):
+                findings.append(
+                    Finding(
+                        scanner="value-source",
+                        rule="value-source/restated-folder-density",
+                        path=rel(root, path),
+                        line=lineno,
+                        message=(
+                            "document restates a folder-density value; "
+                            "the folder_density scanner's constants are "
+                            "the only source — name the rule, not the value"
                         ),
                     )
                 )

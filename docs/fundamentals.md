@@ -325,7 +325,8 @@ or a promise.
   reasons no single file explained.
 - Small files, mechanically capped: a predecessor's single
   living document and single code tree became unreviewable; the
-  length cap in the gate is the mechanical form of this lesson.
+  length cap and the folder-density cap in the gate are the
+  mechanical form of this lesson.
 - Supervision, restorable from tracked source: a predecessor's
   companion server, started by hand with no supervisor, died
   with its host again and again in a single day, silently each

@@ -431,7 +431,8 @@ any other gate.
 ## Enforcement, not memory
 
 Each rule above has a mechanism: the gate (`check.py`) enforces
-the line cap and portability mechanically; the settings seam is
+the line cap, the folder-density cap, and portability
+mechanically; the settings seam is
 one module a reviewer can grep for; layering is visible in the
 folder tree. A rule that recurs as a correction gets turned into
 a mechanism, not repeated louder.

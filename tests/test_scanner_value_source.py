@@ -29,6 +29,24 @@ class ValueSourceScannerTests(unittest.TestCase):
         findings = scan_tree({"docs/guide.md": "No file exceeds 800 lines.\n"})
         self.assertEqual([f.rule for f in findings], ["value-source/restated-cap"])
 
+    def test_restated_folder_cap_is_a_finding(self):
+        findings = scan_tree({"docs/guide.md": "Folders hold at most 20 files.\n"})
+        self.assertEqual(
+            [f.rule for f in findings], ["value-source/restated-folder-density"]
+        )
+
+    def test_restated_folder_band_is_a_finding(self):
+        text = "The folder density band starts at 16 files per folder.\n"
+        findings = scan_tree({"docs/guide.md": text})
+        self.assertEqual(
+            [f.rule for f in findings], ["value-source/restated-folder-density"]
+        )
+
+    def test_folder_words_and_unrelated_counts_pass(self):
+        text = "Folders group files by intent; the gate runs 20 shards.\n"
+        findings = scan_tree({"docs/guide.md": text})
+        self.assertEqual(findings, [])
+
     def test_restated_vitals_is_a_finding(self):
         findings = scan_tree({"docs/guide.md": "Field target: LCP ≤ 2.5 s.\n"})
         self.assertEqual([f.rule for f in findings], ["value-source/restated-vitals"])

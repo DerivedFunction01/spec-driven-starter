@@ -1,8 +1,8 @@
 # Check-adoption census — Steam Power and Workhorse superapp vs the starter
 
-Findings first: of 59 candidate checks censused, 15 are adopted into this
+Findings first: of 59 candidate checks censused, 16 are adopted into this
 programme's steps, 21 are adapted (the mechanism crosses, the source form
-does not), 12 are declined as domain-specific, and 11 are already present in
+does not), 11 are declined as domain-specific, and 11 are already present in
 the starter's generic machinery. The material gaps are concentrated in three
 places: the starter has no date/time one-home scanner in either source form,
 no rendered-surface discipline scanners (raw elements, value slots, dead
@@ -99,7 +99,7 @@ declarations through `pipeline/gate/runner.py`; a red leg is fatal.
 | `importisolation` | A package imports nothing from sibling packages (declared bootstrap exceptions) | Partial — `layers` enforces backend tier direction only | Adapt — Step 8 gate-shape lane, as the webapp flavor's package form |
 | `writeruniqueness` | One homed stage+rename writer; no truncate-writes to state-shaped paths elsewhere | Absent — `docs/checks.md` lists governed-literal scanners as noted, not implemented | Adopt — Step 8 gate-shape lane |
 | `dateuniqueness` (+ `date_families.json`) | Shape-based AST scan: one homed module per date intent, the family→home map as data | Absent | Adopt — Step 8 date lane (with Steam's `time-ownership` as the second proof) |
-| `foldercensus` | Folder file-count census on every run (warn/fail thresholds) | Absent | Decline — per-file size discipline is already carried (`length`, `prose_length`); a folder-count census is the superapp monorepo's shape, not a generic starter rule |
+| `foldercensus` | Folder file-count census on every run (warn/fail thresholds) | Present — the `folder_density` scanner is the generic form (cap, band, additions-ban register) | Adopt — the generic file-length and folder-density programme (2026-11-21) reverses this row's earlier decline verdict; the superapp leg's warn/fail thresholds are a repo binding of the generic rule |
 | ruff format/lint legs (`staticlegs.py`) | Format and lint over declared targets | Present — `check.py` static legs | None — already carried |
 | `scanners` leg (`staticlegs.py`) | Delegates to a package's own scanner suite via a named module | Present — the scanner framework itself (`backend/foundation/checks/runner.py` + registry) | None — already carried |
 | `isolation-unittest` | Suite wrapped in a real-state hash snapshot; any change fails the leg | Present — `check.py`'s test-isolation proof, same mechanism | None — already carried |
@@ -115,7 +115,7 @@ declarations through `pipeline/gate/runner.py`; a red leg is fatal.
 
 ## Counts
 
-- Adopt: 15 — `dead-classes`, `primitive-components`, `primitive-components-data`, `time-ownership`, `value-slots`, `contrast-tone-text`, `qa-axe`, `qa-geometry`, `qa-truncation`, `qa-dead-click`, `pathdiscipline`, `writeruniqueness`, `dateuniqueness`, `verify-contrast`, `gen-tokens`
+- Adopt: 16 — `dead-classes`, `primitive-components`, `primitive-components-data`, `time-ownership`, `value-slots`, `contrast-tone-text`, `qa-axe`, `qa-geometry`, `qa-truncation`, `qa-dead-click`, `pathdiscipline`, `writeruniqueness`, `dateuniqueness`, `verify-contrast`, `gen-tokens`, `foldercensus`
 - Adapt: 21 — `adapter-mirror`, `check.mjs` runner form, `contrast-pairs`, `e2e-shard`, `rule-ownership`, `surface-vocabulary`, `contrast.test.ts`, `contrast-classic`, `contrast-button-roles`, composition/anatomy pins, `qa-*` guard pins, `cr2-kit-conformance`, `screenshots`, `scripts/e2e.mjs`, repository contract real-server leg, `tools/smoke.mjs`, `importisolation`, AST targeting pattern, `frontends.json` served-by form, `verify-log-payload`, `venvbuild`
-- Decline: 12 — `catalog-drift`, `employee-data`, `file-input-chrome`, `platform-branching`, `table-classes`, `transfer-primitives`, `contrast-band-followups`, `platform.test.ts`, `foldercensus`, `kit_drift`, `parity-check`, package command legs
+- Decline: 11 — `catalog-drift`, `employee-data`, `file-input-chrome`, `platform-branching`, `table-classes`, `transfer-primitives`, `contrast-band-followups`, `platform.test.ts`, `kit_drift`, `parity-check`, package command legs
 - Already present: 11 — `asset-registration`, `file-length`, `port-boundary`, `tokens.test.ts`, `route-coverage` e2e form, `scripts/verify.mjs` isolation hash, `linecap`, `portability`, ruff legs, `scanners` leg, `isolation-unittest`

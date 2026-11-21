@@ -81,7 +81,7 @@ reporting itself unconfigured).
 
 | Scanner | Rule in one line |
 | --- | --- |
-| length | no file over the length cap the scanner's constant sets (Python + frontend scripts) |
+| length | no file over the length cap the scanner's constant sets, over the code extension set; the creep band below the cap lists on every run as a notice, and a registered band or over-cap file may not grow — the in-scanner register only shrinks, and a stale entry is itself a finding |
 | portability | tracked text references only what a fresh clone resolves: no absolute or home-anchored paths, no owner's name, no specific untracked plan files |
 | denylist | no personal literals from the provisioned denylist (below) |
 | layers | backend imports point downward only across foundation < domain < infra < services < apps (AST) |
@@ -106,6 +106,7 @@ reporting itself unconfigured).
 | path_discipline | climbs to a root, cwd-derived roots, and home-anchored literal roots occur only inside a paths module or under a declaration carried in the scanner's data; a declaration whose file lost the pattern fails as stale |
 | writer_uniqueness | writes that truncate a state-shaped target and hand-rolled stage-then-rename sequences occur only at the designated writer home or under a declared seam; a seam whose file lost the pattern fails as stale |
 | adapter_mirror | every class implementing the store protocol defines the protocol's whole method set, which the scanner reads from the protocol class itself; partial implementations need an allowlist entry, and an entry covering a class that now mirrors fully fails as stale |
+| folder_density | no folder over the direct-child code-file cap the scanner's constant sets; the band below the cap lists on every run as a notice, and a registered band or over-cap folder may not gain files — the in-scanner register only shrinks, and a stale entry is itself a finding |
 
 Portability exceptions: only files named in the scanner's
 `EXCEPTION_FILES` registry may carry a directive line naming

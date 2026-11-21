@@ -17,6 +17,9 @@ from backend.foundation.scanners.asset_manifest import (
 from backend.foundation.scanners.base import Scanner
 from backend.foundation.scanners.clean_exit import SCANNER as CLEAN_EXIT_SCANNER
 from backend.foundation.scanners.denylist import SCANNER as DENYLIST_SCANNER
+from backend.foundation.scanners.folder_density import (
+    SCANNER as FOLDER_DENSITY_SCANNER,
+)
 from backend.foundation.scanners.layers import SCANNER as LAYERS_SCANNER
 from backend.foundation.scanners.legacy_shims import (
     SCANNER as LEGACY_SHIMS_SCANNER,
@@ -88,6 +91,7 @@ ALL_SCANNERS: tuple[Scanner, ...] = (
     PATH_DISCIPLINE_SCANNER,
     WRITER_UNIQUENESS_SCANNER,
     ADAPTER_MIRROR_SCANNER,
+    FOLDER_DENSITY_SCANNER,
 )
 
 __all__ = ["ALL_SCANNERS"]
