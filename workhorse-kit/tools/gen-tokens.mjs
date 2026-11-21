@@ -279,7 +279,7 @@ const indexCss =
   // @source seam in the kit README) — this kit-owned rule
   // ships in the kit's own CSS and holds regardless.
   '\n.wb-segmented-input:focus-visible + .wb-segmented-segment {\n  outline: 2px solid var(--wb-focus-ring);\n  outline-offset: 1px;\n}\n' +
-  // Toggle (components/Toggle.tsx): the visible focus
+  // Toggle (components/controls/Toggle.tsx): the visible focus
   // indicator lands on the track span, not the button —
   // the button suppresses its own outline so the ring
   // hugs the switch. The track also carries
@@ -302,7 +302,7 @@ const indexCss =
   // backdrop instead, which the kit cannot know — the
   // track sits on cards, rows, and canvas alike.)
   '\n.wb-toggle:focus-visible .wb-toggle-track {\n  outline: 2px solid var(--wb-focus-ring);\n  outline-offset: 1px;\n  box-shadow: inset 0 0 0 2px var(--wb-on-accent);\n}\n' +
-  // Checkbox (components/Checkbox.tsx): the same
+  // Checkbox (components/controls/Checkbox.tsx): the same
   // camouflage shape as the Toggle, one component over.
   // The visible element IS the button — a locked circle
   // whose checked fill is the status-done hue — and its
