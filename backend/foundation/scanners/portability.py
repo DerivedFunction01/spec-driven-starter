@@ -2,7 +2,7 @@
 
 No absolute or home-anchored paths and no references to
 specific untracked plan files or dated memory logs; personal
-literals are never compiled into tracked code.
+literals are the denylist scanner's leg, never compiled here.
 """
 
 from __future__ import annotations

@@ -1,9 +1,8 @@
 """File discovery shared by the scanners.
 
 Walks the working tree from a root, skipping what is never
-source: ``var/``, ``.git/``, ``workbench/``, caches, and the
-untracked plan files under ``.plans/``; the tracked form
-filters a walk to ``git ls-files`` when git answers.
+source (``var/``, ``.git/``, ``workbench/``, caches, ``.plans/``);
+the tracked form filters a walk to ``git ls-files``.
 """
 
 from __future__ import annotations

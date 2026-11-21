@@ -15,6 +15,7 @@ from backend.foundation.scanners.files import python_files, rel
 
 EXEMPT_NAMES = frozenset(
     {
+        "test_scanner_denylist.py",
         "test_scanner_tests_tracked_only.py",
         "test_scanner_tracking.py",
     }

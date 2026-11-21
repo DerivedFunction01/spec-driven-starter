@@ -83,17 +83,21 @@ population derives from the tree it scans, never from a
 declaration a package or folder makes, and a consuming repo
 carrying a subset of the registry is drift, not a binding.
 A scanner that cannot run without provisioning does not
-pass quietly — unconfigured is an error finding. The gate's
-outcome is a function of the tracked tree alone: untracked
-local state never changes what a scanner does.
+pass quietly — unconfigured is an error finding. One
+scanner's data is untracked by design: the denylist's
+literals are personal and live outside the tree. That
+scanner runs by default regardless — the list supplies its
+literals where one is provisioned and never affects its
+standing; with no list, it reports nothing.
 
 | Scanner | Rule in one line |
 | --- | --- |
 | length | no tracked code file over the length cap the scanner's constant sets — every tracked code file counts by default, with no coverage register; the creep band below the cap lists on every run as a notice, and a band file grown past its committed `HEAD` count is a finding |
 | portability | tracked text references only what a fresh clone resolves: no absolute or home-anchored paths, no owner's name, no specific untracked plan files |
+| denylist | no personal literals from the denylist where one is provisioned (below); with none, the scanner reports nothing |
 | layers | backend imports point downward only across foundation < domain < infra < services < apps (AST) |
 | no_reexport | no import statements in any `backend/**/__init__.py` |
-| settings_seam | no environment access outside `backend/foundation/settings.py` |
+| settings_seam | no environment access outside `backend/foundation/settings.py` (one named harness exemption: the denylist scanner) |
 | literal | no SSN-shaped, credential-shaped, or token-shaped literals in tracked content |
 | legacy_shims | no backward-compatibility wording in code or comments, no banned identifier parts, no bare CamelCase alias bindings |
 | prose_length | docstring caps (module 4, def/class 3; tests 3/2) and comment-block caps |
@@ -118,7 +122,8 @@ local state never changes what a scanner does.
 Portability exceptions: only files named in the scanner's
 `EXCEPTION_FILES` registry may carry a directive line naming
 one exact matched string and its reason (em-dash separated);
-a directive anywhere else is itself a finding.
+a directive anywhere else is itself a finding, and exceptions
+never apply to the denylist.
 
 ## Store contract tests
 
@@ -308,6 +313,22 @@ is recorded with the asset's entry in
 enforces registration). A CDN thumbnail is a preview, never
 the durable copy; a selected asset is ingested into
 project-owned storage.
+
+## Denylist provisioning
+
+Personal literals live in an untracked plain-text file, one
+literal per line (blank lines and `#` comments ignored).
+Resolution: the file named by `STARTER_DENYLIST_FILE` wins —
+set but unreadable resolves to no list and does **not** fall
+back; otherwise the default `var/config/denylist.txt`
+applies when present. With a list provisioned, every hit is
+an error finding: rule, path, line — the literal and the
+line's content are never printed, and the list file itself
+is never scanned. With no list, the scanner reports nothing
+and the gate is exactly as it would be without one. In
+conversion mode the denylist is provisioned from the
+predecessor's personal literals at conversion time (see
+`docs/conversion.md`).
 
 ## Example configs — patterns noted, not implemented
 

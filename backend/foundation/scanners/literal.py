@@ -1,7 +1,8 @@
 """Literal scanner: credential-shaped and token-shaped strings.
 
 Generic legs over tracked content only: SSN shape, credential
-assignments with a non-placeholder value, token shapes.
+assignments with a non-placeholder value, token shapes. The
+personal denylist is a separate scanner (``denylist.py``).
 """
 
 from __future__ import annotations

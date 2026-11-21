@@ -147,11 +147,10 @@ Fixture discipline:
 The predecessor's real data, configuration, and personal
 literals never enter the tracked tree. They are preserved as
 untracked instance state, inventoried before the swap. The
-tracked tree carries a sample authored as fiction. Personal
-literals are never compiled into tracked code or tracked
-lists; the tracked tree is kept clean of them by the
-portability and literal scanners' shapes, not by any
-untracked list.
+tracked tree carries a sample authored as fiction. At
+conversion time the denylist (`docs/checks.md`) is provisioned
+from the predecessor's personal literals, so the gate fails if
+one ever reaches a tracked file.
 
 ## Swap protocol
 
