@@ -361,31 +361,40 @@ been surfaced to its waiter. The owner-waiting rows
 carry it: a waiter with an unanswered ask outranks
 queue position.
 
-Terminal: a run record in a terminal failed state
-that its owning programme has not consumed. The
+Terminal: a run record in a terminal shape that
+its owning programme has not consumed. The shapes:
+a payload finish in state failed; a record closed
+into state orphaned by its terminal event (the
+hours before the event are the orphan class's
+ground); and a record in state complete whose
+declared outputs were never recovered — a terminal
+state that reads complete while the substance is
+absent, and the derivable face of the orphan
+residual above, since such a record carries the
+outputs declaration the residual waits on. The
 record is the runner's, and recording is not
-consumption: the collector stamps a terminal
-failure within seconds, and the failure then sits
-silent unless the launching seat polls for it.
-Consumption is the owning programme's own record —
-a todo, a pass record, a lane or coordinator record
-at the programme's declared locations — citing the
-run in its terminal state. A failed run at least
-one checkpoint interval old (the programme's
-declared cadence) with no such citation raises the
-row to the owning coordinator; it re-surfaces every
-run of the measure until the citation lands, and
-escalates under the programme's declared escalation
-bound like every other class. A completed run never
-raises it; a non-terminal record is the orphan
-class's ground, not this one's. The tick is the
-class's only consumer — no per-programme watcher
-and no second surfacing surface is built for it.
-Attribution is by caller, and a programme whose
-runs ride a caller that is not its slug stem
-declares its caller stems in the registry, so the
-attribution stays data, never a measure-side
-special case.
+consumption: the collector stamps a terminal state
+within seconds, and the outcome then sits silent
+unless the launching seat polls for it. Consumption
+is the owning programme's own record — a todo, a
+pass record, a lane or coordinator record at the
+programme's declared locations — citing the run in
+its terminal state. A terminal run at least one
+checkpoint interval past its terminal instant (the
+programme's declared cadence) with no such citation
+raises the row to the owning coordinator; it
+re-surfaces every run of the measure until the
+citation lands, and escalates under the programme's
+declared escalation bound like every other class. A
+clean completed run never raises it; a non-terminal
+record is the orphan class's ground, not this
+one's. The tick is the class's only consumer — no
+per-programme watcher and no second surfacing
+surface is built for it. Attribution is by caller,
+and a programme whose runs ride a caller that is
+not its slug stem declares its caller stems in the
+registry, so the attribution stays data, never a
+measure-side special case.
 
 The actuator ladder, in order; a message alone is
 the weakest form and never counts as the act by
