@@ -1,11 +1,13 @@
-"""File-length scanner: cap, creep band, and register.
+"""File-length scanner: cap and creep band against ``HEAD``.
 
-Over the cap in ``MAX_LINES`` is an error; the band from
-``CREEP_LINES`` is a notice, frozen by ``REGISTER``.
+Over the cap in ``MAX_LINES`` is an error; tracked files are
+the population, and band growth past ``HEAD`` is an error.
 """
 
 from __future__ import annotations
 
+import shutil
+import subprocess
 from pathlib import Path
 
 from backend.foundation.scanners.base import (
@@ -14,23 +16,12 @@ from backend.foundation.scanners.base import (
     Finding,
     Scanner,
 )
-from backend.foundation.scanners.files import python_files, rel, walk_files
+from backend.foundation.scanners.files import rel, walk_files
 
 MAX_LINES = 800
 CREEP_LINES = 700
 
-CODE_SUFFIXES: tuple[str, ...] = (".js", ".mjs", ".ts", ".tsx", ".css")
-EXCLUDED_PARTS = frozenset({"assets", "generated"})
-
-# Ratchet register: (path, recorded count) for files carried
-# at or over the band; it only shrinks, and a stale entry is
-# itself a finding. Seeded by a repo's adoption, never after.
-REGISTER: tuple[tuple[str, int], ...] = (
-    ("flavors/webapp/files/packages/ui-kit/tools/verify-contrast.mjs", 1132),
-    ("flavors/webapp/files/tools/check.mjs", 769),
-    ("ui-kit/tools/verify-contrast.mjs", 1132),
-    ("workhorse-kit/tools/verify-contrast.mjs", 1178),
-)
+CODE_SUFFIXES: tuple[str, ...] = (".py", ".js", ".mjs", ".ts", ".tsx", ".css")
 
 
 def _is_suite(path: Path) -> bool:
@@ -44,15 +35,52 @@ def _is_suite(path: Path) -> bool:
     )
 
 
-def _population(root: Path) -> dict[str, Path]:
-    """Scanned files by repo-relative path, exclusions applied."""
+def _git(root: Path, *args: str) -> subprocess.CompletedProcess[str] | None:
+    """Run git at ``root``; None when git cannot answer."""
+    git = shutil.which("git")
+    if git is None:
+        return None
+    try:
+        result = subprocess.run(
+            [git, *args],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return result if result.returncode == 0 else None
+
+
+def _tracked_population(root: Path) -> dict[str, Path] | None:
+    """Tracked code files by relative path, or None without git."""
+    result = _git(root, "ls-files")
+    if result is None:
+        return None
     found: dict[str, Path] = {}
-    for path in python_files(root) + walk_files(root, CODE_SUFFIXES):
-        relpath = rel(root, path)
-        if any(part in EXCLUDED_PARTS for part in Path(relpath).parts):
-            continue
-        found[relpath] = path
+    for line in result.stdout.splitlines():
+        relpath = line.strip()
+        if relpath and Path(relpath).suffix in CODE_SUFFIXES:
+            found[relpath] = root / relpath
     return found
+
+
+def _population(root: Path) -> dict[str, Path]:
+    """Scanned files by repo-relative path, tracked by default."""
+    tracked = _tracked_population(root)
+    if tracked is not None:
+        return tracked
+    return {rel(root, path): path for path in walk_files(root, CODE_SUFFIXES)}
+
+
+def _head_count(root: Path, relpath: str) -> int | None:
+    """Line count of ``relpath`` at HEAD, or None when absent."""
+    result = _git(root, "show", f"HEAD:{relpath}")
+    if result is None:
+        return None
+    return len(result.stdout.splitlines())
 
 
 def _finding(rule: str, path: str, message: str, severity: str) -> Finding:
@@ -78,64 +106,14 @@ def _band_notice(relpath: str, count: int) -> Finding:
     )
 
 
-def _registered_findings(relpath: str, count: int, recorded: int) -> list[Finding]:
-    """Findings for a registered file at its current count."""
-    if count < CREEP_LINES:
-        return [
-            _finding(
-                "length/register-stale",
-                relpath,
-                f"registered at {recorded} lines but now {count}, below "
-                f"the {CREEP_LINES}-line band; remove the register entry",
-                SEVERITY_ERROR,
-            )
-        ]
-    if count > recorded:
-        return [
-            _finding(
-                "length/register-growth",
-                relpath,
-                f"registered file grew from {recorded} to {count} lines; "
-                "registered files may not grow — decompose instead",
-                SEVERITY_ERROR,
-            )
-        ]
-    if count < recorded:
-        return [
-            _finding(
-                "length/register-stale",
-                relpath,
-                f"registered at {recorded} lines but now {count}; "
-                "update the register count down — it only shrinks",
-                SEVERITY_ERROR,
-            )
-        ]
-    if count > MAX_LINES:
-        return [
-            _finding(
-                "length/registered-over-cap",
-                relpath,
-                f"{count} lines, carried over the {MAX_LINES}-line cap "
-                "by the register; decomposition is owed",
-                SEVERITY_NOTICE,
-            )
-        ]
-    return [_band_notice(relpath, count)]
-
-
 def scan(root: Path) -> list[Finding]:
     findings: list[Finding] = []
-    registered = dict(REGISTER)
-    seen: set[str] = set()
     for relpath, path in sorted(_population(root).items()):
         try:
             count = len(path.read_text(encoding="utf-8").splitlines())
         except (OSError, UnicodeDecodeError):
             continue
-        seen.add(relpath)
-        if relpath in registered:
-            findings.extend(_registered_findings(relpath, count, registered[relpath]))
-        elif count > MAX_LINES:
+        if count > MAX_LINES:
             findings.append(
                 _finding(
                     "length/file-length",
@@ -146,26 +124,28 @@ def scan(root: Path) -> list[Finding]:
                 )
             )
         elif count >= CREEP_LINES and not _is_suite(path):
-            findings.append(_band_notice(relpath, count))
-    for relpath, recorded in REGISTER:
-        if relpath not in seen:
-            findings.append(
-                _finding(
-                    "length/register-stale",
-                    relpath,
-                    f"registered at {recorded} lines but the file is "
-                    "gone or unscanned; remove the register entry",
-                    SEVERITY_ERROR,
+            head = _head_count(root, relpath)
+            if head is not None and count > head:
+                findings.append(
+                    _finding(
+                        "length/band-growth",
+                        relpath,
+                        f"{count} lines, grown from {head} at HEAD while "
+                        f"in the creep band ({CREEP_LINES}-{MAX_LINES}); "
+                        "band files may not grow — decompose instead",
+                        SEVERITY_ERROR,
+                    )
                 )
-            )
+            else:
+                findings.append(_band_notice(relpath, count))
     return findings
 
 
 SCANNER = Scanner(
     name="length",
     description=(
-        "enforce the line cap and creep band on code files, "
-        "with the ratchet register freezing listed files"
+        "enforce the line cap on tracked code files; the creep "
+        "band lists as a notice and may not grow past HEAD"
     ),
     run=scan,
 )

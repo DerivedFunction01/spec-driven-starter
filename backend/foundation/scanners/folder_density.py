@@ -1,12 +1,14 @@
 """Folder-density scanner: the file cap in ``MAX_FILES``.
 
-Counts direct-child code files per folder; over the cap is
-a finding, the creep band lists as a notice, and registered
-folders are frozen — growth or a stale entry is a finding.
+Counts every tracked file of any kind, direct children per
+folder; over the cap is a finding, and the creep band lists
+as a notice with additions over the ``HEAD`` count an error.
 """
 
 from __future__ import annotations
 
+import shutil
+import subprocess
 from collections import Counter
 from pathlib import Path, PurePosixPath
 
@@ -16,40 +18,66 @@ from backend.foundation.scanners.base import (
     Finding,
     Scanner,
 )
-from backend.foundation.scanners.files import rel, walk_files
+from backend.foundation.scanners.files import SKIP_DIRS
 
 MAX_FILES = 20
 CREEP_FILES = 16
 
-CODE_SUFFIXES: tuple[str, ...] = (".py", ".js", ".mjs", ".ts", ".tsx", ".css")
-EXCLUDED_PARTS = frozenset({"assets", "generated"})
 
-# The ratchet register: (folder, recorded count) for folders
-# seeded over the band at adoption. An entry freezes its
-# folder's count and must shrink away; it never excuses growth.
-REGISTER: tuple[tuple[str, int], ...] = (
-    ("backend/foundation/scanners", 30),
-    ("tests", 44),
-    ("workhorse-kit/components", 29),
-)
+def _git_lines(root: Path, args: list[str]) -> list[str] | None:
+    """Lines of a git command at ``root``, or None if git cannot answer."""
+    git = shutil.which("git")
+    if git is None:
+        return None
+    try:
+        result = subprocess.run(
+            [git, *args],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if result.returncode != 0:
+        return None
+    return [line.strip() for line in result.stdout.splitlines() if line.strip()]
 
 
-def _in_population(parts: tuple[str, ...]) -> bool:
-    """Whether a file's relative parts belong to the population."""
-    if any(part in EXCLUDED_PARTS for part in parts):
-        return False
-    return not (parts[0] == "flavors" and "files" in parts[1:3])
+def _walked_paths(root: Path) -> list[str]:
+    """Every file under ``root`` as a relative POSIX path, skips applied."""
+    found: list[str] = []
+    for path in sorted(root.rglob("*")):
+        if not path.is_file():
+            continue
+        parts = path.relative_to(root).parts
+        if any(part in SKIP_DIRS for part in parts[:-1]):
+            continue
+        found.append(PurePosixPath(*parts).as_posix())
+    return found
+
+
+def _counts(paths: list[str]) -> dict[str, int]:
+    counts: Counter[str] = Counter()
+    for path in paths:
+        counts[PurePosixPath(path).parent.as_posix()] += 1
+    return dict(counts)
 
 
 def folder_counts(root: Path) -> dict[str, int]:
-    """Direct-child code-file counts per folder under ``root``."""
-    counts: Counter[str] = Counter()
-    for path in walk_files(root, CODE_SUFFIXES):
-        if not _in_population(path.relative_to(root).parts):
-            continue
-        folder = PurePosixPath(rel(root, path)).parent.as_posix()
-        counts[folder] += 1
-    return dict(counts)
+    """Direct-child tracked-file counts per folder under ``root``."""
+    tracked = _git_lines(root, ["ls-files"])
+    if tracked is None:
+        tracked = _walked_paths(root)
+    return _counts(tracked)
+
+
+def _head_counts(root: Path) -> dict[str, int] | None:
+    lines = _git_lines(root, ["ls-tree", "-r", "--name-only", "HEAD"])
+    if lines is None:
+        return None
+    return _counts(lines)
 
 
 def _finding(folder: str, rule: str, message: str, notice: bool = False) -> Finding:
@@ -63,107 +91,46 @@ def _finding(folder: str, rule: str, message: str, notice: bool = False) -> Find
     )
 
 
-def _unregistered(folder: str, count: int) -> list[Finding]:
-    if count > MAX_FILES:
-        return [
-            _finding(
-                folder,
-                "folder_density/folder-density",
-                f"{count} code files exceeds the {MAX_FILES}-file folder "
-                "cap; group into subfolders by intent",
-            )
-        ]
-    if count > CREEP_FILES:
-        return [
-            _finding(
-                folder,
-                "folder_density/creep-band",
-                f"{count} code files, inside the creep band over "
-                f"{CREEP_FILES}; group into subfolders by intent "
-                "before the cap forces it",
-                notice=True,
-            )
-        ]
-    return []
-
-
-def _registered(folder: str, count: int, recorded: int) -> list[Finding]:
-    if count > recorded:
-        return [
-            _finding(
-                folder,
-                "folder_density/register-growth",
-                f"registered folder grew from {recorded} to {count} code "
-                "files; the register freezes growth — group into "
-                "subfolders by intent",
-            )
-        ]
-    if count <= CREEP_FILES:
-        return [
-            _finding(
-                folder,
-                "folder_density/register-stale",
-                f"registered folder is down to {count} code files, at or "
-                "below the creep floor; remove the register entry",
-            )
-        ]
-    if count < recorded:
-        return [
-            _finding(
-                folder,
-                "folder_density/register-stale",
-                f"register records {recorded} code files but the folder "
-                f"holds {count}; update the recorded count down",
-            )
-        ]
-    if count > MAX_FILES:
-        return [
-            _finding(
-                folder,
-                "folder_density/registered-over-cap",
-                f"registered folder holds {count} code files, over the "
-                f"{MAX_FILES}-file cap; its decomposition is queued "
-                "in the register",
-                notice=True,
-            )
-        ]
-    return [
-        _finding(
+def _band(folder: str, count: int, head: dict[str, int] | None) -> Finding:
+    if head is not None and folder in head and count > head[folder]:
+        return _finding(
             folder,
-            "folder_density/creep-band",
-            f"registered folder holds {count} code files, inside the "
-            f"creep band over {CREEP_FILES}; its decomposition is "
-            "queued in the register",
-            notice=True,
+            "folder_density/band-addition",
+            f"band folder grew from {head[folder]} files at HEAD to "
+            f"{count}; additions are banned in the creep band — "
+            "group into subfolders by intent",
         )
-    ]
+    return _finding(
+        folder,
+        "folder_density/creep-band",
+        f"{count} files, inside the creep band over {CREEP_FILES}; "
+        "group into subfolders by intent before the cap forces it",
+        notice=True,
+    )
 
 
 def scan(root: Path) -> list[Finding]:
     counts = folder_counts(root)
-    registered = dict(REGISTER)
+    head = _head_counts(root)
     findings: list[Finding] = []
     for folder in sorted(counts):
-        recorded = registered.get(folder)
-        if recorded is None:
-            findings.extend(_unregistered(folder, counts[folder]))
-        else:
-            findings.extend(_registered(folder, counts[folder], recorded))
-    for folder in sorted(registered):
-        if folder not in counts:
+        count = counts[folder]
+        if count > MAX_FILES:
             findings.append(
                 _finding(
                     folder,
-                    "folder_density/register-stale",
-                    "registered folder no longer exists in the counted "
-                    "population; remove the register entry",
+                    "folder_density/folder-density",
+                    f"{count} files exceeds the {MAX_FILES}-file folder "
+                    "cap; group into subfolders by intent",
                 )
             )
+        elif count > CREEP_FILES:
+            findings.append(_band(folder, count, head))
     return findings
 
 
 SCANNER = Scanner(
     name="folder_density",
-    description="enforce the per-folder code-file cap and creep band",
+    description="enforce the per-folder tracked-file cap and creep band",
     run=scan,
 )
