@@ -21,7 +21,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useIsPhone } from "../lib/responsive";
+import { useIsPhone } from "../../lib/responsive";
 
 export type AppShellNavItem = {
   key: string;

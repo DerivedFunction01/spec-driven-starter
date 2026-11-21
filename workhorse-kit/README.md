@@ -29,7 +29,8 @@ Consumers depend on this home as the package `@workhorse/kit`
   edited by hand.
 - `assets/fonts/` — the bundled woff2 the generated `fonts.css`
   references (Inter variable; IBM Plex Mono 400/500/600), via
-  local `@font-face` only — no external fetch, ever.
+  local `@font-face` only — no external fetch, ever; plus
+  `assets/fonts/katex/` — KaTeX's 20 woff2 (see `Math`, below).
 - `components/` — the 24 viewer primitives (Badge, Button, Card,
   Chip, DataTable, Lane, Sheet, TriageRow, SegmentedControl,
   Toggle, Tooltip, …): 24 named components in 23 files —
@@ -37,13 +38,13 @@ Consumers depend on this home as the package `@workhorse/kit`
   carried: `Specimen.tsx`, the specimen harness that renders
   every primitive in its contracted variants (a review surface,
   not itself a primitive).
-- `components/AppShell.tsx` — the one app shell (contract 09),
+- `components/shell/AppShell.tsx` — the one app shell (contract 09),
   added 2026-11-13: `AppShell` switches between its two
   presentations on the `lib/responsive.ts` seam — `SidebarNav`
   + `TopBar` on desktop, `PhoneShell` (large-title nav,
   grouped-list section index) on phone. Every app renders
   inside it; no app keeps a shell of its own.
-- `components/GroupedList.tsx` — the iOS form family (kit gap
+- `components/display/GroupedList.tsx` — the iOS form family (kit gap
   K1, closed 2026-11-13): `GroupedList` (the inset grouped
   list; hairline dividers between any children), `GroupLabel`,
   `Row` (structured: label / sub / badge / end / chevron,
@@ -56,13 +57,13 @@ Consumers depend on this home as the package `@workhorse/kit`
   warn and fail tones), and `ActionRow` (full-width action,
   danger variant). The four apps composed this family
   locally in four dialects; this file is the one form.
-- `components/StatusChip.tsx` — the outcome chip (K1):
+- `components/display/StatusChip.tsx` — the outcome chip (K1):
   `StatusChip` renders a tone + label on the contract 06
   tone mapping (ok / info / warn / fail on the status
   table's hue + text variables, idle sunken), in a plain
   and a pressable form. Not `Chip`, which renders the
   ruled-status table only.
-- `components/Checkbox.tsx` — the selection controls (K1):
+- `components/controls/Checkbox.tsx` — the selection controls (K1):
   `Checkbox`, a CIRCLE whose box is locked (width, height,
   min and max pinned, flex 0 0 auto, align-self set), so no
   parent row height and no global button rule can stretch
@@ -70,7 +71,7 @@ Consumers depend on this home as the package `@workhorse/kit`
   and `Radio`, the standalone round radio control with the
   same lock. `RadioRow` (in GroupedList.tsx) is the
   full-width checkmark form.
-- `components/LogRow.tsx` — the one timeline / log-entry row
+- `components/display/LogRow.tsx` — the one timeline / log-entry row
   (the kit sheet's LogRow), redesigned 2026-11-13 in the
   timeline-component study, Variant B as picked by the owner:
   `LogRow` renders one served entry (date token in a fixed
@@ -80,7 +81,7 @@ Consumers depend on this home as the package `@workhorse/kit`
   entity routing row). A pure form-model: kinds, tones, and
   facts arrive as data; no per-app knowledge. First consumer:
   the runner's Events view.
-- `components/Math.tsx` — `Math`, the typeset-math component
+- `components/shell/Math.tsx` — `Math`, the typeset-math component
   (the math-component study, approved 2026-11-13): renders
   one served math node — structured segments carry math
   nodes as `{source, display, valid}` — with KaTeX 0.16.11.
@@ -98,8 +99,11 @@ Consumers depend on this home as the package `@workhorse/kit`
   equation scrolls horizontally in its well at full typeset
   size, never scaled down (frame 4b, shrink-to-fit, was
   rejected). KaTeX's assets are vendored in this home —
-  `assets/katex.css` (woff2-only) and its 20 woff2 fonts in
-  `assets/fonts/` — and imported by the component itself,
+  `assets/katex-fonts.css`, `assets/katex.css`,
+  `assets/katex-sizing.css` and `assets/katex-symbols.css`
+  (woff2-only) and its 20 woff2 fonts in
+  `assets/fonts/katex/` — and imported
+  by the component itself,
   never through `themes/`; TS consumers also take
   `@types/katex`.
 - `lib/responsive.ts` — the primitives' one external dependency

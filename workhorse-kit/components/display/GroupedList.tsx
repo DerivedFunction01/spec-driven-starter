@@ -24,7 +24,7 @@
 // flex-none, so the details text truncates and the chip
 // never clips; with no sub it rides the label line.
 import { type CSSProperties, type ReactNode } from "react";
-import { Toggle } from "./Toggle";
+import { Toggle } from "../controls/Toggle";
 
 /** The kit's chevron — the same inline SVG LogRow carries
  *  (8×13, 2px round-cap stroke), so the kit stays

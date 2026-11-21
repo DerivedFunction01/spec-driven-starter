@@ -36,7 +36,9 @@
 // htmlAndMathml output is never narrowed).
 //
 // KaTeX's own assets are vendored in the kit (assets/
-// katex.css, woff2-only, and its fonts in assets/fonts/)
+// katex-fonts.css, katex.css, katex-sizing.css and
+// katex-symbols.css, woff2-only, and its fonts
+// in assets/fonts/katex/)
 // and imported HERE, by the component — never through
 // themes/index.css and never from a CDN. That is the
 // K2 lesson applied in advance: the stylesheet reference
@@ -44,8 +46,11 @@
 // or skips an import for this component.
 import { type ReactNode, useMemo } from "react";
 import katex from "katex";
-import "../assets/katex.css";
-import "../assets/math.css";
+import "../../assets/katex-fonts.css";
+import "../../assets/katex.css";
+import "../../assets/katex-sizing.css";
+import "../../assets/katex-symbols.css";
+import "../../assets/math.css";
 
 export type MathProps = {
   /** The node's TeX source, as served. Also the node's

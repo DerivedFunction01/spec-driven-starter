@@ -49,7 +49,7 @@ import {
   LOG_PAYLOAD_MAX_LINES,
   clampLogPayload,
   logPayloadOverflows,
-} from "../lib/log-payload";
+} from "../../lib/log-payload";
 
 export type LogRowTone = "ok" | "info" | "warn" | "fail" | "idle";
 

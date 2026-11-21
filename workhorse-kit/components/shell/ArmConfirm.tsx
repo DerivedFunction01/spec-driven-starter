@@ -20,7 +20,7 @@
 // Contract: context/component-contracts.md#armconfirm.
 
 import { type ReactNode, useState } from "react";
-import { Button } from "./Button";
+import { Button } from "../controls/Button";
 
 export type ArmConfirmProps = {
   /** The control's own label, e.g. "Verify". */

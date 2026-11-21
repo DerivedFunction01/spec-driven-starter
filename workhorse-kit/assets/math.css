@@ -1,4 +1,4 @@
-/* Math — the kit Math component's forms (components/Math.tsx).
+/* Math — the kit Math component's forms (components/shell/Math.tsx).
    Imported by the component itself, beside assets/katex.css;
    never through themes/. Every rule below is the approved
    math-component study's own CSS (2026-11-13), scoped under

@@ -5,26 +5,26 @@
 // Justified past the ~300-line guideline in
 // context/component-contracts.md#specimen on exactly that ground.
 import { type ReactNode, useState } from "react";
-import { AnnotationBadge, annotationMarkStyle, selectionMarkStyle } from "./AnnotationBadge";
-import { Badge } from "./Badge";
-import { Button } from "./Button";
-import { Card } from "./Card";
-import { Chip, type RuledStatus } from "./Chip";
-import { DataTable } from "./DataTable";
-import { DegradedBanner } from "./DegradedBanner";
-import { DensityToggle, type DensityValue } from "./DensityToggle";
-import { EmptyState } from "./EmptyState";
+import { AnnotationBadge, annotationMarkStyle, selectionMarkStyle } from "../display/AnnotationBadge";
+import { Badge } from "../display/Badge";
+import { Button } from "../controls/Button";
+import { Card } from "../display/Card";
+import { Chip, type RuledStatus } from "../controls/Chip";
+import { DataTable } from "../display/DataTable";
+import { DegradedBanner } from "../display/DegradedBanner";
+import { DensityToggle, type DensityValue } from "../controls/DensityToggle";
+import { EmptyState } from "../display/EmptyState";
 import { Frame } from "./Frame";
-import { Lane } from "./Lane";
+import { Lane } from "../display/Lane";
 import { Math } from "./Math";
-import { ModeControl, type ModeValue } from "./ModeControl";
-import { PaletteSelect } from "./PaletteSelect";
-import { SegmentedControl } from "./SegmentedControl";
+import { ModeControl, type ModeValue } from "../controls/ModeControl";
+import { PaletteSelect } from "../controls/PaletteSelect";
+import { SegmentedControl } from "../controls/SegmentedControl";
 import { Sheet } from "./Sheet";
-import { StateControls, type StateValues } from "./StateControls";
-import { Toggle } from "./Toggle";
-import { Tooltip } from "./Tooltip";
-import { TriageRow } from "./TriageRow";
+import { StateControls, type StateValues } from "../controls/StateControls";
+import { Toggle } from "../controls/Toggle";
+import { Tooltip } from "../display/Tooltip";
+import { TriageRow } from "../display/TriageRow";
 import {
   ActionRow,
   GroupLabel,
@@ -34,9 +34,9 @@ import {
   Row,
   StatRow,
   SwitchRow,
-} from "./GroupedList";
-import { StatusChip } from "./StatusChip";
-import { Checkbox, LabeledCheckbox, Radio } from "./Checkbox";
+} from "../display/GroupedList";
+import { StatusChip } from "../display/StatusChip";
+import { Checkbox, LabeledCheckbox, Radio } from "../controls/Checkbox";
 
 const STATUSES: RuledStatus[] = [
   "canonical",

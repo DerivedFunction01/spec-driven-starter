@@ -16,7 +16,7 @@
 // crash, and valid fields still render.
 // Contract: context/component-contracts.md#statecontrols.
 import { type ReactNode, useId } from "react";
-import { useIsPhone } from "../lib/responsive";
+import { useIsPhone } from "../../lib/responsive";
 import { Button } from "./Button";
 import { FIELD_CLASSES, FIELD_STYLE } from "./Fields";
 import { SegmentedControl } from "./SegmentedControl";
