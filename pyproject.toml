@@ -59,7 +59,8 @@ select = ["E", "F", "I", "W", "UP", "B"]
 
 # ---------------------------------------------------------------------------
 # Pytest. This file lives at the repo root, so rootdir is the repo
-# root and testpaths is the flat suite under tests/. Worker count
+# root and testpaths is the suite under tests/ (scanner mirror
+# tests grouped under tests/scanners/). Worker count
 # is NOT set here: check.py owns it (--workers, default 2).
 # ---------------------------------------------------------------------------
 

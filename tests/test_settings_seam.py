@@ -15,7 +15,7 @@ class SettingsSeamTests(unittest.TestCase):
                 continue
             # The denylist scanner is the gate harness's own seam.
             rel = path.relative_to(ROOT).as_posix()
-            if rel == "backend/foundation/scanners/denylist.py":
+            if rel == "backend/foundation/scanners/content/denylist.py":
                 continue
             if "os.environ" in path.read_text(encoding="utf-8"):
                 offenders.append(str(path.relative_to(ROOT)))
