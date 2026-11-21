@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from backend.foundation.scanners.base import SEVERITY_NOTICE
+from backend.foundation.scanners.base import SEVERITY_ERROR
 from backend.foundation.scanners.perf_budget import scan
 
 
@@ -40,11 +40,22 @@ class PerfBudgetScannerTests(unittest.TestCase):
             [f.rule for f in findings], ["perf-budget/over-budget"]
         )
 
-    def test_missing_budget_file_is_a_notice_not_a_failure(self):
+    def test_missing_budget_file_is_an_error(self):
         findings = scan_tree({"frontend/app.js": "a"})
         self.assertEqual(len(findings), 1)
-        self.assertEqual(findings[0].severity, SEVERITY_NOTICE)
+        self.assertEqual(findings[0].severity, SEVERITY_ERROR)
         self.assertEqual(findings[0].rule, "perf-budget/unconfigured")
+
+    def test_malformed_budget_file_is_an_error(self):
+        findings = scan_tree(
+            {
+                "frontend/app.js": "a",
+                "frontend/budgets.json": "{not json",
+            }
+        )
+        self.assertEqual(len(findings), 1)
+        self.assertEqual(findings[0].severity, SEVERITY_ERROR)
+        self.assertEqual(findings[0].rule, "perf-budget/unreadable")
 
     def test_no_frontend_is_clean(self):
         self.assertEqual(scan_tree({"backend/x.py": "x = 1\n"}), [])

@@ -1,8 +1,7 @@
 """Performance-budget scanner: frontend weight vs its budget.
 
-Budgets live in ``frontend/budgets.json`` (KB per class). With
-a frontend but no budget file, the leg reports itself
-unconfigured as a notice and never fails.
+Budgets live in ``frontend/budgets.json`` (KB per class); a
+frontend with no budget file is a finding, not a silent pass.
 """
 
 from __future__ import annotations
@@ -10,7 +9,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from backend.foundation.scanners.base import SEVERITY_NOTICE, Finding, Scanner
+from backend.foundation.scanners.base import Finding, Scanner
 from backend.foundation.scanners.files import rel, walk_files
 
 BUDGETS = "frontend/budgets.json"
@@ -52,13 +51,23 @@ def scan(root: Path) -> list[Finding]:
                     "performance leg unconfigured: no frontend/budgets.json; "
                     "the budget is a spec decision (docs/fundamentals.md)"
                 ),
-                severity=SEVERITY_NOTICE,
             )
         ]
     try:
         document = json.loads(budget_path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError):
-        return []
+        return [
+            Finding(
+                scanner="perf_budget",
+                rule="perf-budget/unreadable",
+                path=BUDGETS,
+                line=None,
+                message=(
+                    "frontend/budgets.json exists but could not be read "
+                    "or parsed; no budget is in force"
+                ),
+            )
+        ]
     budgets = document.get("budgets", {})
     vitals = document.get("vitals", {})
     findings: list[Finding] = []

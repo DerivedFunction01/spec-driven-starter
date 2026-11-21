@@ -49,15 +49,36 @@ class AdapterMirrorScannerTests(unittest.TestCase):
     def test_partial_implementation_is_a_finding(self):
         findings = scan_tree({"backend/infra/store.py": PARTIAL})
         self.assertEqual(len(findings), 1)
-        self.assertEqual(
-            findings[0].rule, "adapter-mirror/partial-implementation"
-        )
+        self.assertEqual(findings[0].rule, "adapter-mirror/partial-implementation")
         self.assertIn("save_kits", findings[0].message)
 
-    def test_missing_declared_module_is_a_finding(self):
-        findings = scan_tree({})
+    def test_empty_tree_is_clean(self):
+        self.assertEqual(scan_tree({}), [])
+
+    def test_tree_without_infra_tier_is_clean(self):
+        findings = scan_tree({"backend/domain/model.py": FULL})
+        self.assertEqual(findings, [])
+
+    def test_partial_in_undeclared_module_is_found_by_default(self):
+        findings = scan_tree(
+            {
+                "backend/infra/store.py": FULL,
+                "backend/infra/other_store.py": PARTIAL,
+            }
+        )
         self.assertEqual(len(findings), 1)
-        self.assertEqual(findings[0].rule, "adapter-mirror/missing-module")
+        self.assertEqual(findings[0].rule, "adapter-mirror/partial-implementation")
+        self.assertEqual(findings[0].path, "backend/infra/other_store.py")
+        self.assertIn("save_kits", findings[0].message)
+
+    def test_tier_module_without_implementations_is_clean(self):
+        findings = scan_tree(
+            {
+                "backend/infra/store.py": FULL,
+                "backend/infra/sample_data.py": "SAMPLE_KITS = []\n",
+            }
+        )
+        self.assertEqual(findings, [])
 
     def test_unrelated_class_is_not_an_implementation(self):
         source = FULL + "\n\nclass Helper:\n    def render(self):\n        pass\n"

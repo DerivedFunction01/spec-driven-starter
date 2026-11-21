@@ -76,8 +76,19 @@ scanner exporting `SCANNER`, shared `Finding`/`Scanner` types
 in `base.py`, file discovery in `files.py`, the ordered
 registry in `registry.py`, and the runner at
 `backend/foundation/checks/runner.py`. Severities: **error**
-fails the gate; **notice** prints but never fails (a leg
-reporting itself unconfigured).
+fails the gate; **notice** prints but never fails.
+
+Every scanner is repo-scoped and on by default: its
+population derives from the tree it scans, never from a
+declaration a package or folder makes, and a consuming repo
+carrying a subset of the registry is drift, not a binding.
+A scanner that cannot run without provisioning does not
+pass quietly — unconfigured is an error finding — except
+where this catalogue records an exception by name. The one
+recorded exception: `denylist`, provision-gated by design,
+because its list is untracked personal data no clone can
+carry; unconfigured, it emits one notice and checks nothing,
+and provisioned, every hit is an error.
 
 | Scanner | Rule in one line |
 | --- | --- |
@@ -99,13 +110,13 @@ reporting itself unconfigured).
 | asset_manifest | every binary or external asset the frontend uses is registered in `frontend/assets-manifest.json`; stale entries fail too |
 | security_baseline | no dynamic-execution / unsafe-deserialization patterns in backend code; the four security response headers are set in the apps layer |
 | a11y_static | the static accessibility floor over frontend HTML: lang declared, images alted, controls and buttons named, no positive tabindex |
-| perf_budget | frontend asset weight per class stays inside `frontend/budgets.json`, and the field-vitals thresholds live there as positive numbers (a notice, never a failure, while no budget file exists) |
+| perf_budget | frontend asset weight per class stays inside `frontend/budgets.json`, and the field-vitals thresholds live there as positive numbers; a frontend with no budget file is itself a finding — the budget is a spec decision the repo owes |
 | value_source | no document restates a source constant: the length cap, the sample port (the README quickstart keeps one literal), or a field-vitals threshold — docs state the rule and name the source |
 | restatement | no sentence of ten words or more is restated across tracked documents — one home per rule, the second document carries its delta or a pointer; fenced specimens are not read, and deliberate duplication is named in the scanner's exception registry |
 | time_ownership | date/time derivations (parse, normalize, format, epoch, homed now wrappers) live in the one module the scanner's family map names; foreign calendar machinery and sliced instant fields outside the home are findings, and a sanctioned copy that stops matching its shape fails as stale |
 | path_discipline | climbs to a root, cwd-derived roots, and home-anchored literal roots occur only inside a paths module or under a declaration carried in the scanner's data; a declaration whose file lost the pattern fails as stale |
 | writer_uniqueness | writes that truncate a state-shaped target and hand-rolled stage-then-rename sequences occur only at the designated writer home or under a declared seam; a seam whose file lost the pattern fails as stale |
-| adapter_mirror | every class implementing the store protocol defines the protocol's whole method set, which the scanner reads from the protocol class itself; partial implementations need an allowlist entry, and an entry covering a class that now mirrors fully fails as stale |
+| adapter_mirror | every class implementing the store protocol defines the protocol's whole method set, which the scanner reads from the protocol class itself; the population is every module in the adapter tier, derived from the tree — no module is declared; partial implementations need an allowlist entry, and an entry covering a class that now mirrors fully fails as stale |
 | folder_density | no folder over the direct-child file cap the scanner's constant sets — every folder and every tracked file of any kind counts by default, with no coverage register; the band below the cap lists on every run as a notice, and a band folder grown past its committed `HEAD` count is a finding |
 
 Portability exceptions: only files named in the scanner's

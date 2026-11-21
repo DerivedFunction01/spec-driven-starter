@@ -1,8 +1,7 @@
 """Adapter-mirror scanner: implementations stay mirrors.
 
-Adapted from Steam's module-map form: the mirror obligation
-is the protocol's method set, derived from the protocol
-class at scan time — every implementation defines all of it.
+Population is every module in the adapter tier, derived
+from the tree; the obligation is the protocol's method set.
 """
 
 from __future__ import annotations
@@ -12,10 +11,10 @@ from pathlib import Path
 
 from backend.foundation.scanners.base import Finding, Scanner
 
-# The mirror contract is data: the adapter modules under
-# scan, and the protocol class whose method set every
-# implementation must carry in full.
-ADAPTER_MODULES: tuple[str, ...] = ("backend/infra/store.py",)
+# The population is the adapter tier itself: every module
+# under it counts by default. The protocol class's method
+# set is what every implementation must carry in full.
+ADAPTER_TIER = "backend/infra"
 PROTOCOL_CLASS = "Store"
 
 # Sanctioned partial implementations: {module, class, kind}.
@@ -83,37 +82,51 @@ def _scan_module(
     return findings, implementations, protocol_methods
 
 
+def _adapter_modules(root: Path) -> list[str]:
+    """Every `.py` module under the adapter tier, sorted.
+
+    The population derives from the tree at scan time; a
+    missing tier directory means an empty population.
+    """
+    tier = root / ADAPTER_TIER
+    if not tier.is_dir():
+        return []
+    return sorted(
+        path.relative_to(root).as_posix()
+        for path in tier.rglob("*.py")
+        if path.name != "__init__.py"
+    )
+
+
 def scan(root: Path) -> list[Finding]:
     findings: list[Finding] = []
-    protocol_methods: set[str] | None = None
     class_sets: dict[str, set[str]] = {}
     present: dict[str, dict[str, ast.ClassDef]] = {}
-    for module in ADAPTER_MODULES:
-        path = root / module
-        if not path.is_file():
-            findings.append(
-                Finding(
-                    scanner="adapter_mirror",
-                    rule="adapter-mirror/missing-module",
-                    path=module,
-                    line=None,
-                    message=(
-                        "a declared adapter module does not exist; "
-                        "the mirror contract names a module the tree "
-                        "no longer carries"
-                    ),
-                )
-            )
-            continue
+    texts: dict[str, str] = {}
+    for module in _adapter_modules(root):
         try:
-            text = path.read_text(encoding="utf-8")
+            texts[module] = (root / module).read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError):
             continue
+    protocol_methods: set[str] | None = None
+    for text in texts.values():
+        try:
+            classes = _classes(ast.parse(text))
+        except SyntaxError:
+            continue
+        if PROTOCOL_CLASS in classes:
+            protocol_methods = _methods(classes[PROTOCOL_CLASS])
+            break
+    for module, text in texts.items():
         module_findings, implementations, protocol_methods = _scan_module(
             module, text, protocol_methods
         )
         findings.extend(module_findings)
-        class_sets[module] = implementations
+        # The mirror-set check ranges over modules carrying an
+        # implementation; a tier module with none (seed data,
+        # helpers) has no class set to mirror.
+        if implementations:
+            class_sets[module] = implementations
         try:
             present[module] = _classes(ast.parse(text))
         except SyntaxError:
