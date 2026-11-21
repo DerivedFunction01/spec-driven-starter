@@ -1,3 +1,5 @@
+import shutil
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -51,6 +53,42 @@ class RestatementScannerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             write(tmp, "docs/a.md", f"{LONG}\n\n{LONG}\n")
             self.assertEqual(scan(Path(tmp)), [])
+
+
+def git(root, *args):
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(root),
+            "-c",
+            "user.email=test@example.com",
+            "-c",
+            "user.name=Test",
+            *args,
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+
+@unittest.skipUnless(shutil.which("git"), "git not on PATH")
+class RestatementTrackedPopulationTests(unittest.TestCase):
+    def test_only_tracked_documents_count(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            git(root, "init", "-q")
+            write(root, "docs/a.md", f"{LONG}\n")
+            write(root, "docs/b.md", f"{LONG}\n")
+            git(root, "add", "docs/a.md", "docs/b.md")
+            git(root, "commit", "-q", "-m", "seed")
+            write(root, "docs/c.md", f"{LONG}\n")
+            findings = scan(root)
+            self.assertEqual([f.path for f in findings], ["docs/b.md"])
+            git(root, "add", "docs/c.md")
+            findings = scan(root)
+            self.assertEqual([f.path for f in findings], ["docs/b.md", "docs/c.md"])
 
 
 if __name__ == "__main__":

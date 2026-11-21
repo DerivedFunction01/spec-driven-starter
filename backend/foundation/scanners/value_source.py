@@ -1,7 +1,7 @@
 """Restated-value scanner: docs carry intent, sources carry values.
 
-A document that restates a source constant's literal (the
-length and folder caps, the port, a vitals threshold) is one.
+A tracked document that restates a source constant's literal
+(the length and folder caps, the port, a vitals threshold) is one.
 """
 
 from __future__ import annotations
@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 
 from backend.foundation.scanners.base import Finding, Scanner
-from backend.foundation.scanners.files import rel, walk_files
+from backend.foundation.scanners.files import rel, walk_tracked
 from backend.foundation.scanners.folder_density import CREEP_FILES, MAX_FILES
 from backend.foundation.scanners.length import MAX_LINES
 from backend.foundation.settings import Settings
@@ -22,7 +22,7 @@ VITALS_PATTERN = re.compile(r"(LCP|INP|CLS)[^.\n]{0,16}(≤|<|=)\s*\d")
 
 def _markdown_files(root: Path) -> list[Path]:
     found: list[Path] = []
-    for path in walk_files(root, (".md",)):
+    for path in walk_tracked(root, (".md",)):
         parts = path.relative_to(root).parts
         if parts and parts[0] in EXCLUDED_TREES and "files" in parts:
             continue

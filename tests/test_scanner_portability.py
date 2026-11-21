@@ -1,3 +1,5 @@
+import shutil
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -55,6 +57,42 @@ class PortabilityScannerTests(unittest.TestCase):
         self.assertTrue(findings)
         for finding in findings:
             self.assertNotIn(needle, finding.message)
+
+
+def git(root, *args):
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(root),
+            "-c",
+            "user.email=test@example.com",
+            "-c",
+            "user.name=Test",
+            *args,
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+
+@unittest.skipUnless(shutil.which("git"), "git not on PATH")
+class PortabilityTrackedPopulationTests(unittest.TestCase):
+    def test_only_tracked_files_are_scanned(self):
+        violation = "see " + "/h" + "ome/someone/x.py\n"
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            git(root, "init", "-q")
+            write(root, "tracked.md", violation)
+            git(root, "add", "tracked.md")
+            git(root, "commit", "-q", "-m", "seed")
+            write(root, "untracked.md", violation)
+            findings = scan(root)
+            self.assertEqual({f.path for f in findings}, {"tracked.md"})
+            git(root, "add", "untracked.md")
+            findings = scan(root)
+            self.assertEqual({f.path for f in findings}, {"tracked.md", "untracked.md"})
 
 
 if __name__ == "__main__":

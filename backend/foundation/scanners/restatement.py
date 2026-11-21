@@ -11,7 +11,7 @@ import re
 from pathlib import Path
 
 from backend.foundation.scanners.base import Finding, Scanner
-from backend.foundation.scanners.files import rel, walk_files
+from backend.foundation.scanners.files import rel, walk_tracked
 
 MIN_WORDS = 10
 EXCLUDED_TREES = ("flavors",)
@@ -34,7 +34,7 @@ _WORD_RE = re.compile(r"[^a-z0-9 ]")
 
 def _markdown_files(root: Path) -> list[Path]:
     found: list[Path] = []
-    for path in walk_files(root, (".md",)):
+    for path in walk_tracked(root, (".md",)):
         parts = path.relative_to(root).parts
         if parts and parts[0] in EXCLUDED_TREES and "files" in parts:
             continue

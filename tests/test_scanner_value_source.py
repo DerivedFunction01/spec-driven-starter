@@ -1,3 +1,5 @@
+import shutil
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -69,6 +71,44 @@ class ValueSourceScannerTests(unittest.TestCase):
     def test_port_in_other_docs_is_a_finding(self):
         findings = scan_tree({"docs/guide.md": "It binds port 8797 by default.\n"})
         self.assertEqual([f.rule for f in findings], ["value-source/restated-port"])
+
+
+def git(root, *args):
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(root),
+            "-c",
+            "user.email=test@example.com",
+            "-c",
+            "user.name=Test",
+            *args,
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+
+@unittest.skipUnless(shutil.which("git"), "git not on PATH")
+class ValueSourceTrackedPopulationTests(unittest.TestCase):
+    def test_only_tracked_documents_are_scanned(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            git(root, "init", "-q")
+            write(root, "docs/tracked.md", "No file exceeds 800 lines.\n")
+            git(root, "add", "docs/tracked.md")
+            git(root, "commit", "-q", "-m", "seed")
+            write(root, "docs/untracked.md", "No file exceeds 800 lines.\n")
+            findings = scan(root)
+            self.assertEqual({f.path for f in findings}, {"docs/tracked.md"})
+            git(root, "add", "docs/untracked.md")
+            findings = scan(root)
+            self.assertEqual(
+                {f.path for f in findings},
+                {"docs/tracked.md", "docs/untracked.md"},
+            )
 
 
 if __name__ == "__main__":

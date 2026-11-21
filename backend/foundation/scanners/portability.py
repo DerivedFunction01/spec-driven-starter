@@ -11,7 +11,7 @@ import re
 from pathlib import Path
 
 from backend.foundation.scanners.base import Finding, Scanner
-from backend.foundation.scanners.files import rel, walk_files
+from backend.foundation.scanners.files import rel, tracked_paths, walk_tracked
 
 SCAN_SUFFIXES = (
     ".py",
@@ -74,15 +74,16 @@ GENERIC_LEGS = (
 
 
 def scanned_files(root: Path) -> list[Path]:
-    """The file set the text scanners share, sans mirror tests."""
+    """The tracked file set the text scanners share, sans mirror tests."""
     files = []
-    for path in walk_files(root, SCAN_SUFFIXES):
+    for path in walk_tracked(root, SCAN_SUFFIXES):
         if rel(root, path).startswith(EXCLUDED_PREFIX):
             continue
         files.append(path)
+    tracked = tracked_paths(root)
     for name in EXTRA_FILES:
         extra = root / name
-        if extra.is_file():
+        if extra.is_file() and (tracked is None or name in tracked):
             files.append(extra)
     return files
 

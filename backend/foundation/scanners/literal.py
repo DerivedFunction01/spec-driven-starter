@@ -1,7 +1,7 @@
 """Literal scanner: credential-shaped and token-shaped strings.
 
-Generic legs only: SSN shape, credential-shaped assignments
-with a non-placeholder value, and GitHub-style token shapes.
+Generic legs over tracked content only: SSN shape, credential
+assignments with a non-placeholder value, token shapes.
 """
 
 from __future__ import annotations
@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 
 from backend.foundation.scanners.base import Finding, Scanner
-from backend.foundation.scanners.files import rel, walk_files
+from backend.foundation.scanners.files import rel, walk_tracked
 
 SCAN_SUFFIXES = (".py", ".md", ".toml", ".yaml", ".yml")
 
@@ -102,7 +102,7 @@ def _scan_file(root: Path, path: Path) -> list[Finding]:
 
 def scan(root: Path) -> list[Finding]:
     findings: list[Finding] = []
-    for path in walk_files(root, SCAN_SUFFIXES):
+    for path in walk_tracked(root, SCAN_SUFFIXES):
         if rel(root, path).startswith(EXCLUDED_PREFIX):
             continue
         findings.extend(_scan_file(root, path))
