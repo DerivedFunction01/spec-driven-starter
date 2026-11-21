@@ -1,7 +1,7 @@
 # Characterization template
 
 The dossier a conversion builds before touching anything
-(`docs/conversion.md`). One dossier per predecessor, kept with
+(`../conversion.md`). One dossier per predecessor, kept with
 the project's plans while the conversion runs and cited by the
 spec extraction as its evidence. Copy this skeleton.
 

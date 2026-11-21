@@ -20,7 +20,7 @@ wins, and that the extraction said so.>
 rule — its observed behavior is the evidence; where its
 documents disagree with observation, observation wins and the
 extraction says so. Point at the characterization dossier
-(docs/characterization-template.md) and at the keep / change /
+(docs/templates/characterization-template.md) and at the keep / change /
 drop table's location: every predecessor behavior carries one
 of those rulings, with reasons for change and drop.>
 

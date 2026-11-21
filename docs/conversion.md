@@ -58,7 +58,7 @@ Before any change, inventory the predecessor as it runs:
   anything that acts without being asked.
 
 Record observed behavior in a characterization dossier
-(template: `docs/characterization-template.md`). Before any
+(template: `templates/characterization-template.md`). Before any
 change, capture golden fixtures from the *running* predecessor
 — outputs, files, rendered artifacts. The fixtures are the
 parity baseline; a fixture captured after the fact proves

@@ -60,7 +60,7 @@ Keep / change / drop: <table location in the spec extraction>
   diffs enumerated and explained). A deliberate behavior change
   cites its change ruling and lands with its spec amendment in
   the same change.
-- The final step is the swap (`docs/conversion.md`): safety
+- The final step is the swap (`../conversion.md`): safety
   bundle taken, checksum manifest written, swap in place,
   preserved files verified byte-identical against the manifest.
 

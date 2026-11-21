@@ -47,6 +47,6 @@ carry it.
 ## Styling
 
 - Token-only styling: components reference the UI context
-  tokens (`docs/ui-tokens-template.md`) — color roles,
+  tokens (`templates/ui-tokens-template.md`) — color roles,
   typography, radius — never raw values. A value with no token
   is a token-file amendment first, a component change second.

@@ -70,7 +70,7 @@ side, and a landing needs both green.
   token file, seeded before features, so no feature invents
   visual values; its palette is re-seeded in the design
   pass. (A project that drops the kit falls back to the UI
-  context token file, `docs/ui-tokens-template.md`.)
+  context token file, `docs/templates/ui-tokens-template.md`.)
 - **Ignores:** add `node_modules/` and `dist/` to the
   project's `.gitignore` when the flavor is applied — build
   output and installed dependencies are never tracked.

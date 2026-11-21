@@ -1,7 +1,7 @@
 # Inspiration pin board — template
 
 A project's pins: related apps, competitors, and references
-kept as a spec artifact (intake-gated: `docs/method.md`).
+kept as a spec artifact (intake-gated: `../method.md`).
 Inspiration is evidence with a verdict, not a mood. Copy this
 skeleton; one row per pin, with its capture kept beside the
 board.
@@ -23,8 +23,8 @@ board.
   resolution lives.
 - "Take" names the transferable pattern, never the asset:
   inspiration never licenses copying assets, copy, or branding
-  (imagery discipline, `docs/fundamentals.md`; the mockup
-  standard, `docs/mockup-approval.md`).
+  (imagery discipline, `../fundamentals.md`; the mockup
+  standard, `../mockup-approval.md`).
 - Captures are dated because references move; a pin whose
   capture no longer matches its reference is refreshed or
   dropped, never silently stale.

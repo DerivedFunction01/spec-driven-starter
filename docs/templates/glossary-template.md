@@ -1,6 +1,6 @@
 # Glossary template
 
-The project's own language, defined once (`docs/fundamentals.md`:
+The project's own language, defined once (`../fundamentals.md`:
 one glossary). One glossary file per project, kept under `docs/`
 and cited by the spec. Copy this skeleton; one row per term.
 

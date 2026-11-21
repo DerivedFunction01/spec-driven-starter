@@ -1,7 +1,7 @@
 # Integration record template
 
 One record per third-party service a project integrates
-(`docs/fundamentals.md`: third-party integration record,
+(`../fundamentals.md`: third-party integration record,
 intake-gated). Built from the provider's official docs, not
 from memory or from another project's record. Copy this
 skeleton per service.

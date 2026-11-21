@@ -1,7 +1,7 @@
 # Discoverability file — template
 
 For a public site that must be found by search (intake-gated:
-`docs/method.md`), one file owns how search engines see it.
+`../method.md`), one file owns how search engines see it.
 Kept with the frontend spec; the starter's sample is internal
 and carries none. Copy this skeleton.
 

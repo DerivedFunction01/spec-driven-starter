@@ -205,7 +205,7 @@ answer; nothing there binds a project whose answer is no.
   agent, not written against one vendor's proprietary hooks.
 - **One glossary.** The project's domain terms are defined
   once in its glossary (template:
-  `docs/glossary-template.md`): plain-word definition, the
+  `templates/glossary-template.md`): plain-word definition, the
   exact technical name it maps to, one example. Specs, plans,
   code names, and UI copy use glossary terms exactly; a
   concept with no entry is named and entered before it is
@@ -264,7 +264,7 @@ or a promise.
 - **Third-party integration record** — applies when the
   intake answers yes to *integrates third-party services*.
   Each service gets one record (template:
-  `docs/integration-template.md`) built from the provider's
+  `templates/integration-template.md`) built from the provider's
   official docs, not memory: hosts, auth scheme, least scope
   requested, where the credential lives, and which operations
   are verified versus untested. Untested is labeled, never

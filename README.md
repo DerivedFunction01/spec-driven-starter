@@ -106,7 +106,7 @@ seam (`backend/foundation/settings.py`); no other module reads
 the environment. No tracked file exceeds the gate's length cap, references a
 file outside the repo, or carries a personal identifier — the
 gate proves all three. Plans are written in the plan syntax in
-`docs/plan-template.md`, tracked as one todo file per step, and
+`docs/templates/plan-template.md`, tracked as one todo file per step, and
 closed out (status set, file archived) in the same pass that
 lands them. An approved mockup is an exact specification, not
 inspiration; anything in it that real data cannot reproduce

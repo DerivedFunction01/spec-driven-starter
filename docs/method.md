@@ -61,7 +61,7 @@ material its yes answer activates:
 | The project's readers include non- or beginner coders | Plain-language register |
 
 Every answer is recorded in the project's spec (the intake
-record in `docs/spec-template.md`), with its scope. A yes
+record in `templates/spec-template.md`), with its scope. A yes
 creates exactly the conditional sections, templates, and
 primitives it names — in that project, not in the starter's
 defaults. A no leaves no trace: no section, no rule, no
@@ -201,7 +201,7 @@ client-side patch.
 ## 5. Plans are the work record
 
 Every implementation is a plan file (syntax:
-`docs/plan-template.md`): objective, rulings, steps with files /
+`templates/plan-template.md`): objective, rulings, steps with files /
 verify / done-when, and open questions in the structured
 question format so a viewer can surface them for ruling. One
 todo file per step, created before work starts, moved at each

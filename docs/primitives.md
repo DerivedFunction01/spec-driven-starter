@@ -80,7 +80,7 @@ the ladder and that contract, never a host-specific poller
 binding. Drills for every shape live in
 `tests/test_supervision.py`.
 
-## Plan file (see `docs/plan-template.md`)
+## Plan file (see `templates/plan-template.md`)
 
 Objective, rulings, steps with verify and done-when, structured
 open questions, and the closeout move. The plan plus its todo
