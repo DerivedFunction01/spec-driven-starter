@@ -329,7 +329,7 @@ run-record store, and the fleet capacity source
 an acknowledgement clears nothing.
 
 The classes: idle, serial, stall/seam, orphan,
-unreported, terminal. Idle is armed or doing work with no
+unreported, terminal, unlanded. Idle is armed or doing work with no
 conforming checkpoint past the stall bound and no
 verified blocked basis (Blocked states and claimed
 instructions); serial is a programme with
@@ -395,6 +395,35 @@ and a programme whose runs ride a caller that is
 not its slug stem declares its caller stems in the
 registry, so the attribution stays data, never a
 measure-side special case.
+
+Unlanded: a build the owning programme's own record
+claims complete whose commits are not on main. The
+claim is a progress-checkpoint line naming the commit
+beside a completion word — a build stated complete, a
+gate stated passed — and the measure is ancestry: the
+tick checks the named commit against main, never the
+claim's own word, so a checkpoint claiming "landed"
+for a commit main does not carry is the same gap in
+its sharpest form. A gate verdict is not a landing,
+and a branch push is not one either: the transport
+branch is the landing vehicle, not the landing. A
+claim at least one checkpoint interval old (the
+programme's declared cadence) with the commit still
+off main raises the row to the owning coordinator; it
+re-surfaces every run of the measure until the commit
+lands, and escalates under the programme's declared
+escalation bound like every other class. The row
+clears on the landing itself — ancestry flipping —
+never on a later checkpoint's say-so. A claim whose
+commit cannot be measured (unknown object, no repo
+derivable from the record) raises nothing: honest
+absence over a guessed row. The record vocabulary
+matches the measure: a built-but-unlanded cure is
+recorded "built, unlanded", and "complete" and
+"completed" in a checkpoint are reserved for
+landed-on-main — a checkpoint that spends the closing
+words on branch state manufactures the completion the
+tick then believes.
 
 The actuator ladder, in order; a message alone is
 the weakest form and never counts as the act by
@@ -593,7 +622,11 @@ a group with nothing to report omitted and never filled
 with a placeholder. The done group names the work items
 flipped since the last report wherever work items exist;
 summary-form done is legitimate only at the two closing
-states. Work running past an hour while its thread stays
+states. Completion words are measured words: in a
+checkpoint or a report, "complete" is reserved for
+landed-on-main, and a built-but-unlanded item is stated
+"built, unlanded" — the unlanded gap class reads the
+record on exactly this vocabulary. Work running past an hour while its thread stays
 active states itself under stalling — long-running is
 self-stated at the hour, not discovered after the fact.
 
