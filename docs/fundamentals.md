@@ -228,6 +228,25 @@ answer; nothing there binds a project whose answer is no.
   interpreter is never the runtime for repo work. A result
   produced under any other interpreter is not evidence
   about the repo.
+- **Branch transport to venues.** Where a project's jobs
+  run on a remote venue, a committed tree reaches the
+  venue as a branch on origin: the job's manifest declares
+  the branch and its full expected SHA, the venue fetches
+  the delta, and the checkout asserts its HEAD equals the
+  announced SHA before anything runs. A snapshot bundle
+  is the fallback for a genuinely uncommitted tree,
+  declared by naming no transport, never substituted
+  mid-launch. A branch is transport only, never a
+  landing: the run is judged on the tree at its announced
+  SHA, and transport branches are deleted from origin
+  when the work is done. Untracked provisioned material —
+  keys, denylists, kit files — never rides a branch; it
+  moves on the upload and plant channel, as provisioned
+  material always does. Grouped changes share one
+  worktree, one branch, and its transport rather than an
+  archive per change, and every run record stamps the
+  transport kind used, so a bundle fallback is a counted
+  event, not a habit.
 - **The cap is a backstop.** A file approaching its size
   cap is already a defect, not a file with room left: the
   cap exists to catch a decomposition that was missed, not
