@@ -90,6 +90,58 @@ class LivingDatesScannerTests(unittest.TestCase):
         for finding in findings:
             self.assertNotIn(ISO, finding.message)
 
+    def test_date_in_doc_code_span_passes(self):
+        text = f"Run `report --day {ISO}` to rebuild.\n"
+        findings = self.scan_tree({"note.md": text})
+        self.assertEqual(findings, [])
+
+    def test_date_in_fenced_block_passes(self):
+        files = {
+            "note.md": f"Example:\n\n```\nreport --day {ISO}\n```\n",
+            "guide.md": f"Example:\n\n~~~\nreport --day {ISO}\n~~~\n",
+        }
+        findings = self.scan_tree(files)
+        self.assertEqual(findings, [])
+
+    def test_date_in_prose_beside_code_span_fails(self):
+        text = f"Shipped {ISO}; run `report` to check.\n"
+        findings = self.scan_tree({"note.md": text})
+        self.assertEqual(rules(findings), ["living-dates/iso-date"])
+        self.assertEqual(findings[0].line, 1)
+
+    def test_dated_gitignore_comment_fails(self):
+        files = {".gitignore": f"# bundle corpus; retired {ISO}\n*.log\n"}
+        findings = self.scan_tree(files)
+        self.assertEqual(rules(findings), ["living-dates/iso-date"])
+        self.assertEqual(findings[0].line, 1)
+
+    def test_gitignore_hash_inside_pattern_passes(self):
+        findings = self.scan_tree({".gitignore": f"build#{ISO}/\n"})
+        self.assertEqual(findings, [])
+
+    def test_dated_toml_comment_fails(self):
+        files = {"pyproject.toml": f"# floor raised {ISO}\n[project]\n"}
+        findings = self.scan_tree(files)
+        self.assertEqual(rules(findings), ["living-dates/iso-date"])
+        self.assertEqual(findings[0].line, 1)
+
+    def test_date_in_toml_string_value_passes(self):
+        findings = self.scan_tree({"pyproject.toml": f'day = "{ISO}"\n'})
+        self.assertEqual(findings, [])
+
+    def test_date_in_yaml_string_value_passes(self):
+        findings = self.scan_tree({"config.yaml": f'day: "{ISO}"\n'})
+        self.assertEqual(findings, [])
+
+    def test_hash_in_quoted_yaml_value_starts_no_comment(self):
+        findings = self.scan_tree({"config.yaml": f'note: "release #{ISO} build"\n'})
+        self.assertEqual(findings, [])
+
+    def test_date_in_yaml_trailing_comment_fails(self):
+        findings = self.scan_tree({"config.yaml": f"day: today # verified {ISO}\n"})
+        self.assertEqual(rules(findings), ["living-dates/iso-date"])
+        self.assertEqual(findings[0].line, 1)
+
 
 def git(root, *args):
     subprocess.run(

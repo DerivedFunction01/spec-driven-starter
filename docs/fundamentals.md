@@ -223,7 +223,8 @@ answer; nothing there binds a project whose answer is no.
   dates: no date stamps, no dated entry tags, no date
   parentheticals. A comment that needs a date to make sense
   is rewritten to state the rule or reason itself. Dates as
-  data are untouched: string literals, fixtures, test
+  data are untouched: string literals, code spans and
+  fenced code blocks in documents, fixtures, test
   specimens, served values, and identifiers that carry a
   date as their content are data, not documents or
   comments, and stay. Archives are records, not documents:
@@ -231,8 +232,9 @@ answer; nothing there binds a project whose answer is no.
   records keep their form and their dates, and stand
   outside this rule. Enforcement is a scanner in each
   repo's gate, on by default, whose population is the
-  repo's tracked living documents and tracked code derived
-  from the tree itself; archive paths are excluded by
+  repo's tracked living documents and tracked code — prose,
+  comments and docstrings, and config-file comments —
+  derived from the tree itself; archive paths are excluded by
   directory convention only, never by a register of exempt
   files.
 - **Nothing builds from a wish.** A wish states an outcome
