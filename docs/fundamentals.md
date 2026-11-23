@@ -211,6 +211,30 @@ answer; nothing there binds a project whose answer is no.
   concept with no entry is named and entered before it is
   built on, and a term argued about is defined in the same
   pass that argues it.
+- **Docs and comments state the present.** A living
+  document — an agent instructions file, a spec or repo
+  document, a README, a live plan, a memory index or topic
+  file — states the present truth as a fact or a rule, and
+  a correction rewrites the entry it corrects, in place, in
+  the same edit. An entry that records what used to be
+  true, what it superseded, or when it changed is a defect
+  of the same class as the error it documents. Living
+  documents and code comments and docstrings carry no
+  dates: no date stamps, no dated entry tags, no date
+  parentheticals. A comment that needs a date to make sense
+  is rewritten to state the rule or reason itself. Dates as
+  data are untouched: string literals, fixtures, test
+  specimens, served values, and identifiers that carry a
+  date as their content are data, not documents or
+  comments, and stay. Archives are records, not documents:
+  finished plans, run logs, dated logs, and audit and gate
+  records keep their form and their dates, and stand
+  outside this rule. Enforcement is a scanner in each
+  repo's gate, on by default, whose population is the
+  repo's tracked living documents and tracked code derived
+  from the tree itself; archive paths are excluded by
+  directory convention only, never by a register of exempt
+  files.
 - **Nothing builds from a wish.** A wish states an outcome
   without rules; a spec states the rules, constraints, edge
   cases, and failure paths, and names its decisions. A wish

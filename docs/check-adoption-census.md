@@ -15,7 +15,7 @@ are the cure for that row.
 
 Verdicts are against the starter's generic machinery — `check.py`,
 `docs/checks.md`, the 21 scanners in `backend/foundation/scanners/registry.py`,
-`flavors/webapp/`, `skills/` — verified 2026-11-17. Dispositions name the
+`flavors/webapp/`, `skills/` — verified against the tree. Dispositions name the
 plan step that carries the work; a candidate discovered later joins this
 census before it joins the starter.
 
@@ -99,7 +99,7 @@ declarations through `pipeline/gate/runner.py`; a red leg is fatal.
 | `importisolation` | A package imports nothing from sibling packages (declared bootstrap exceptions) | Partial — `layers` enforces backend tier direction only | Adapt — Step 8 gate-shape lane, as the webapp flavor's package form |
 | `writeruniqueness` | One homed stage+rename writer; no truncate-writes to state-shaped paths elsewhere | Absent — `docs/checks.md` lists governed-literal scanners as noted, not implemented | Adopt — Step 8 gate-shape lane |
 | `dateuniqueness` (+ `date_families.json`) | Shape-based AST scan: one homed module per date intent, the family→home map as data | Absent | Adopt — Step 8 date lane (with Steam's `time-ownership` as the second proof) |
-| `foldercensus` | Folder file-count census on every run (warn/fail thresholds) | Present — the `folder_density` scanner is the generic form (cap, band, additions measured against `HEAD`) | Adopt — carried by the generic file-length and folder-density rule (2026-11-21); the superapp leg's warn/fail thresholds are a repo binding of the generic rule |
+| `foldercensus` | Folder file-count census on every run (warn/fail thresholds) | Present — the `folder_density` scanner is the generic form (cap, band, additions measured against `HEAD`) | Adopt — carried by the generic file-length and folder-density rule; the superapp leg's warn/fail thresholds are a repo binding of the generic rule |
 | ruff format/lint legs (`staticlegs.py`) | Format and lint over declared targets | Present — `check.py` static legs | None — already carried |
 | `scanners` leg (`staticlegs.py`) | Delegates to a package's own scanner suite via a named module | Present — the scanner framework itself (`backend/foundation/checks/runner.py` + registry) | None — already carried |
 | `isolation-unittest` | Suite wrapped in a real-state hash snapshot; any change fails the leg | Present — `check.py`'s test-isolation proof, same mechanism | None — already carried |

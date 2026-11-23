@@ -10,6 +10,9 @@ from __future__ import annotations
 from backend.foundation.scanners.base import Scanner
 from backend.foundation.scanners.content.denylist import SCANNER as DENYLIST_SCANNER
 from backend.foundation.scanners.content.literal import SCANNER as LITERAL_SCANNER
+from backend.foundation.scanners.content.living_dates import (
+    SCANNER as LIVING_DATES_SCANNER,
+)
 from backend.foundation.scanners.content.portability import (
     SCANNER as PORTABILITY_SCANNER,
 )
@@ -83,6 +86,7 @@ ALL_SCANNERS: tuple[Scanner, ...] = (
     NO_REEXPORT_SCANNER,
     SETTINGS_SEAM_SCANNER,
     LITERAL_SCANNER,
+    LIVING_DATES_SCANNER,
     LEGACY_SHIMS_SCANNER,
     PROSE_LENGTH_SCANNER,
     CLEAN_EXIT_SCANNER,

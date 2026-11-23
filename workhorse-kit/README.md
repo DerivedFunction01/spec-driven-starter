@@ -4,7 +4,7 @@ The one shared design system for the workhorse apps (scheduler,
 workbench, runner, attention) and every later consumer. This
 directory is the kit's home, in the spec-driven starter, per the
 superapp seed plan §2b ruling: the kit is built once here; repos
-consume it, they never fork or copy it. Extracted 2026-11-13
+consume it, they never fork or copy it. Extracted
 from workbench-viewer at pin `b0b9cc5` (consolidation plan step
 S2), where the token system was authored; the workbench is now
 a consumer like every other repo.
@@ -38,14 +38,14 @@ Consumers depend on this home as the package `@workhorse/kit`
   carried: `Specimen.tsx`, the specimen harness that renders
   every primitive in its contracted variants (a review surface,
   not itself a primitive).
-- `components/shell/AppShell.tsx` — the one app shell (contract 09),
-  added 2026-11-13: `AppShell` switches between its two
+- `components/shell/AppShell.tsx` — the one app shell (contract 09):
+  `AppShell` switches between its two
   presentations on the `lib/responsive.ts` seam — `SidebarNav`
   + `TopBar` on desktop, `PhoneShell` (large-title nav,
   grouped-list section index) on phone. Every app renders
   inside it; no app keeps a shell of its own.
 - `components/display/GroupedList.tsx` — the iOS form family (kit gap
-  K1, closed 2026-11-13): `GroupedList` (the inset grouped
+  K1, closed): `GroupedList` (the inset grouped
   list; hairline dividers between any children), `GroupLabel`,
   `Row` (structured: label / sub / badge / end / chevron,
   under the owner's two-line row discipline — the label's
@@ -67,12 +67,12 @@ Consumers depend on this home as the package `@workhorse/kit`
   `Checkbox`, a CIRCLE whose box is locked (width, height,
   min and max pinned, flex 0 0 auto, align-self set), so no
   parent row height and no global button rule can stretch
-  it into an ellipse (the owner's tick lesson, 2026-11-13);
+  it into an ellipse (the owner's tick lesson);
   and `Radio`, the standalone round radio control with the
   same lock. `RadioRow` (in GroupedList.tsx) is the
   full-width checkmark form.
 - `components/display/LogRow.tsx` — the one timeline / log-entry row
-  (the kit sheet's LogRow), redesigned 2026-11-13 in the
+  (the kit sheet's LogRow), redesigned in the
   timeline-component study, Variant B as picked by the owner:
   `LogRow` renders one served entry (date token in a fixed
   column, headline, kind badge at the right end — flex-none,
@@ -82,7 +82,7 @@ Consumers depend on this home as the package `@workhorse/kit`
   facts arrive as data; no per-app knowledge. First consumer:
   the runner's Events view.
 - `components/shell/Math.tsx` — `Math`, the typeset-math component
-  (the math-component study, approved 2026-11-13): renders
+  (the math-component study, approved): renders
   one served math node — structured segments carry math
   nodes as `{source, display, valid}` — with KaTeX 0.16.11.
   Inline it sets in prose and inherits the content colour,
@@ -160,16 +160,16 @@ round; both are standing:
 
 The themes bundle is self-contained: `themes/index.css`
 imports only files the kit ships (fonts + one CSS per
-palette). Gap K2 (closed 2026-11-13): an earlier generated
+palette). Gap K2 (closed): an earlier generated
 `index.css` imported a `katex.css` the kit has never
 carried — a workbench-viewer asset vendored by hand beside
 that repo's themes — which forced consumers to stub the
 file or skip `index.css` entirely. The import stays
 removed: `themes/` carries no KaTeX reference. The kit's
-math component (above, added 2026-11-13) vendors KaTeX
+math component (above) vendors KaTeX
 under `assets/` and imports it from the component itself —
 the dangling-reference failure this gap names does not
-return by that door either. Gap K3 (closed 2026-11-13): `--wb-accent-soft`
+return by that door either. Gap K3 (closed): `--wb-accent-soft`
 is a semantic token (the accent at resting-fill alpha,
 both palettes × both modes); consumers no longer fall
 back for it.

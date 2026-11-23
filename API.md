@@ -57,7 +57,7 @@ Errors are plain objects: `{ "error": "<machine-code>",
 "message": "<human sentence>" }` with a matching HTTP status.
 No raw stack traces or payload dumps cross the seam.
 
-## Amendment — `api/2` (2026-11-07)
+## Amendment — `api/2`
 
 Supersedes the error shape of `api/1`; everything else in
 `api/1` stands. The `contract` field of every payload now
@@ -87,7 +87,7 @@ Errors are **problem details** (RFC 9457), never the plain
 - Stack traces, queries, and internal paths never cross the
   seam.
 
-## Addendum — `api/2` (2026-11-07, environment identity)
+## Addendum — `api/2` (environment identity)
 
 `GET /health` additionally serves `environment`: the settings
 seam's environment identity for the running instance, so any
