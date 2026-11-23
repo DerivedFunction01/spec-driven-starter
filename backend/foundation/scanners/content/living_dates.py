@@ -59,9 +59,7 @@ SLASH_DATE_RE = re.compile(r"\b\d{4}/\d{2}/\d{2}\b")
 MONTH_DAY_YEAR_RE = re.compile(
     r"\b" + _MONTH + r"\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}\b"
 )
-DAY_MONTH_YEAR_RE = re.compile(
-    r"\b\d{1,2}(?:st|nd|rd|th)?\s+" + _MONTH + r"\s+\d{4}\b"
-)
+DAY_MONTH_YEAR_RE = re.compile(r"\b\d{1,2}(?:st|nd|rd|th)?\s+" + _MONTH + r"\s+\d{4}\b")
 MONTH_YEAR_RE = re.compile(r"\b" + _MONTH + r"\s+\d{4}\b")
 PAREN_YEAR_RE = re.compile(r"\(\s*(?:19|20)\d{2}\s*\)")
 
