@@ -73,6 +73,19 @@ names its durable source when it is set; a trigger with
 no durable source is a defect of the expectation, not of
 the work it watches.
 
+The staffable queue is a registry contract: a programme's
+queue is an ordered declaration of work items, landed
+markers, and gated items — an item gated on a marker is
+staffable only when its marker lands. When a measure
+shows fewer distinct families in flight than the queue's
+staffable count, the continuation steer names the next
+unstaffed items as a staffing commission, in queue order.
+The commission clears under the clearing rule above — on
+a later measure showing the families in flight — and on
+nothing else. Items leave the queue by amendment to the
+contract: landed work is pruned, and a marker flips on
+the landing it records.
+
 Child workers are the count: a programme's workers are
 served split by attribution — runs by the programme's own
 coordinator callers in the caller registry, and child
@@ -112,6 +125,33 @@ missing-record defect of its own class, carrying the
 checkpoint gap: the age of the lane's newest checkpoint
 against the armed progress-checkpoint cadence (a mechanism
 default; its value is owned by the bindings layer).
+
+Expected staffing is declared as lane records: one record
+per lane, and each record is a declaration with a
+lifetime. Declare: the staffing seat posts the expected
+lane count and, per lane, an estimated duration and its
+venue — the venue field is always present, and none is a
+standing value for authoring-side lanes, which count
+toward expected and actual exactly as venue lanes do.
+Ping: the declaration stays live only while the lane
+pings; the ping is the lane's own checkpoint writes on
+the supervision cadence, never a separate manual act, and
+a missed ping raises the lane's row at once. Renew: at
+the estimate's end the lane renews with a new estimate or
+terminates; the record shows estimate against actual and
+the renewal count. Terminate: only on an explicit,
+checkable condition drawn from the queue's marker
+vocabulary — never by silence, by expiry, or on the
+lane's own say-so; an expired declaration with no renewal
+and no termination condition met is an escalated row, not
+a closed lane. A lane is not a session: its venue-bound
+steps wait inside the lane's declared gap-wait state, and
+a lane never ends, merges, or hands its item back for
+want of a session — declared lanes exceeding the sessions
+up is the healthy shape. The measure cross-checks three
+signals — lane records, venue run records, and worktree
+activity — and a disagreement among them is a finding,
+not a rounding.
 
 Actuation is part of the measure: a supervision steer that
 cannot reach an agent able to act is itself a defect after
