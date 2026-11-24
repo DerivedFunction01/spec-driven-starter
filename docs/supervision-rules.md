@@ -159,14 +159,30 @@ estimate per step in the plan file. An estimate is
 normally under an hour; a longer one is legitimate only
 for novel work, deep research, or language-model-bound
 work, and the entry states why it takes that long and
-why the estimate should not be lower. An item that
+why the estimate should not be lower. A longer estimate
+names the class that floors it, from the closed set of
+long-duration classes: an irreducible serial dependency;
+work CPU-bound at the full worker count; memory-bandwidth-
+or I/O-bound work; limited compute or capacity queueing;
+network-held work; coordination and fan-in, including
+tail latency; hard language-model or algorithmic
+complexity floors; critic and verification runs; certain
+browser work; and real-time observation windows. The
+discriminator is universal: the elapsed time sits at the
+class's floor with its bottleneck at its measured
+ceiling, and any proposed shortcut names what it
+surrenders. Duration claimed for serial-by-default work,
+polling intervals, re-running from zero, lanes queued
+behind sessions, manufactured approvals, or transport
+round-trips is a justification in no class. An item that
 passes its estimate without completing is overdue: the
 owning thread actuates on it — re-estimates it with the
 reason stated, staffs it, or escalates it — rather than
 merely reporting it again. The estimate lint reads the
 plan and todo surfaces the tree itself declares; an
-entry with no estimate, and an over-hour estimate
-without its justification, are findings.
+entry with no estimate, an over-hour estimate without
+its justification, and a justification naming none of
+the long-duration classes, are findings.
 
 Actuation is part of the measure: a supervision steer that
 cannot reach an agent able to act is itself a defect after
