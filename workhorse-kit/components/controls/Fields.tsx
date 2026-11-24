@@ -1,5 +1,5 @@
-// Fields — the kit's form controls (F4 of the 2026-11-10
-// entries critic pass): a native <select> and a native
+// Fields — the kit's form controls (F4 of the entries
+// critic pass): a native <select> and a native
 // <input> under kit chrome, plus the Field labelled
 // wrapper. Native semantics underneath, exactly as
 // SegmentedControl sits on native radios: the browser's
@@ -28,7 +28,7 @@ import {
  * hand-built forms. Inline style for the token plumbing
  * (the kit's convention); classes carry sizing, the focus
  * ring, and the disabled treatment. Width is w-full
- * (2026-11-15 mobile critic, K1): a field fills its
+ * (mobile critic, K1): a field fills its
  * container — without a width the control renders at its
  * intrinsic size (a text input at the 234px HTML default)
  * and its value clips inside wider form columns. A call

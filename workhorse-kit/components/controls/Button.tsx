@@ -2,8 +2,8 @@
 // Variants × states per context/component-contracts.md#button.
 // Labels never truncate: no nowrap / overflow clipping anywhere
 // in the chain — a squeezed button wraps its label and grows
-// (owner rule, 2026-11-17: a truncated button is a defect,
-// cured by sizing/layout, never by clipping).
+// (owner rule: a truncated button is a defect, cured by
+// sizing/layout, never by clipping).
 import { type CSSProperties, type MouseEvent, type ReactNode, useState } from "react";
 
 export type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";

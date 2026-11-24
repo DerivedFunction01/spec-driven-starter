@@ -47,7 +47,7 @@ export function Toggle({ checked, onChange, label, disabled = false, className }
       // escapes to the page's outer scroller and its
       // static position deep in a scroll region extends
       // that scroller's overflow — the phantom body
-      // scroll of owner defect D5 (2026-11-17). The
+      // scroll of owner defect D5. The
       // button as containing block keeps the span's
       // overflow inside the region that owns the row.
       className={[

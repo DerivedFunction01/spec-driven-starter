@@ -10,23 +10,23 @@
 // holds 5.3:1+). Alias texts (var(--wb-status-<other>-text))
 // resolve to their target before checking.
 //
-// Part 2 (scanner rule 1 of the 2026-11-10 entries critic
+// Part 2 (scanner rule 1 of the entries critic
 // pass): the CONTENT tokens join the net. --wb-content-
 // primary and --wb-content-secondary are the essential-
 // content voices and must hold >= 4.5:1 against every
 // surface token, both palettes x both modes — that bar is
 // FATAL. --wb-content-muted is the META voice (slugs,
-// timestamps, counts, card meta lines): the 2026-11-16
+// timestamps, counts, card meta lines): the
 // superapp critic pass (finding B-2) measured it at
 // 2.91–3.71:1 across the surface set and filed it as a
 // serious WCAG 2.2 AA failure on 4,229 rendered nodes, so
-// the meta-only 3.4:1 grading recorded here in 2026-11-10
+// the meta-only 3.4:1 grading once recorded here
 // is superseded: muted now holds the SAME fatal 4.5:1 bar
 // on every surface, both palettes x both modes, and its
 // token values sit on the muted->secondary scale step that
 // clears the bar while staying the subordinate voice.
 //
-// Part 3 (2026-11-16 superapp critic re-run, finding
+// Part 3 (superapp critic re-run, finding
 // N-1): the TINT pairs join the net. Parts 1-2 check text
 // against the five surface tokens, but the kit's chip
 // family renders status text on the status's own TINT —
@@ -55,7 +55,7 @@
 // 12/20 inline) — a component that changes its mix owes
 // this file the same change.
 //
-// Part 4 (2026-11-16 superapp critic confirmation,
+// Part 4 (superapp critic confirmation,
 // finding F-2): the SOLID pairs join the net. Parts 1–3
 // check text against surfaces and tints; a solid fill is
 // neither — it is an opaque token fill carrying its own
@@ -75,7 +75,7 @@
 // Part 5 below, mirrored as data the way Part 3 mirrors
 // the mix badges.)
 //
-// Part 5 (2026-11-17 superapp critic confirmation
+// Part 5 (superapp critic confirmation
 // follow-up — the Button danger active state F9 measured
 // at 3.92:1 olive/dark and 3.67:1 teal/dark and named
 // outside its scope): the BUTTON STATE pairs join the
@@ -93,7 +93,7 @@
 // Part 3's badge mixes do; the shade endpoint is the
 // press-shade token, resolved per palette x mode.
 //
-// Part 6 (2026-11-17, the generic-kit sync — Step 7 of
+// Part 6 (the generic-kit sync — Step 7 of
 // the starter's check-adoption plan): the NON-TEXT pairs
 // and the COMPOSITE grounds join the net, with the spend
 // census that keeps them honest. Parts 1–5 price text
@@ -116,7 +116,7 @@
 //      carry are the accent family and the done disc:
 //      measured directly, focus-on-fill sits at
 //      1.00–2.40:1 — the ring camouflages, the defect the
-//      2026-11-16 critic confirmation pass read as
+//      critic confirmation pass read as
 //      switches painting no indicator. No step on the
 //      scale cures it, so the Toggle track and the
 //      Checkbox disc carry an inset separator band in

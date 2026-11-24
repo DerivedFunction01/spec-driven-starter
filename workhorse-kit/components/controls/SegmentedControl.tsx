@@ -26,7 +26,7 @@ export type SegmentedControlProps<V extends string> = {
 // unaffected: they still render single-line exactly as
 // before. The span carries vertical padding (py-1.5) so a
 // wrapped label never sits against the pill's border
-// (2026-11-15 critic R2: a 3-line stress label measured
+// (critic R2: a 3-line stress label measured
 // 1.0px from the top border); single-line pills are
 // unchanged — their height is the min-height either way.
 //
@@ -41,7 +41,7 @@ export type SegmentedControlProps<V extends string> = {
 // label wrapping it is the native radio's hit area — both
 // carry the control's full contract height (38px, 44px
 // coarse) so the measured target IS the pill, not a 30px
-// box inside a 38px fieldset (the 2026-11-10 critic's F2
+// box inside a 38px fieldset (the critic's F2
 // leg for this primitive). The fieldset's padding drops to
 // zero so the track hugs the pills at the same height.
 const SEGMENT_CLASSES = [
@@ -70,8 +70,8 @@ export function SegmentedControl<V extends string>({
       // page's outer scroller, and a control sitting
       // deep in a scroll region extends that scroller's
       // overflow by its full static depth — the phantom
-      // body scroll of owner defect D5 (2026-11-17,
-      // measured at +2539px on the workbench entries
+      // body scroll of owner defect D5, measured
+      // at +2539px on the workbench entries
       // route). The fieldset as containing block keeps
       // their overflow inside the region that owns the
       // control; their rendered (clipped, 1px) boxes do

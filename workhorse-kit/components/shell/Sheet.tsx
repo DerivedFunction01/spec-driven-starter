@@ -2,7 +2,7 @@
 // the canonical use). Escape (document listener) + backdrop
 // button close; focus moves to the panel on open; the visible
 // title is the accessible name.
-// Panel contract (2026-11-15 mobile critic, K2): the panel's
+// Panel contract (mobile critic, K2): the panel's
 // width is net of its own margins (100% − 1rem against the
 // m-2), so its margin box never overflows the root — the
 // w-full + m-2 form rendered at x=−8 on phone. The content

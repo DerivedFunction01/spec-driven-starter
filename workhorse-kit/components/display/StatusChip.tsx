@@ -1,6 +1,6 @@
 // StatusChip — the status system rendered as a chip
-// (kit sheet, content family; kit gap K1, closed
-// 2026-11-13): a tone word with its dot, on the contract 06
+// (kit sheet, content family; kit gap K1): a tone word
+// with its dot, on the contract 06
 // tone mapping the apps already share — ok / info / warn /
 // fail ride the status table's hue + per-mode text
 // variables (done / canonical / stale / hard-gate), idle

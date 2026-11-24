@@ -1,5 +1,5 @@
 // ModeControl — appearance setting, EXACT ruled contract
-// (the owner, 2026-10-25 16:53 EDT; Subplan 05 codes #/settings
+// (owner-ruled; Subplan 05 codes #/settings
 // against this signature). Pure: the shell applies + persists.
 // Contract: context/component-contracts.md#modecontrol.
 import { SegmentedControl } from "./SegmentedControl";

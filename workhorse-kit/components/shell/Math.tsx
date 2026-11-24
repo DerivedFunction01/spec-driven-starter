@@ -1,5 +1,5 @@
 // Math — the kit's typeset-math component (the math-
-// component study, approved 2026-11-13; its forms are the
+// component study, owner-approved; its forms are the
 // study's frames, reproduced exactly). It renders ONE
 // served math node: the backend serves structured segments
 // — text runs plus math nodes carrying {source, display,
@@ -18,7 +18,7 @@
 // the fallback decision is never made here.
 //
 // The display form is the study's sunken well, and its
-// overflow rule is the owner's pick (2026-11-13, frame
+// overflow rule is the owner's pick (frame
 // 4a): the equation rides a max-content span inside the
 // scrolling well, so a wide equation scrolls horizontally
 // AT FULL TYPESET SIZE. Frame 4b (shrink-to-fit) was

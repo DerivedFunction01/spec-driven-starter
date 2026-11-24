@@ -126,7 +126,7 @@ function asSpec(raw: unknown): FieldSpec {
 }
 
 // The field appearance idiom lives in Fields.tsx (one
-// kit home, F4 of the 2026-11-10 critic pass); the
+// kit home, F4 of the critic pass); the
 // generated controls here consume it unchanged.
 const INPUT_STYLE = FIELD_STYLE;
 const INPUT_CLASSES = FIELD_CLASSES;

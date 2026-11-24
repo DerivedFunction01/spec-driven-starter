@@ -1,13 +1,13 @@
 // Checkbox + Radio — the kit's selection controls (kit
-// gap K1, closed 2026-11-13: the kit had neither; the
+// gap K1: the kit had neither; the
 // workbench hand-rolled the todo checkbox twice, the
 // attention app hand-rolled its radio rows). Both render
 // as <button> with the ARIA role, so Space/Enter work
 // natively; group semantics (radiogroup, arrow keys) are
 // the consumer's wrapper, as with RadioRow.
 //
-// Checkbox geometry — the owner's tick lesson
-// (2026-11-13): the control is a CIRCLE whose box is
+// Checkbox geometry — the owner's tick lesson:
+// the control is a CIRCLE whose box is
 // LOCKED. Width, height, min and max are all pinned to
 // the one size, flex is 0 0 auto, and align-self is set —
 // so no parent row height (a two-line todo) and no global
@@ -16,7 +16,7 @@
 // where an unlocked 24px tick was forced 24×32; the lock
 // below is the cure stated as the component's contract,
 // and Radio carries the same lock for the same reason.
-// The locked size is 24px (2026-11-15 mobile critic): the
+// The locked size is 24px (mobile critic): the
 // 24px minimum target — the earlier 22px box measured
 // 2px under it on every consumer row.
 //
@@ -27,7 +27,7 @@
 // naming the option, use LabeledCheckbox below: the
 // circle plus its label as visible text, the whole row
 // the tap target. A bare Checkbox dropped into a form
-// ships a column of empty circles (2026-11-15 critic,
+// ships a column of empty circles (the critic,
 // the attention rule editor: 15 of 15 unlabelled).
 import { type CSSProperties } from "react";
 
@@ -170,8 +170,8 @@ export type LabeledCheckboxProps = {
  *  whole 40px row the tap target. The circle's own click
  *  stops propagation in the kit control, so a tap on the
  *  circle toggles once (there) and a tap on the text
- *  toggles once (here). Adopted into the kit 2026-11-15
- *  from the attention app's consumption form, which the
+ *  toggles once (here). Adopted into the kit from the
+ *  attention app's consumption form, which the
  *  mobile critic pass proved at 15 sites; the app's local
  *  copy retires onto this one. */
 export function LabeledCheckbox({

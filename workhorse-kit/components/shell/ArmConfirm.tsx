@@ -1,5 +1,5 @@
 // ArmConfirm — the commit guard (q2 arm-confirm, F3 of
-// the 2026-11-10 entries critic pass). A lifecycle commit
+// the entries critic pass). A lifecycle commit
 // never fires on a single activation: the first activation
 // ARMS the control in place — the button becomes its
 // confirm form and a plain-voice statement of the action,

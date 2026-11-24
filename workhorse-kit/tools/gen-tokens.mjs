@@ -224,7 +224,7 @@ const indexCss =
   '@import "tailwindcss";\n' +
   '@import "./fonts.css";\n' +
   // No katex import: the kit ships no math component, no
-  // KaTeX fonts, and no katex.css (gap K2, closed 2026-11-13).
+  // KaTeX fonts, and no katex.css (gap K2, closed).
   // The file the import named was a workbench-viewer asset
   // vendored by hand beside ITS themes; here it left every
   // consumer stubbing or skipping index.css. An app that
@@ -263,8 +263,8 @@ const indexCss =
   // is then distinguishable from its surrounding text
   // by nothing at all (the reader-chrome form of the
   // same shape was measured by axe as
-  // link-in-text-block, serious; critic F13,
-  // 2026-11-17). The prose scope gives its anchors the
+  // link-in-text-block, serious; critic F13).
+  // The prose scope gives its anchors the
   // app's link colour plus the non-colour cue: an
   // underline with a small offset. The accent token is
   // already per-palette and per-mode, so one rule
@@ -291,7 +291,7 @@ const indexCss =
   // express: the inset separator ring. The focus-ring
   // token IS the accent, and a checked track's fill is
   // the accent too, so the accent ring alone camouflages
-  // against the checked fill — the 2026-11-16 critic
+  // against the checked fill — the critic
   // confirmation pass read the digest switches as
   // painting no indicator. The separator must contrast
   // with the FILL, and the one token guaranteed to do

@@ -1,19 +1,8 @@
 """Living-dates scanner: no dates in living docs or comments.
 
-Living documents state the present truth and carry no dates;
-code comments and docstrings carry no dates either. Dates as
-data — string literals, fixtures, specimens, served values —
-are not documents or comments and pass. Code inside a
-document — fenced blocks and inline code spans — is data in
-the same way: it is the doc form of a string literal, never
-a finding. Comments in config files are comments: the hash
-comment family (a ``.gitignore`` file, TOML, YAML, CFG, INI)
-is in the population, its values never a surface. Archives
-are records: finished plans and run-log or dated-log
-directories are excluded by directory convention only,
-never by a register of exempt files. The population is the
-tracked tree, derived from ``git ls-files`` when git
-answers.
+Dates as data pass — string literals, fixtures, served values,
+and code inside a document; config-file comments are in the
+population, archives excluded by directory convention only.
 """
 
 from __future__ import annotations
@@ -40,9 +29,8 @@ ALL_SUFFIXES = SCAN_SUFFIXES + CONFIG_SUFFIXES
 EXCLUDED_PREFIX = "tests/scanners/"
 
 # Archive directory conventions: a path under a finished-plan
-# directory, a run-log directory, or a dated-log directory is
-# a record, not a living document. A directory named by a
-# date is a dated log by its name alone.
+# directory, a run-log or dated-log directory, or a date-named
+# directory is a record, not a living document.
 ARCHIVE_DIR_NAMES = frozenset(
     {"run-log", "run-logs", "run_log", "run_logs", "dated-logs", "dated_logs"}
 )
@@ -164,10 +152,8 @@ def _find_span_close(line: str, start: int, run: int) -> int | None:
 def _mask_code_spans(line: str) -> str:
     """The line with inline code spans blanked to spaces.
 
-    A span opens with a run of backticks and closes with a
-    run of the same length; an unmatched run is literal
-    text and stays. Length is preserved, so columns and
-    line numbers hold.
+    An unmatched backtick run is literal text and stays;
+    length is preserved, so columns and line numbers hold.
     """
     chars = list(line)
     index = 0
@@ -192,10 +178,8 @@ def _mask_code_spans(line: str) -> str:
 def _mask_doc_lines(text: str) -> list[str]:
     """Doc lines with fenced blocks and code spans blanked.
 
-    Code inside a document is data — the doc form of a
-    string literal — so fenced blocks (backtick or tilde)
-    and inline code spans are blanked in place; prose on
-    the same lines still scans, and line numbers hold.
+    Code inside a document is data, so it is blanked in
+    place; prose still scans, and line numbers hold.
     """
     masked: list[str] = []
     fence_char = ""
@@ -257,10 +241,8 @@ def _python_surfaces(text: str) -> list[tuple[int, str]]:
 def _script_surfaces(text: str) -> list[tuple[int, str]]:
     """(line, text) pairs for TS/JS comments, lexed by hand.
 
-    Strings and template literals are skipped so a date held
-    as data never reads as a comment. Regex literals are not
-    distinguished from division; a date inside a regex reads
-    as comment text — the conservative direction.
+    Strings and template literals are skipped so dates held as
+    data never read as comments; a date in a regex does.
     """
     surfaces: list[tuple[int, str]] = []
     index = 0
@@ -320,11 +302,8 @@ def _scan_code(root: Path, path: Path, text: str) -> list[Finding]:
 def _hash_comment_surfaces(text: str) -> list[tuple[int, str]]:
     """(line, comment) pairs for hash-comment config files.
 
-    A comment runs from an unquoted ``#`` to the end of the
-    line. Quoted strings are data — a ``#`` inside one starts
-    no comment — so the scan skips them with the same
-    quote discipline as the script lexer; values are never
-    a surface.
+    A comment runs from an unquoted ``#`` to end of line;
+    quoted strings are data and start no comment.
     """
     surfaces: list[tuple[int, str]] = []
     for lineno, line in enumerate(text.splitlines(), start=1):

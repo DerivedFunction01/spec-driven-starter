@@ -9,8 +9,8 @@ export type FrameProps = {
   /** e.g. "1440 × 900 · dark" — mono, in the well's corner,
    *  rendered as a small chip on the surface-2 ground so it
    *  reads against any specimen content beneath it (the
-   *  bare-text form sat at low contrast over the well,
-   *  2026-11-15 workbench critic). */
+   *  bare-text form sat at low contrast over the well —
+   *  the workbench critic's finding). */
   viewportLabel?: string;
   headerActions?: ReactNode;
   footer?: ReactNode;

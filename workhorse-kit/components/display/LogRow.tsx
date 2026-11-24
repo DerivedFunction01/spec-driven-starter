@@ -1,6 +1,6 @@
 // LogRow — the ONE timeline / log-entry row for every app
 // (kit sheet: "the mono event-stream row"), redesigned once
-// in the timeline-component study (2026-11-13, Variant B as
+// in the timeline-component study (Variant B as
 // picked by the owner) instead of being reinvented per app.
 //
 // Anatomy (Variant B): row 1 is [date token · headline …
@@ -30,7 +30,7 @@
 // entity routing row. Nothing beyond the two lines is ever
 // squeezed into the row to make room for them.
 //
-// Payload clamp (owner ruling 2026-11-16, from the
+// Payload clamp (owner ruling, from the
 // Scheduler Overview log flooding on a long exec payload):
 // a headline that exceeds the payload budget
 // (lib/log-payload — a pure predicate over the served

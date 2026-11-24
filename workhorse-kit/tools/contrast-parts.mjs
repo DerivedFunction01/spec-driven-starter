@@ -31,7 +31,7 @@ for (const [name, st] of Object.entries(tokens.status)) {
 // Part 2 — content tokens x surfaces (scanner rule 1).
 // Every content voice — primary, secondary, and muted —
 // holds the AA bar (4.5:1) on every surface, fatally.
-// Muted joined the fatal set under the 2026-11-16 critic
+// Muted joined the fatal set under the critic
 // finding B-2 (see the header note).
 const CONTENT_VOICES = ["primary", "secondary", "muted"];
 export let contentChecked = 0;

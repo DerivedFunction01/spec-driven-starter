@@ -1,5 +1,5 @@
 // PaletteSelect — appearance setting, EXACT ruled contract
-// (the owner, 2026-10-25 16:53 EDT; Subplan 05 codes #/settings
+// (owner-ruled; Subplan 05 codes #/settings
 // against this signature). Palette ids arrive via props —
 // never hardcoded here. ≤4 options ⇒ segmented; more ⇒ a
 // native select (same appearance cells as an input row).

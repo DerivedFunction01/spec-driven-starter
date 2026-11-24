@@ -1,5 +1,5 @@
 // GroupedList — the iOS form vocabulary of the kit sheet,
-// one home (kit gap K1, closed 2026-11-13): the inset
+// one home (kit gap K1): the inset
 // grouped list and its rows — GroupLabel, Row, StatRow,
 // SwitchRow, RadioRow, NoticeRow, ActionRow. The four apps
 // composed this family locally, in four dialects, from kit
@@ -12,7 +12,7 @@
 // kit's own primitives (Toggle here; Button, SegmentedControl
 // ride as row content).
 //
-// Row discipline (the owner's row ruling, 2026-11-13, from
+// Row discipline (the owner's row ruling, from
 // the lease-row and label-fix cures): the label gets its
 // own line and flexes across the full row width; nothing
 // that must stay whole ever competes with it there. A
