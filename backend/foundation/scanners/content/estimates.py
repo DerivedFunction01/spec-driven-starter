@@ -1,8 +1,7 @@
 """Estimates scanner: plan steps and todos carry estimates.
-Entries — step headings, steps-list items, todo checkboxes —
-carry [est: <duration>] (<n>m/<n>h tokens, summed); over sixty
-minutes, the bracket's justification must name one of the
-closed set of long-duration classes.
+Entries carry [est: <duration>] (<n>m/<n>h tokens, summed);
+over sixty minutes, the bracket's justification must name one
+of the closed set of long-duration classes.
 """
 
 from __future__ import annotations
@@ -22,10 +21,7 @@ JUSTIFICATION_WORDS = 3
 
 # The closed set of long-duration classes (supervision rules,
 # estimates passage): an over-hour justification is valid only
-# when it names one. Each entry pairs the class's canonical
-# name with the phrases that name it; matching is on whole
-# words after normalization, so hyphen, slash, and case
-# variation in the entry's wording is tolerated.
+# when it names one; matching is whole-word after normalization.
 LONG_DURATION_CLASSES: tuple[tuple[str, tuple[str, ...]], ...] = (
     (
         "irreducible serial dependency",
@@ -68,9 +64,7 @@ def _normalize(text: str) -> str:
 
 
 _CLASS_PHRASES: tuple[str, ...] = tuple(
-    _normalize(phrase)
-    for _name, phrases in LONG_DURATION_CLASSES
-    for phrase in phrases
+    _normalize(phrase) for _name, phrases in LONG_DURATION_CLASSES for phrase in phrases
 )
 
 
