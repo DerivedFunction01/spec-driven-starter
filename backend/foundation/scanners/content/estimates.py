@@ -1,7 +1,8 @@
 """Estimates scanner: plan steps and todos carry estimates.
 Entries — step headings, steps-list items, todo checkboxes —
 carry [est: <duration>] (<n>m/<n>h tokens, summed); over sixty
-minutes, 3+ justification words must follow in the bracket.
+minutes, the bracket's justification must name one of the
+closed set of long-duration classes.
 """
 
 from __future__ import annotations
@@ -18,6 +19,66 @@ ARCHIVE_DIR = "finished"
 QUESTIONS_WORD = "question"
 OVERRUN_MINUTES = 60
 JUSTIFICATION_WORDS = 3
+
+# The closed set of long-duration classes (supervision rules,
+# estimates passage): an over-hour justification is valid only
+# when it names one. Each entry pairs the class's canonical
+# name with the phrases that name it; matching is on whole
+# words after normalization, so hyphen, slash, and case
+# variation in the entry's wording is tolerated.
+LONG_DURATION_CLASSES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    (
+        "irreducible serial dependency",
+        ("serial dependency", "serial dependencies", "serial by construction"),
+    ),
+    ("cpu-bound at full worker count", ("cpu-bound", "cpu-saturated")),
+    ("memory-bandwidth or i/o-bound", ("memory-bandwidth", "i/o-bound")),
+    (
+        "limited compute or capacity queueing",
+        ("capacity queueing", "capacity queuing", "limited compute"),
+    ),
+    ("network-held", ("network-held", "network-bound")),
+    (
+        "coordination and fan-in",
+        ("coordination", "fan-in", "tail latency"),
+    ),
+    (
+        "hard language-model or algorithmic complexity floor",
+        ("algorithmic complexity", "complexity floor", "hard nlp"),
+    ),
+    (
+        "critic and verification runs",
+        ("critic", "verification run", "verification runs"),
+    ),
+    ("browser work", ("browser work",)),
+    (
+        "real-time observation window",
+        ("observation window", "observation windows", "real-time observation"),
+    ),
+)
+
+
+def _normalize(text: str) -> str:
+    """Lowercase words of the text, punctuation as separators.
+
+    A slash is dropped first, so "i/o-bound" and "io-bound"
+    normalize to the same words.
+    """
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", text.lower().replace("/", "")).split())
+
+
+_CLASS_PHRASES: tuple[str, ...] = tuple(
+    _normalize(phrase)
+    for _name, phrases in LONG_DURATION_CLASSES
+    for phrase in phrases
+)
+
+
+def _names_long_duration_class(justification: str) -> bool:
+    """True when the justification names a long-duration class."""
+    padded = f" {_normalize(justification)} "
+    return any(f" {phrase} " in padded for phrase in _CLASS_PHRASES)
+
 
 HEADING_RE = re.compile(r"^(#{1,4})\s+(.*?)\s*$")
 STEP_HEADING_RE = re.compile(r"^Step\s+\d+\b")
@@ -197,9 +258,10 @@ def _entries(lines: list[str], todo_file: bool) -> list[_Entry]:
     return entries
 
 
-def _parse_estimate(entry_text: str) -> tuple[float, int] | None:
-    """(minutes, justification words), or None when no bracket
-    carries a leading duration — that bracket is no estimate.
+def _parse_estimate(entry_text: str) -> tuple[float, int, str] | None:
+    """(minutes, justification words, justification), or None
+    when no bracket carries a leading duration — that bracket
+    is no estimate.
     """
     match = ESTIMATE_RE.search(entry_text)
     if match is None:
@@ -216,7 +278,7 @@ def _parse_estimate(entry_text: str) -> tuple[float, int] | None:
     if consumed == 0:
         return None
     remainder = body[consumed:].strip(" \t—–-:")
-    return minutes, len(WORD_RE.findall(remainder))
+    return minutes, len(WORD_RE.findall(remainder)), remainder
 
 
 def _scan_file(root: Path, path: Path, text: str) -> list[Finding]:
@@ -248,8 +310,10 @@ def _scan_file(root: Path, path: Path, text: str) -> list[Finding]:
                 )
             )
             continue
-        minutes, justification_words = parsed
-        if minutes > OVERRUN_MINUTES and justification_words < JUSTIFICATION_WORDS:
+        minutes, justification_words, justification = parsed
+        if minutes <= OVERRUN_MINUTES:
+            continue
+        if justification_words < JUSTIFICATION_WORDS:
             findings.append(
                 Finding(
                     scanner="estimates",
@@ -259,6 +323,19 @@ def _scan_file(root: Path, path: Path, text: str) -> list[Finding]:
                     message=(
                         "estimate over one hour carries no justification "
                         "(content withheld)"
+                    ),
+                )
+            )
+        elif not _names_long_duration_class(justification):
+            findings.append(
+                Finding(
+                    scanner="estimates",
+                    rule="estimates/unclassed-overrun",
+                    path=relpath,
+                    line=entry.lineno,
+                    message=(
+                        "estimate over one hour names no long-duration "
+                        "class (content withheld)"
                     ),
                 )
             )
@@ -293,6 +370,9 @@ def scan(root: Path) -> list[Finding]:
 
 SCANNER = Scanner(
     name="estimates",
-    description="plan steps and todos carry estimates; over an hour, justified",
+    description=(
+        "plan steps and todos carry estimates; over an hour, the "
+        "justification names a long-duration class"
+    ),
     run=scan,
 )

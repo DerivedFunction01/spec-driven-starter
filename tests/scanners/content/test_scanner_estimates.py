@@ -88,6 +88,53 @@ class EstimatesScannerTests(unittest.TestCase):
         findings = self.scan_tree({".plans/plan.md": plan})
         self.assertEqual(rules(findings), ["estimates/unjustified-overrun"])
 
+    def test_each_long_duration_class_is_accepted(self):
+        justifications = [
+            "floored by a serial dependency: the bundle verifies after the gate",
+            "cpu-bound at the full worker count on both sessions",
+            "memory-bandwidth is the ceiling: the census streams the snapshot twice",
+            "io-bound on the snapshot read; the disk is the ceiling throughout",
+            "capacity queueing on the two live sessions sets the floor",
+            "network-held: the transfer waits on the link, not on compute",
+            "coordination and fan-in across six lanes; tail latency sets the floor",
+            "an algorithmic complexity floor: the solve is quadratic in the cohort",
+            "the critic and verification runs over the rendered surface set the floor",
+            "browser work: the flow is driven by hand through the live console",
+            "a real-time observation window: the soak is watched for a full cycle",
+        ]
+        for justification in justifications:
+            with self.subTest(justification=justification):
+                plan = (
+                    f"## Steps\n\n1. **Long** — work. "
+                    f"[est: 2h — {justification}]\n"
+                )
+                findings = self.scan_tree({".plans/plan.md": plan})
+                self.assertEqual(findings, [])
+
+    def test_long_justification_naming_no_class_fails(self):
+        plan = (
+            "## Steps\n\n1. **Long** — rewrite. [est: 2h — the work is simply "
+            "very large and touches many files across the whole tree]\n"
+        )
+        findings = self.scan_tree({".plans/plan.md": plan})
+        self.assertEqual(rules(findings), ["estimates/unclassed-overrun"])
+
+    def test_invalid_form_justification_fails(self):
+        plan = (
+            "## Steps\n\n1. **Long** — waits. [est: 2h — polling intervals "
+            "while sessions free up]\n"
+        )
+        findings = self.scan_tree({".plans/plan.md": plan})
+        self.assertEqual(rules(findings), ["estimates/unclassed-overrun"])
+
+    def test_serial_by_default_names_no_class(self):
+        plan = (
+            "## Steps\n\n1. **Long** — serial. [est: 2h — serial-by-default "
+            "execution, one lane after another]\n"
+        )
+        findings = self.scan_tree({".plans/plan.md": plan})
+        self.assertEqual(rules(findings), ["estimates/unclassed-overrun"])
+
     def test_unparseable_estimate_fails(self):
         plan = "## Steps\n\n1. **Blocked** — waits. [est: their landing + 15m]\n"
         findings = self.scan_tree({".plans/plan.md": plan})
