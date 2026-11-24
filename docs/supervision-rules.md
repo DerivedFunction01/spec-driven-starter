@@ -153,6 +153,21 @@ signals — lane records, venue run records, and worktree
 activity — and a disagreement among them is a finding,
 not a rounding.
 
+Estimates are part of the record: every todo states its
+completion-time estimate, and every plan states the
+estimate per step in the plan file. An estimate is
+normally under an hour; a longer one is legitimate only
+for novel work, deep research, or language-model-bound
+work, and the entry states why it takes that long and
+why the estimate should not be lower. An item that
+passes its estimate without completing is overdue: the
+owning thread actuates on it — re-estimates it with the
+reason stated, staffs it, or escalates it — rather than
+merely reporting it again. The estimate lint reads the
+plan and todo surfaces the tree itself declares; an
+entry with no estimate, and an over-hour estimate
+without its justification, are findings.
+
 Actuation is part of the measure: a supervision steer that
 cannot reach an agent able to act is itself a defect after
 one failed cycle, never a silent loop. When the dispatch

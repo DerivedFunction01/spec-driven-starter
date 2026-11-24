@@ -24,6 +24,7 @@ Status: draft
 files: <the files touched>
 verify: <the command or check whose result proves the step>
 done when: <the observable end state>
+est: <the step's completion-time estimate>
 
 ## Open questions
 - [ ] <A question only the owner can rule on>
