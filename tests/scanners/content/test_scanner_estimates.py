@@ -100,6 +100,7 @@ class EstimatesScannerTests(unittest.TestCase):
             "an algorithmic complexity floor: the solve is quadratic in the cohort",
             "the critic and verification runs over the rendered surface set the floor",
             "browser work: the flow is driven by hand through the live console",
+            "debugging: the intermittent failure is isolated by bisecting the gate runs",
             "a real-time observation window: the soak is watched for a full cycle",
         ]
         for justification in justifications:

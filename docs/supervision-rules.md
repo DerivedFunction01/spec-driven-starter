@@ -155,7 +155,11 @@ not a rounding.
 
 Estimates are part of the record: every todo states its
 completion-time estimate, and every plan states the
-estimate per step in the plan file. An estimate is
+estimate per step in the plan file. Estimates are
+stated at the scale the work runs: a code edit is
+minutes, many under five, and over thirty minutes is
+unlikely for an edit — an edit estimated past thirty
+minutes is debugging, or the step is split. An estimate is
 normally under an hour; a longer one is legitimate only
 for novel work, deep research, or language-model-bound
 work, and the entry states why it takes that long and
@@ -167,7 +171,7 @@ or I/O-bound work; limited compute or capacity queueing;
 network-held work; coordination and fan-in, including
 tail latency; hard language-model or algorithmic
 complexity floors; critic and verification runs; certain
-browser work; and real-time observation windows. The
+browser work; debugging; and real-time observation windows. The
 discriminator is universal: the elapsed time sits at the
 class's floor with its bottleneck at its measured
 ceiling, and any proposed shortcut names what it

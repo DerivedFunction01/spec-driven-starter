@@ -47,6 +47,7 @@ LONG_DURATION_CLASSES: tuple[tuple[str, tuple[str, ...]], ...] = (
         ("critic", "verification run", "verification runs"),
     ),
     ("browser work", ("browser work",)),
+    ("debugging", ("debugging",)),
     (
         "real-time observation window",
         ("observation window", "observation windows", "real-time observation"),
