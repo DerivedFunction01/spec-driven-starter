@@ -48,4 +48,4 @@
 
 ## External services
 
-- External services (such as GitHub) are reached through your harness's connectors and integrations; the bindings live in `harness/connectors.md`.
+- External services (such as GitHub) are reached through your harness's connectors and integrations, in whatever form that harness exposes them.

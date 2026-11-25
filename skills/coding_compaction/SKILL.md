@@ -54,4 +54,4 @@
 
 ## External services
 
-- Connector and integration bindings are harness-specific; they live in `harness/connectors.md`, not in this skill.
+- Connector and integration discovery is harness-specific and stays with the harness, not in this skill.

@@ -8,10 +8,13 @@ places: the starter has no date/time one-home scanner in either source form,
 no rendered-surface discipline scanners (raw elements, value slots, dead
 classes), and no rendered accessibility legs at all — its a11y coverage is a
 static HTML scanner plus a sample-page surface net. Every UI-layer contrast
-mechanism exists only inside the Workhorse Kit, which the generic starter
-neither references from `check.py` nor seeds into a new project; Steps 2–6 of
+mechanism existed only inside the Workhorse Kit, which the generic starter
+neither referenced from `check.py` nor seeded into a new project; Steps 2–6 of
 the governing plan for the generic UI kit programme
-are the cure for that row.
+were the cure for that row, and the cure has landed: the mechanism now lives
+in the starter's one UI kit (`ui-kit/` — the former Workhorse Kit, renamed
+when the generic kit was dropped), and the webapp flavor seeds it into a new
+project as `packages/ui-kit`.
 
 Verdicts are against the starter's generic machinery — `check.py`,
 `docs/checks.md`, the 21 scanners in `backend/foundation/scanners/registry.py`,

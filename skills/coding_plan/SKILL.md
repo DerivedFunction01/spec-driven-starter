@@ -92,4 +92,4 @@ List the 3-5 files most critical for implementing this plan, one backticked repo
 
 ## External services
 
-- Work against external services (such as GitHub, when the codebase lives there) through whatever connectors or integrations your harness provides. The harness-specific bindings — which connectors exist and how to find more — live in `harness/connectors.md`, so this skill stays readable by any agent harness.
+- Work against external services (such as GitHub, when the codebase lives there) through whatever connectors or integrations your harness provides. How a harness exposes and discovers those integrations is that harness's own affair, documented with the harness, never in this skill.
