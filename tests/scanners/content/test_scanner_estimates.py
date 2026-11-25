@@ -48,35 +48,36 @@ class EstimatesScannerTests(unittest.TestCase):
         findings = self.scan_tree({"TODO.md": "# Queue\n\n- Sweep the store\n"})
         self.assertEqual(rules(findings), ["estimates/missing-estimate"])
 
-    def test_under_hour_estimates_pass(self):
+    def test_under_threshold_estimates_pass(self):
         plan = (
             "# Plan\n\n## Steps\n\n"
             "1. **First** — build it. [est: 20m]\n"
-            "2. **Second** — gate it. [est: 55m]\n"
+            "2. **Second** — gate it. [est: 25m]\n"
         )
         findings = self.scan_tree({".plans/plan.md": plan})
         self.assertEqual(findings, [])
 
     def test_step_heading_with_estimate_passes(self):
-        plan = "### Step 1 — Build [est: 45m]\nfiles: a.py\nverify: gate\n"
+        plan = "### Step 1 — Build [est: 20m]\nfiles: a.py\nverify: gate\n"
         findings = self.scan_tree({".plans/plan.md": plan})
         self.assertEqual(findings, [])
 
-    def test_exactly_one_hour_needs_no_justification(self):
-        plan = "## Steps\n\n1. **Hour** — exactly. [est: 1h]\n2. **Hour** — spelled. [est: 60m]\n"
+    def test_exactly_thirty_minutes_needs_no_justification(self):
+        plan = "## Steps\n\n1. **Half** — exactly. [est: 30m]\n2. **Half** — spelled. [est: 0.5h]\n"
         findings = self.scan_tree({".plans/plan.md": plan})
         self.assertEqual(findings, [])
 
-    def test_over_hour_without_justification_fails(self):
+    def test_over_threshold_without_justification_fails(self):
         plan = (
             "## Steps\n\n"
             "1. **Long** — hours form. [est: 2h]\n"
             "2. **Long** — minutes form. [est: 90m]\n"
             "3. **Long** — combined form. [est: 1h30m]\n"
+            "4. **Long** — three-quarter form. [est: 45m]\n"
         )
         findings = self.scan_tree({".plans/plan.md": plan})
         self.assertEqual(rules(findings), ["estimates/unjustified-overrun"])
-        self.assertEqual(len(findings), 3)
+        self.assertEqual(len(findings), 4)
 
     def test_over_hour_with_justification_passes(self):
         plan = f"## Steps\n\n1. **Long** — rewrite. [est: 2h — {JUSTIFY}]\n"
@@ -184,9 +185,9 @@ class EstimatesScannerTests(unittest.TestCase):
             "## Steps\n\n"
             "1. **Spec text** — the rule enters the supervision rules. [est: 20m]\n"
             "2. **Estimate lint (starter gate)** — a scanner in the starter's "
-            "own form. [est: 55m — the template scanner carries the population, "
-            "masking, and registration mechanics]\n"
-            "3. **Gate and land** — landings serial, ancestry verified. [est: 45m]\n"
+            "own form. [est: 55m — serial by construction: the template scanner "
+            "carries the population, masking, and registration mechanics]\n"
+            "3. **Gate and land** — landings serial, ancestry verified. [est: 25m]\n"
         )
         findings = self.scan_tree({".plans/2026-11-24-estimate-rule.md": plan})
         self.assertEqual(findings, [])

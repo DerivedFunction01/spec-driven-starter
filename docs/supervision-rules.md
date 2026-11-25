@@ -184,9 +184,9 @@ owning thread actuates on it — re-estimates it with the
 reason stated, staffs it, or escalates it — rather than
 merely reporting it again. The estimate lint reads the
 plan and todo surfaces the tree itself declares; an
-entry with no estimate, an over-hour estimate without
-its justification, and a justification naming none of
-the long-duration classes, are findings.
+entry with no estimate, an estimate over thirty
+minutes without its justification, and a justification
+naming none of the long-duration classes, are findings.
 
 Actuation is part of the measure: a supervision steer that
 cannot reach an agent able to act is itself a defect after

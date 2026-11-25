@@ -1,6 +1,6 @@
 """Estimates scanner: plan steps and todos carry estimates.
 Entries carry [est: <duration>] (<n>m/<n>h tokens, summed);
-over sixty minutes, the bracket's justification must name one
+over thirty minutes, the bracket's justification must name one
 of the closed set of long-duration classes.
 """
 
@@ -16,11 +16,11 @@ DOC_SUFFIX = ".md"
 TODO_NAMES = frozenset({"todo.md", "todos.md"})
 ARCHIVE_DIR = "finished"
 QUESTIONS_WORD = "question"
-OVERRUN_MINUTES = 60
+OVERRUN_MINUTES = 30
 JUSTIFICATION_WORDS = 3
 
 # The closed set of long-duration classes (supervision rules,
-# estimates passage): an over-hour justification is valid only
+# estimates passage): an over-threshold justification is valid only
 # when it names one; matching is whole-word after normalization.
 LONG_DURATION_CLASSES: tuple[tuple[str, tuple[str, ...]], ...] = (
     (
@@ -316,8 +316,8 @@ def _scan_file(root: Path, path: Path, text: str) -> list[Finding]:
                     path=relpath,
                     line=entry.lineno,
                     message=(
-                        "estimate over one hour carries no justification "
-                        "(content withheld)"
+                        "estimate over thirty minutes carries no "
+                        "justification (content withheld)"
                     ),
                 )
             )
@@ -329,8 +329,8 @@ def _scan_file(root: Path, path: Path, text: str) -> list[Finding]:
                     path=relpath,
                     line=entry.lineno,
                     message=(
-                        "estimate over one hour names no long-duration "
-                        "class (content withheld)"
+                        "estimate over thirty minutes names no "
+                        "long-duration class (content withheld)"
                     ),
                 )
             )
@@ -366,8 +366,8 @@ def scan(root: Path) -> list[Finding]:
 SCANNER = Scanner(
     name="estimates",
     description=(
-        "plan steps and todos carry estimates; over an hour, the "
-        "justification names a long-duration class"
+        "plan steps and todos carry estimates; over thirty minutes, "
+        "the justification names a long-duration class"
     ),
     run=scan,
 )
