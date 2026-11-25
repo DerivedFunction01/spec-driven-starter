@@ -1,0 +1,84 @@
+/* Math — the kit Math component's forms (components/shell/Math.tsx).
+   Imported by the component itself, beside assets/katex.css;
+   never through themes/. Every rule below is the approved
+   math-component study's own CSS (2026-11-13), scoped under
+   the component's ui-math classes — same declarations, same
+   values; the study's selectors are named in each comment. */
+
+/* Inline (study: .katex base rule). Typeset at 1.06em in the
+   prose it sits in; colour is inherited from the content
+   around it, in light and dark alike (study frame 6). */
+.ui-math-inline .katex {
+  font-size: 1.06em;
+}
+
+/* Display (study: .math-display) — the sunken well. */
+.ui-math-display {
+  margin: 18px 0;
+  padding: 16px 18px;
+  background: var(--ui-surface-sunken);
+  border-radius: var(--ui-card-radius);
+  text-align: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+.ui-math-display .katex-display {
+  margin: 0;
+  padding: 0;
+}
+.ui-math-display .katex {
+  font-size: 1.14em;
+}
+
+/* The overflow rule (study frame 4a, the owner's pick
+   2026-11-13): the equation rides an inline-block span sized
+   to its typeset width inside the scrolling well, so a wide
+   equation scrolls horizontally AT FULL TYPESET SIZE. It is
+   never scaled down — frame 4b (shrink-to-fit) was rejected
+   and does not exist in the component. (Study: .math-scroll
+   .inner; the well's own 16px bottom padding stands in for
+   the study well's 6px scrollbar padding.) */
+.ui-math-scroll-inner {
+  display: inline-block;
+  min-width: max-content;
+  padding: 2px 4px;
+}
+
+/* Equation number (study: .math-eqno) — document content in
+   the well's floated slot, never a component counter. */
+.ui-math-eqno {
+  float: right;
+  color: var(--ui-content-muted);
+  font-size: 13px;
+  line-height: 2.2;
+}
+
+/* Malformed, inline (study frame 5: .tex-broken) — the raw
+   source in a mono chip on sunken, hard-gate text colour. */
+.ui-math-broken {
+  font-family: var(--ui-font-mono);
+  font-size: 0.86em;
+  background: var(--ui-surface-sunken);
+  color: var(--ui-status-hard-gate-text);
+  border-radius: 5px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+/* Malformed, display (study frame 5: .tex-broken-block) —
+   the raw source as a mono block on sunken with the
+   vermilion (hard-gate) left bar. */
+.ui-math-broken-block {
+  margin: 18px 0;
+  padding: 14px 16px;
+  background: var(--ui-surface-sunken);
+  border-radius: var(--ui-card-radius);
+  border-left: 3px solid var(--ui-status-hard-gate);
+  font-family: var(--ui-font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ui-content-secondary);
+  overflow-x: auto;
+  white-space: nowrap;
+}

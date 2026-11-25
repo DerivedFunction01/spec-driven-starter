@@ -1,0 +1,28 @@
+// DensityToggle — appearance setting, EXACT ruled contract
+// (owner-ruled; Subplan 05 codes #/settings
+// against this signature). Pure: the shell applies + persists.
+// Contract: context/component-contracts.md#densitytoggle.
+import { SegmentedControl } from "./SegmentedControl";
+
+export type DensityValue = "comfortable" | "compact";
+
+export type DensityToggleProps = {
+  value: DensityValue;
+  onChange: (v: DensityValue) => void;
+};
+
+const OPTIONS = [
+  { value: "comfortable", label: "Comfortable" },
+  { value: "compact", label: "Compact" },
+] as const;
+
+export function DensityToggle({ value, onChange }: DensityToggleProps) {
+  return (
+    <SegmentedControl
+      options={[...OPTIONS]}
+      value={value}
+      onChange={onChange}
+      ariaLabel="Density"
+    />
+  );
+}

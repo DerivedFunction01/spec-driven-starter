@@ -1,16 +1,20 @@
-// The ONE responsive seam: every phone presentation in a
-// consumer hangs off this module — the breakpoint value, its
-// media query, and the hook the shell and sections read. No
-// other file names a width breakpoint; a future width variant
-// extends THIS module, never a second literal elsewhere.
+// The ONE responsive seam (mobile variant build): every
+// phone presentation in the client hangs off this module —
+// the breakpoint value, its media query, and the hook the
+// shell and sections read. No other file names a width
+// breakpoint; a future width variant extends THIS module,
+// never a second literal elsewhere.
 //
-// The value: phone exhibits are designed at a 390px width, and
-// the small-screen threshold the source kits proved is 480px —
-// the phone presentation therefore applies at <= 480px (the
-// 390px design width sits inside it with margin), and every
-// width above it renders exactly the desktop presentation,
-// unchanged. One breakpoint by ruling: no tablet-specific
-// variant in the generic kit.
+// The value: the approved mobile mockup
+// (workbench-viewer-mobile-variant-mockup) renders its
+// phone exhibits at a 390px design width, and the mockup
+// stylesheet's own small-screen threshold is 480px
+// (@media (max-width: 480px) for its compact treatment).
+// The phone presentation therefore applies at <= 480px —
+// the 390px design width sits inside it with margin —
+// and every width above it renders exactly the desktop
+// presentation, unchanged. One breakpoint by ruling: no
+// tablet-specific variant in v1.
 
 import { useEffect, useState } from "react";
 

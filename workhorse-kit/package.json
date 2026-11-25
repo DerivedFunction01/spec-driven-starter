@@ -1,1 +1,0 @@
-{"description":"Workhorse Kit v1 — the one shared design system. Tokens are the source of truth; themes/ is the generated CSS distribution. See README.md.","name":"@workhorse/kit","private":true,"type":"module","version":"1.0.0","dependencies":{"katex":"0.16.11"}}

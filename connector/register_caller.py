@@ -2,7 +2,7 @@
 """Caller registration, step one: record this venue's caller
 name in untracked local state. The token itself never passes
 through this script — it is issued per caller at the host and
-delivered through the secure store (docs/connector-setup.md).
+delivered through the secure store (harness/connector-setup.md).
 """
 
 import json

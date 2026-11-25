@@ -1,5 +1,5 @@
 import { readFileSync, readdirSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const here = dirname(fileURLToPath(import.meta.url));
@@ -24,63 +24,25 @@ export function ratio(fg, bg) {
   return (l1 + 0.05) / (l2 + 0.05);
 }
 
-// Resolve a token $value to a hex: a literal, a DTCG
-// alias ({primitive...} / {semantic...}) followed
-// through the token tree, or a var(--ui-status-<other>)
-// / var(--ui-status-<other>-text) reference to another
-// status's hue or same-mode text.
-export function resolveColor(raw, mode, seen = new Set()) {
+// Resolve a status text $value to a hex: literal, a DTCG
+// alias into primitive/status, or a var(--ui-status-*-text)
+// reference to another status's same-mode text.
+export function resolveText(raw, mode, seen = new Set()) {
   if (raw.startsWith("#")) return raw;
-  const textAlias = raw.match(/^var\(--ui-status-([a-z-]+)-text\)$/);
-  if (textAlias) {
-    if (seen.has(textAlias[1])) throw new Error(`alias loop: ${raw}`);
-    seen.add(textAlias[1]);
-    return resolveColor(tokens.status[textAlias[1]].text[mode].$value, mode, seen);
-  }
-  const hueAlias = raw.match(/^var\(--ui-status-([a-z-]+)\)$/);
-  if (hueAlias) {
-    if (seen.has(hueAlias[1])) throw new Error(`alias loop: ${raw}`);
-    seen.add(hueAlias[1]);
-    return resolveColor(tokens.status[hueAlias[1]].hue.$value, mode, seen);
-  }
-  if (raw === "var(--ui-content-secondary)") {
-    throw new Error(
-      "var(--ui-content-secondary) is palette/mode-scoped; resolve it via resolveSemantic in that scope",
-    );
+  const alias = raw.match(/^var\(--ui-status-([a-z-]+)-text\)$/);
+  if (alias) {
+    if (seen.has(alias[1])) throw new Error(`alias loop: ${raw}`);
+    seen.add(alias[1]);
+    return resolveText(tokens.status[alias[1]].text[mode].$value, mode, seen);
   }
   const dtcg = raw.match(/^\{(.+)\}$/);
   if (dtcg) {
     let node = tokens;
     for (const part of dtcg[1].split(".")) node = node[part];
-    return resolveColor(node.$value, mode, seen);
+    return resolveText(node.$value, mode, seen);
   }
-  throw new Error(`cannot resolve color value: ${raw}`);
+  throw new Error(`cannot resolve status text value: ${raw}`);
 }
-
-// Resolve a semantic $value in a palette x mode scope:
-// literals, DTCG aliases (including {semantic...}
-// self-references), and the scope's own content voices.
-export function resolveSemantic(raw, palette, mode) {
-  let v = raw;
-  while (typeof v === "string" && !v.startsWith("#")) {
-    if (v === "var(--ui-content-secondary)") {
-      v = tokens.semantic[palette][mode].content.secondary.$value;
-      continue;
-    }
-    const m = v.match(/^\{(.+)\}$/);
-    if (!m) throw new Error(`cannot resolve semantic value: ${raw}`);
-    let node = tokens;
-    for (const part of m[1].split(".")) node = node[part];
-    v = node.$value;
-  }
-  return v;
-}
-
-export const surfaceHex = (palette, mode, surface) =>
-  resolveSemantic(tokens.semantic[palette][mode].surface[surface].$value, palette, mode);
-export const contentHex = (palette, mode, voice) =>
-  resolveSemantic(tokens.semantic[palette][mode].content[voice].$value, palette, mode);
-
 
 export function hexToRgb(hex) {
   const h = hex.replace("#", "");
@@ -101,8 +63,47 @@ export function ratioRgb(fg, bg) {
   if (l1 < l2) [l1, l2] = [l2, l1];
   return (l1 + 0.05) / (l2 + 0.05);
 }
+// Resolve a status hue $value to a hex: literal, a DTCG
+// alias into the primitives, a var(--ui-status-<other>)
+// reference to another status's hue, or deferred's
+// var(--ui-content-secondary) (the palette/mode's own
+// secondary content token).
+export function resolveHue(raw, palette, mode, seen = new Set()) {
+  if (raw.startsWith("#")) return raw;
+  if (raw === "var(--ui-content-secondary)") {
+    return tokens.semantic[palette][mode].content.secondary.$value;
+  }
+  const alias = raw.match(/^var\(--ui-status-([a-z-]+)\)$/);
+  if (alias) {
+    if (seen.has(alias[1])) throw new Error(`hue alias loop: ${raw}`);
+    seen.add(alias[1]);
+    return resolveHue(tokens.status[alias[1]].hue.$value, palette, mode, seen);
+  }
+  const dtcg = raw.match(/^\{(.+)\}$/);
+  if (dtcg) {
+    let node = tokens;
+    for (const part of dtcg[1].split(".")) node = node[part];
+    return resolveHue(node.$value, palette, mode, seen);
+  }
+  throw new Error(`cannot resolve status hue value: ${raw}`);
+}
 
+
+export function resolveSemantic(raw) {
+  let v = raw;
+  while (typeof v === "string" && v.startsWith("{")) {
+    let node = tokens;
+    for (const part of v.slice(1, -1).split(".")) node = node[part];
+    v = node.$value;
+  }
+  return v;
+}
 
 export const BADGE_TINT_PCT = 16;
-export const BADGE_FG_HUE_PCT = 30;
-export const BADGE_TONES = ["ok", "info", "warn", "fail"];
+export const BADGE_FG_HUE_PCT = 43;
+export const BADGE_TONES = {
+  ok: "{primitive.color.okabe.bluish-green}",
+  info: "{primitive.color.okabe.blue}",
+  warn: "{primitive.color.okabe.orange}",
+  fail: "{primitive.color.okabe.vermilion}",
+};

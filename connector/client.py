@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Harness connector client stub: the venue-side CLI for the
-connector's tool contract (docs/connector-setup.md). Real
+connector's tool contract (harness/connector-setup.md). Real
 HTTP transport; refuses unattributed or unconfigured calls.
 """
 
@@ -42,7 +42,7 @@ def _config() -> tuple[str, str, str]:
     if not base:
         raise Refusal(
             "HARNESS_CONNECTOR_URL is not set: no connector is "
-            "configured on this venue (docs/connector-setup.md)"
+            "configured on this venue (harness/connector-setup.md)"
         )
     if not caller or not token:
         raise Refusal(

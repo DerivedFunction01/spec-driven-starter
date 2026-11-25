@@ -26,7 +26,7 @@ Hard rules:
 - Runtime state lives under `var/` and is never tracked.
 - Harness connector: venue-side work reaches the home
   deployment only through `connector/client.py` (setup:
-  `docs/connector-setup.md`). Calls are caller-attributed
+  `harness/connector-setup.md`). Calls are caller-attributed
   or refused, and no authority crosses the connector — it
   never approves a permission.
 - Gate before landing: `python3 check.py` green (ruff format+lint, policy scanners, tests). Never invent a command for this file.

@@ -1,0 +1,134 @@
+/* KaTeX 0.16.11 — vendored into the UI Kit (MIT License,
+   Copyright (c) 2013-2020 Khan Academy and other KaTeX contributors).
+   Imported by components/shell/Math.tsx only; never through
+   themes/. Edits against the upstream dist/katex.css:
+   (1) each @font-face src is reduced to its woff2 source — the
+   kit bundles woff2 only, no external fetch, ever (the woff and
+   ttf fallbacks are dropped, their files are not carried);
+   (2) the font URLs point at fonts/katex/…: the fonts live in
+   assets/fonts/katex/, beside the assets/fonts/ folder holding
+   the Inter and IBM Plex Mono woff2 the generated
+   themes/fonts.css references;
+   (3) the @font-face rules are split into this file from
+   katex.css; Math imports both, fonts first. */
+/* stylelint-disable font-family-no-missing-generic-family-keyword */
+@font-face {
+  font-family: "KaTeX_AMS";
+  src: url(fonts/katex/ams/KaTeX_AMS-Regular.woff2) format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Caligraphic";
+  src: url(fonts/katex/caligraphic/KaTeX_Caligraphic-Bold.woff2) format("woff2");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Caligraphic";
+  src: url(fonts/katex/caligraphic/KaTeX_Caligraphic-Regular.woff2) format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Fraktur";
+  src: url(fonts/katex/fraktur/KaTeX_Fraktur-Bold.woff2) format("woff2");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Fraktur";
+  src: url(fonts/katex/fraktur/KaTeX_Fraktur-Regular.woff2) format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Main";
+  src: url(fonts/katex/main/KaTeX_Main-Bold.woff2) format("woff2");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Main";
+  src: url(fonts/katex/main/KaTeX_Main-BoldItalic.woff2) format("woff2");
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: "KaTeX_Main";
+  src: url(fonts/katex/main/KaTeX_Main-Italic.woff2) format("woff2");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: "KaTeX_Main";
+  src: url(fonts/katex/main/KaTeX_Main-Regular.woff2) format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Math";
+  src: url(fonts/katex/math/KaTeX_Math-BoldItalic.woff2) format("woff2");
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: "KaTeX_Math";
+  src: url(fonts/katex/math/KaTeX_Math-Italic.woff2) format("woff2");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: "KaTeX_SansSerif";
+  src: url(fonts/katex/sans-serif/KaTeX_SansSerif-Bold.woff2) format("woff2");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_SansSerif";
+  src: url(fonts/katex/sans-serif/KaTeX_SansSerif-Italic.woff2) format("woff2");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: "KaTeX_SansSerif";
+  src: url(fonts/katex/sans-serif/KaTeX_SansSerif-Regular.woff2) format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Script";
+  src: url(fonts/katex/script/KaTeX_Script-Regular.woff2) format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Size1";
+  src: url(fonts/katex/sizes/KaTeX_Size1-Regular.woff2) format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Size2";
+  src: url(fonts/katex/sizes/KaTeX_Size2-Regular.woff2) format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Size3";
+  src: url(fonts/katex/sizes/KaTeX_Size3-Regular.woff2) format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Size4";
+  src: url(fonts/katex/sizes/KaTeX_Size4-Regular.woff2) format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KaTeX_Typewriter";
+  src: url(fonts/katex/typewriter/KaTeX_Typewriter-Regular.woff2) format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}

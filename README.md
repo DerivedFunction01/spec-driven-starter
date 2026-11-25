@@ -79,7 +79,12 @@ ops/               the supervision kit: unit template, installer,
                    serve script, watchdog (docs/primitives.md),
                    and the stack-dump reference sketch
 connector/         the harness-connector client stub + caller
-                   registration (docs/connector-setup.md)
+                   registration (harness/connector-setup.md)
+harness/           the harness-specific bindings (Muse tool
+                   names, connector discovery, the connector
+                   setup): everything agent-specific lives
+                   here, so the spec, docs, and skills stay
+                   readable by any agent harness
 skills/            tracked agent skills in the open SKILL.md
                    format: the coding playbooks and the harsh
                    UI critic; a consuming repo's harness links
