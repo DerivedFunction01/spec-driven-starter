@@ -1,8 +1,8 @@
 """Denylist scanner: personal literals from an untracked file.
 
-The file named by ``STARTER_DENYLIST_FILE`` wins, never
-falling back; else the default under ``var/config/`` applies
-when present. With no list, nothing is reported.
+``STARTER_DENYLIST_FILE`` wins, never falling back; else
+the default under ``var/config/`` applies when present.
+No list, no findings; matching is ``denylist_match``'s.
 """
 
 from __future__ import annotations
@@ -11,6 +11,10 @@ import os
 from pathlib import Path
 
 from backend.foundation.scanners.base import Finding, Scanner
+from backend.foundation.scanners.content.denylist_match import (
+    line_matches,
+    parse_literals,
+)
 from backend.foundation.scanners.content.portability import scanned_files
 from backend.foundation.scanners.files import rel
 
@@ -38,11 +42,7 @@ def _load_denylist(root: Path) -> list[str]:
         lines = denylist_path.read_text(encoding="utf-8").splitlines()
     except OSError:
         return []
-    return [
-        line.strip()
-        for line in lines
-        if line.strip() and not line.strip().startswith("#")
-    ]
+    return parse_literals(lines)
 
 
 def _read_lines(path: Path) -> list[str] | None:
@@ -75,7 +75,7 @@ def scan(root: Path) -> list[Finding]:
         if lines is None:
             continue
         for lineno, line in enumerate(lines, start=1):
-            if any(literal in line for literal in literals or []):
+            if line_matches(line, literals):
                 # NEVER include the literal or the line content here.
                 findings.append(
                     Finding(

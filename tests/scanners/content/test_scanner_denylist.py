@@ -42,6 +42,34 @@ class DenylistScannerTests(unittest.TestCase):
             for finding in findings:
                 self.assertNotIn(LITERAL, str(finding))
 
+    def test_case_variant_literal_is_an_error(self):
+        # Matching is case-insensitive (the one home is
+        # denylist_match): lowercase is the same leak.
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "list.txt", LITERAL + "\n")
+            write(tmp, "note.md", f"ask {LITERAL.lower()} about it\n")
+            env = {ENV_VAR: str(Path(tmp) / "list.txt")}
+            with mock.patch.dict(os.environ, env, clear=True):
+                findings = scan(Path(tmp))
+            errors = [f for f in findings if f.severity == SEVERITY_ERROR]
+            self.assertEqual(len(errors), 1)
+            self.assertEqual(errors[0].path, "note.md")
+
+    def test_joined_words_are_not_a_case_variant(self):
+        # Case variants only: joined words are a different
+        # string (no match); shouting case must match.
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "list.txt", LITERAL + "\n")
+            write(tmp, "note.md", "the ZxqwvTestperson seam\n")
+            env = {ENV_VAR: str(Path(tmp) / "list.txt")}
+            with mock.patch.dict(os.environ, env, clear=True):
+                self.assertEqual(scan(Path(tmp)), [])
+            write(tmp, "note.md", "ask ZXQWV TESTPERSON about it\n")
+            with mock.patch.dict(os.environ, env, clear=True):
+                findings = scan(Path(tmp))
+            errors = [f for f in findings if f.severity == SEVERITY_ERROR]
+            self.assertEqual(len(errors), 1)
+
     def test_denylist_file_itself_is_never_scanned(self):
         with tempfile.TemporaryDirectory() as tmp:
             write(tmp, "list.txt", LITERAL + "\n")

@@ -81,7 +81,9 @@ NUMBERED_ITEM_RE = re.compile(r"^\d{1,3}[.)]\s+\S")
 BULLET_ITEM_RE = re.compile(r"^[-*]\s+\S")
 CHECKBOX_ITEM_RE = re.compile(r"^[-*]\s+\[[ xX]\]\s+\S")
 ESTIMATE_RE = re.compile(r"\[est:\s*([^\]]*)\]")
-DURATION_TOKEN_RE = re.compile(r"(\d+(?:\.\d+)?)\s*(hours?|hrs?|h|minutes?|mins?|m)\b")
+DURATION_TOKEN_RE = re.compile(
+    r"(\d+(?:\.\d+)?)\s*(hours?|hrs?|h|minutes?|mins?|m)(?![a-z])"
+)
 WORD_RE = re.compile(r"[A-Za-z][A-Za-z'-]*")
 
 
