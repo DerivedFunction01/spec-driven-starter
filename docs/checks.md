@@ -331,13 +331,30 @@ list belongs to the platform ground — the spec and the
 platform trees it grounds — and is homed there for
 platform trees; it is not a content tree's list. A
 repo-specific layer is provisioned for that repo's own
-gates, minimal and named per repo: the layer carries the
-personal-identifying literals (the owner's name,
-mailboxes) that the shape scanners do not cover — most
-other coverage duplicates the scanners, and the
-denylist's residual role in the generic form is exactly
-that uncovered class. The end state is the layered form,
-not one flat list applied to every tree. Collapsing divergent lists takes their union
+gates, minimal and named per repo. Which ground a
+literal lives on follows the trees it must convict in:
+instance-shaped content — an instance's names, its
+issued identifiers — belongs to that instance's layer;
+the personal-identifying class (the owner's name,
+mailboxes) is enforced on every ground, carried in the
+shared ground where a tree inherits it and as a layer's
+named minimal content where it does not. Most other
+coverage duplicates the scanners, and the denylist's
+residual role in the generic form is exactly the
+personal-identifying class the shape scanners do not
+cover. The end state is the layered form, not one flat
+list applied to every tree.
+
+A layer resolves beside the ground it layers:
+`denylist.repo.txt` next to the resolved ground file,
+unioned with the ground on read when present.
+Ground-only provisioning stays legitimate — a tree
+with no layer enforces the ground alone — and the
+ground's resolution semantics are unchanged by a
+layer's presence. A literal moving between ground and
+layer is verified by set equality: the union before
+and after the move is the same set, so no literal is
+lost or duplicated by a layering. Collapsing divergent lists takes their union
 as the interim content basis: no literal is dropped by a
 collapse, and a literal leaves a list only by a deliberate
 removal, never by convergence. A repo's own layer may
