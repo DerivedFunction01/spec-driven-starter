@@ -13,9 +13,12 @@ class SettingsSeamTests(unittest.TestCase):
         for path in sorted((ROOT / "backend").rglob("*.py")):
             if path.name == "settings.py":
                 continue
-            # The denylist scanner is the gate harness's own seam.
+            # The provisioning scanners are the gate harness's own seams.
             rel = path.relative_to(ROOT).as_posix()
-            if rel == "backend/foundation/scanners/content/denylist.py":
+            if rel in (
+                "backend/foundation/scanners/content/denylist.py",
+                "backend/foundation/scanners/content/portability.py",
+            ):
                 continue
             if "os.environ" in path.read_text(encoding="utf-8"):
                 offenders.append(str(path.relative_to(ROOT)))

@@ -93,7 +93,7 @@ standing; with no list, it reports nothing.
 | Scanner | Rule in one line |
 | --- | --- |
 | length | no tracked code file over the length cap the scanner's constant sets — every tracked code file counts by default, with no coverage register; the creep band below the cap lists on every run as a notice, and a band file grown past its committed `HEAD` count is a finding |
-| portability | tracked text references only what a fresh clone resolves: no absolute or home-anchored paths, no owner's name, no specific untracked plan files |
+| portability | tracked text references only what a fresh clone resolves: no absolute or home-anchored paths, no owner's name, no specific untracked plan files; with a repo set provisioned, tracked code names no other repository |
 | denylist | no personal literals from the denylist where one is provisioned (below); with none, the scanner reports nothing |
 | layers | backend imports point downward only across foundation < domain < infra < services < apps (AST) |
 | no_reexport | no import statements in any `backend/**/__init__.py` |
@@ -339,6 +339,24 @@ and the gate is exactly as it would be without one. In
 conversion mode the denylist is provisioned from the
 predecessor's personal literals at conversion time (see
 `docs/conversion.md`).
+
+## Repository-set provisioning
+
+The portability scanner's external-repository leg follows
+the same provisioning form. The sibling repositories a
+repo's tracked code may not name live in an untracked
+plain-text file, one name per line (blank lines and `#`
+comments ignored): the file named by
+`STARTER_REPO_SET_FILE` wins — set but unreadable resolves
+to no set and does **not** fall back; otherwise the
+default `var/config/repo-set.txt` applies when present.
+With a set provisioned, a tracked code file naming
+another repository in the set is an error finding (rule
+`portability/external-repo-ref`); the repo's own name is
+not an external reference, and docs and data are outside
+the leg's population. Repositories are referenced through
+registry/config data, never through literals in code.
+With no set, the leg reports nothing.
 
 ## Example configs — patterns noted, not implemented
 

@@ -16,12 +16,10 @@ from backend.foundation.scanners.base import (
     Finding,
     Scanner,
 )
-from backend.foundation.scanners.files import rel, walk_files
+from backend.foundation.scanners.files import CODE_SUFFIXES, rel, walk_files
 
 MAX_LINES = 800
 CREEP_LINES = 700
-
-CODE_SUFFIXES: tuple[str, ...] = (".py", ".js", ".mjs", ".ts", ".tsx", ".css", ".sh")
 
 
 def _is_suite(path: Path) -> bool:

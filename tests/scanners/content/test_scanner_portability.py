@@ -1,8 +1,10 @@
+import os
 import shutil
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from backend.foundation.scanners.content.portability import scan
 
@@ -93,6 +95,67 @@ class PortabilityTrackedPopulationTests(unittest.TestCase):
             git(root, "add", "untracked.md")
             findings = scan(root)
             self.assertEqual({f.path for f in findings}, {"tracked.md", "untracked.md"})
+
+
+class PortabilityRepoSetTests(unittest.TestCase):
+    def provision(self, root, names=("other-repo",)):
+        write(root, "var/config/repo-set.txt", "\n".join(names) + "\n")
+
+    def test_code_naming_another_repo_is_a_finding(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.provision(tmp)
+            write(tmp, "tool.py", "TARGET = 'other-repo'\n")
+            findings = scan(Path(tmp))
+            self.assertEqual(rules(findings), ["portability/external-repo-ref"])
+            self.assertEqual(findings[0].path, "tool.py")
+            self.assertIn("other-repo", findings[0].message)
+
+    def test_repo_path_reference_in_code_is_a_finding(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.provision(tmp)
+            write(tmp, "ops/run.sh", "cd ../other-repo && make\n")
+            findings = scan(Path(tmp))
+            self.assertEqual(rules(findings), ["portability/external-repo-ref"])
+
+    def test_docs_naming_another_repo_are_clean(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.provision(tmp)
+            write(tmp, "notes.md", "the other-repo gate runs nightly\n")
+            self.assertEqual(scan(Path(tmp)), [])
+
+    def test_data_naming_another_repo_is_clean(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.provision(tmp)
+            write(tmp, "config.json", '{"peer": "other-repo"}\n')
+            self.assertEqual(scan(Path(tmp)), [])
+
+    def test_own_repo_name_is_clean(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            own = Path(tmp).name
+            self.provision(tmp, names=(own, "other-repo"))
+            write(tmp, "tool.py", f"HOME_REPO = '{own}'\n")
+            self.assertEqual(scan(Path(tmp)), [])
+
+    def test_joined_token_is_not_a_reference(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.provision(tmp)
+            write(tmp, "tool.py", "TARGET = 'other-repo-tools'\n")
+            self.assertEqual(scan(Path(tmp)), [])
+
+    def test_unprovisioned_set_is_silent(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "tool.py", "TARGET = 'other-repo'\n")
+            self.assertEqual(scan(Path(tmp)), [])
+
+    def test_env_named_set_file_provisions(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "set.txt", "other-repo\n")
+            write(tmp, "tool.py", "TARGET = 'other-repo'\n")
+            with mock.patch.dict(
+                os.environ, {"STARTER_REPO_SET_FILE": str(Path(tmp) / "set.txt")}
+            ):
+                findings = scan(Path(tmp))
+            self.assertEqual(rules(findings), ["portability/external-repo-ref"])
 
 
 if __name__ == "__main__":

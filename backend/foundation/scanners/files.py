@@ -15,6 +15,11 @@ SKIP_DIRS = frozenset(
     {".git", ".plans", "__pycache__", "node_modules", "var", "workbench", ".venv"}
 )
 
+# The tracked-code population: the suffixes whose files are
+# authored code, counted by the length scanner and scanned
+# as code by the content scanners. One home for the set.
+CODE_SUFFIXES: tuple[str, ...] = (".py", ".js", ".mjs", ".ts", ".tsx", ".css", ".sh")
+
 
 def walk_files(root: Path, suffixes: tuple[str, ...]) -> list[Path]:
     """All files under ``root`` with one of ``suffixes``, sorted."""

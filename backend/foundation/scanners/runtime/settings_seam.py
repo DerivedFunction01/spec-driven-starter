@@ -1,8 +1,8 @@
 """Settings-seam scanner (AST): one environment reader only.
 
 Production under ``backend/`` must not touch the process
-environment or dotenv outside ``foundation/settings.py``.
-Named exemption: ``scanners/content/denylist.py``, the seam.
+environment outside ``foundation/settings.py``. Named
+exemptions: the two provisioning-seam scanners.
 """
 
 from __future__ import annotations
@@ -15,7 +15,11 @@ from backend.foundation.scanners.files import python_files, rel
 
 SETTINGS_PATH = "backend/foundation/settings.py"
 EXEMPT_PATHS = frozenset(
-    {SETTINGS_PATH, "backend/foundation/scanners/content/denylist.py"}
+    {
+        SETTINGS_PATH,
+        "backend/foundation/scanners/content/denylist.py",
+        "backend/foundation/scanners/content/portability.py",
+    }
 )
 
 ENV_ATTRS = frozenset({"environ", "getenv", "putenv", "unsetenv"})

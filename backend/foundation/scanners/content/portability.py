@@ -1,17 +1,24 @@
 """Portability scanner: tracked text resolves inside the repo.
 
-No absolute or home-anchored paths and no references to
-specific untracked plan files or dated memory logs; personal
-literals are the denylist scanner's leg, never compiled here.
+No absolute or home-anchored paths, no specific untracked plan
+files or dated memory logs, and no tracked code naming another
+repository when a repo set is provisioned as data.
 """
 
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 
 from backend.foundation.scanners.base import Finding, Scanner
-from backend.foundation.scanners.files import rel, tracked_paths, walk_tracked
+from backend.foundation.scanners.content.denylist_match import parse_literals
+from backend.foundation.scanners.files import (
+    CODE_SUFFIXES,
+    rel,
+    tracked_paths,
+    walk_tracked,
+)
 
 SCAN_SUFFIXES = (
     ".py",
@@ -71,6 +78,9 @@ GENERIC_LEGS = (
     ("portability/untracked-ref", PLAN_FILE_RE),
     ("portability/untracked-ref", DATED_MEMORY_RE),
 )
+
+REPO_SET_ENV_VAR = "STARTER_REPO_SET_FILE"
+DEFAULT_REPO_SET_PATH = Path("var/config/repo-set.txt")
 
 
 def scanned_files(root: Path) -> list[Path]:
@@ -145,10 +155,78 @@ def _scan_file(root: Path, path: Path) -> list[Finding]:
     return findings
 
 
+def _resolve_repo_set(root: Path) -> Path | None:
+    """The provisioned repo-set file, if one resolves.
+
+    The env-named file wins and never falls back; else the
+    default under ``var/config/`` applies when present.
+    """
+    raw = os.environ.get(REPO_SET_ENV_VAR)
+    if raw:
+        return Path(raw)
+    default = root / DEFAULT_REPO_SET_PATH
+    if default.is_file():
+        return default
+    return None
+
+
+def _load_repo_set(root: Path) -> list[str]:
+    """The provisioned sibling-repo names; empty when none resolve."""
+    repo_set_path = _resolve_repo_set(root)
+    if repo_set_path is None:
+        return []
+    try:
+        lines = repo_set_path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return []
+    return parse_literals(lines)
+
+
+def _repo_ref_findings(root: Path) -> list[Finding]:
+    """Tracked code naming another repository in the provisioned set.
+
+    The repo's own name is not external; docs and data are
+    outside the leg's population.
+    """
+    names = [name for name in _load_repo_set(root) if name != root.name]
+    if not names:
+        return []
+    alternation = "|".join(
+        re.escape(name) for name in sorted(names, key=len, reverse=True)
+    )
+    pattern = re.compile(r"(?<![\w-])(" + alternation + r")(?![\w-])")
+    findings: list[Finding] = []
+    for path in walk_tracked(root, CODE_SUFFIXES):
+        relpath = rel(root, path)
+        if relpath.startswith(EXCLUDED_PREFIX):
+            continue
+        lines = _read_lines(path)
+        if lines is None:
+            continue
+        for lineno, line in enumerate(lines, start=1):
+            for match in pattern.finditer(line):
+                findings.append(
+                    Finding(
+                        scanner="portability",
+                        rule="portability/external-repo-ref",
+                        path=relpath,
+                        line=lineno,
+                        message=(
+                            f"tracked code names external repository "
+                            f"'{match.group(1)}'; repositories are "
+                            "referenced through registry/config data, "
+                            "not literals"
+                        ),
+                    )
+                )
+    return findings
+
+
 def scan(root: Path) -> list[Finding]:
     findings: list[Finding] = []
     for path in scanned_files(root):
         findings.extend(_scan_file(root, path))
+    findings.extend(_repo_ref_findings(root))
     return findings
 
 
