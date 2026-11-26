@@ -193,9 +193,15 @@ signals — lane records, venue run records, and worktree
 activity — and a disagreement among them is a finding,
 not a rounding.
 
-Estimates are part of the record: every todo states its
-completion-time estimate, and every plan states the
-estimate per step in the plan file. Estimates are
+Estimates are part of the record, carried on the
+surface the work runs: every plan states the estimate
+per step in the plan file; planless work carries the
+estimate on its register row, the row standing as the
+plan-substitute with its formation membership and the
+gate it rides; every todo states its completion-time
+estimate. The categorization and the wall-clock
+discipline in this passage apply to the estimate on
+whichever surface carries it. Estimates are
 stated at the scale the work runs: a code edit is
 minutes, many under five, and over thirty minutes is
 unlikely for an edit — an edit estimated past thirty
