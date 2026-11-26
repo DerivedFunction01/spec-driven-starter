@@ -941,6 +941,14 @@ subprocess allowance. Each term is measurable, and the
 stamped counts are the ones the job's environment and
 its own factories actually apply.
 
+Admission is arithmetic, not discovery: before dispatch
+the venue sums the declared footprints of the work it
+would hold against its declared budget, and work that
+does not fit waits. A table found full mid-run is an
+admission defect — every admitted claim was declared in
+advance, so saturation by co-tenants inside their
+envelopes is the admission's failure, not a tenant's.
+
 Venue state is classified on a generic contract, the same
 for every venue kind: idle, advancing, saturated, wedged.
 Sampled CPU-time progression and pids against the
