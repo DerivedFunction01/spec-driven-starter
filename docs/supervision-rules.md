@@ -203,19 +203,21 @@ bindings layer) escalates to the parent thread and stays
 escalated until a measure shows the programme staffed.
 The parent step replaces endless direct re-pings.
 
-Replacement at the stall bound: a lane that misses two
-progress-checkpoint intervals is replaced, not
+Replacement at the stall bound: a lane that misses one
+progress-checkpoint interval is replaced, not
 re-steered. The programme's coordinator names a successor
-in the same movement the second miss is measured, on the
+in the same movement the miss is measured, on the
 same commission — the same work item, branch, and caller
-lineage — and the takeover is recorded in the programme's
-plan record; the stalled lane stands down on that
-commission under the one-executor rule when the successor
-claims it. Re-driving a stalled lane happens inside the
-two intervals, never as a further wait past the bound. A
-stall reaching a third missed interval with no successor
-named is a defect row naming the coordinator's
-non-response, addressed to the parent thread.
+lineage — and the successor begins work in that movement,
+never at the next queue pass; the takeover is recorded in
+the programme's plan record, and the stalled lane stands
+down on that commission under the one-executor rule when
+the successor claims it. Re-driving a stalled lane
+happens inside the interval, never as a further wait past
+the bound. A miss with no successor named and working is
+a defect row naming the coordinator's non-response,
+addressed to the parent thread. A verified owner-gated
+wait is not a miss, and it is not non-response.
 
 The evidence is priced: every row serves its measured
 sentence — active workers, child workers, per-session run
@@ -352,7 +354,7 @@ The six fields:
 - **Work record** — where progress is measured: the record
   the cadence reads.
 - **Cadence** — conforming progress-checkpoints on the
-  armed cadence while doing; two missed intervals is a
+  armed cadence while doing; one missed interval is a
   stall. The cadence is a mechanism default; its value is
   owned by the bindings layer and substituted at
   instantiation.
