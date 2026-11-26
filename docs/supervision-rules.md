@@ -39,18 +39,23 @@ pointer.
 
 ## Staffing
 
-Staffing is measured against live venue capacity: the
-sessions up set the expected worker count for a
-compute-bound programme. A programme running serial or
-one-deep while sessions idle is a staffing defect, surfaced
-repeatedly until it is staffed; placement is the lane's
-hands, never an owner decision. Venue-present: the measure
-reads the fleet capacity source for the sessions up and the
-run-record store for the workers observed. No-venue: no
-sessions exist, the expected count is the local machine's
-own parallelism, and serial local work is not a staffing
-defect — the class binds only where idle capacity exists to
-be idle.
+Staffing is measured against the work: the staffable
+count of a programme's work set sets the expected worker
+count. Sessions are capacity only — they never set the
+expectation, so the expectation never shrinks when
+sessions drop. A programme running serial or one-deep
+while its staffable work waits is a staffing defect,
+surfaced repeatedly until it is staffed; idle sessions
+alongside waiting work price the row, and placement is
+the lane's hands, never an owner decision. Venue-present:
+the measure reads the programme's work set for the
+staffable count and the run-record store for the workers
+observed; the fleet capacity source prices idle capacity
+only. No-venue: no sessions exist; the expected count is
+the staffable count still, the local machine's own
+parallelism is the capacity, and serial local work beyond
+that capacity is not a staffing defect — the class binds
+wherever capacity exists to be idle.
 
 **Inline class — only a measure clears.** An
 acknowledgement never clears a staffing row; only a later
@@ -73,36 +78,53 @@ names its durable source when it is set; a trigger with
 no durable source is a defect of the expectation, not of
 the work it watches.
 
-The staffable queue is a registry contract: a programme's
-queue is an ordered declaration of work items, landed
-markers, and gated items — an item gated on a marker is
-staffable only when its marker lands. When a measure
-shows fewer distinct families in flight than the queue's
-staffable count, the continuation steer names the next
-unstaffed items as a staffing commission, in queue order.
-The commission clears under the clearing rule above — on
-a later measure showing the families in flight — and on
+The staffable set is wider than the declared queue: a
+programme's queue is an ordered declaration of work
+items, landed markers, and gated items — an item gated
+on a marker is staffable only when its marker lands —
+and the staffable set carries, alongside the queue, the
+work the queue does not declare: priced follow-ons,
+register follow-ups, decomposition portions of queued
+items, and preparation for trigger-bound items (the work
+that can be done before the trigger lands). The declared
+queue is a floor for the staffable count, never its
+ceiling. When a measure shows fewer distinct families in
+flight than the staffable count, the continuation steer
+names unstaffed items from across the set as a staffing
+commission, staffed concurrently — queue order is the
+record's order, never a staffing order, and no item waits
+for an earlier item's staffing before its own begins. The
+commission clears under the clearing rule above — on a
+later measure showing the families in flight — and on
 nothing else. Items leave the queue by amendment to the
 contract: landed work is pruned, and a marker flips on
 the landing it records.
 
-Child workers are the count: a programme's workers are
-served split by attribution — runs by the programme's own
-coordinator callers in the caller registry, and child
-workers, runs by every other caller attributed to the
-programme. A coordinator fielding no child workers while
-its programme has parallel work is the defect shape in its
+Distinct families in flight are the count: a programme's
+staffing reads as the distinct work families it has in
+flight, set against the staffable count — never as a run
+total. The workers under the count are served split by
+attribution — runs by the programme's own coordinator
+callers in the caller registry, and child workers, runs
+by every other caller attributed to the programme. A
+coordinator fielding no child workers while its
+programme has parallel work is the defect shape in its
 pure form.
 
-The fleet is the allocation unit: the staffing object
-serves every live session with its running-run count
-across all programmes. A live session carrying no runs
+The fleet is capacity, priced for idleness: the staffing
+object serves every live session with its running-run
+count across all programmes as a capacity read — it
+prices idle capacity and contention, and it never
+denominates staffing. A live session carrying no runs
 while any programme is understaffed, or while runs queue
 on another session, is a fleet-level row of its own —
 contention and idleness coexisting is a defect, not a
 wash. Compute work spreads across every live session
-rather than queueing on one. No-venue: there is no fleet,
-and this rule binds vacuously.
+rather than queueing on one. One run per session while
+staffable families wait is the defect shape this read
+exists to expose: sessions filled one-deep is not a
+staffed programme. No-venue: there is no fleet, and this
+rule binds vacuously.
 
 Idle with work complete is its own class: a programme
 whose work record shows its referenced work done while
@@ -132,7 +154,12 @@ lifetime. Declare: the staffing seat posts the expected
 lane count and, per lane, an estimated duration and its
 venue — the venue field is always present, and none is a
 standing value for authoring-side lanes, which count
-toward expected and actual exactly as venue lanes do.
+toward expected and actual exactly as venue lanes do. A
+declaration is not its own yardstick: the declared count
+is checked against the staffable count, and a declaration
+below it is a staffing defect in itself, priced by the
+shortfall — a seat never measures clean by declaring
+less.
 Ping: the declaration stays live only while the lane
 pings; the ping is the lane's own checkpoint writes on
 the supervision cadence, never a separate manual act, and
