@@ -111,6 +111,19 @@ coordinator fielding no child workers while its
 programme has parallel work is the defect shape in its
 pure form.
 
+The count has a floor, and the floor is a number in the
+standard: every programme states a numeric staffing
+floor — the least count of distinct families in active
+work while staffable work waits — in its governing text.
+A floor that lives only in a reminder body, a cron body,
+or a seat's practice is not a floor. The floor's value is
+the programme's own, set at instantiation; the obligation
+to state it as a number is the standard's. A measure
+below the floor while staffable families wait is a
+serial-staffing defect instance by definition, and the
+row prices the floor, the families in flight, and the
+shortfall.
+
 The fleet is capacity, priced for idleness: the staffing
 object serves every live session with its running-run
 count across all programmes as a capacity read — it
@@ -121,9 +134,9 @@ on another session, is a fleet-level row of its own —
 contention and idleness coexisting is a defect, not a
 wash. Compute work spreads across every live session
 rather than queueing on one. One run per session while
-staffable families wait is the defect shape this read
-exists to expose: sessions filled one-deep is not a
-staffed programme. No-venue: there is no fleet, and this
+staffable families wait is a serial-staffing defect
+instance by definition: sessions filled one-deep is not
+a staffed programme, whatever the run counts read. No-venue: there is no fleet, and this
 rule binds vacuously.
 
 Idle with work complete is its own class: a programme
