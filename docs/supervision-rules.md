@@ -907,6 +907,38 @@ a follow-up, improvement, or consolidation proposed in
 prose alone does not exist, and a prose-only offer is a
 reporting defect.
 
+## Handler freshness
+
+A handler registry's rows carry a served currency
+verdict, composed by the one component that holds every
+truth source — the reconciler — and consumed by surfaces
+without derivation. The verdict set is fixed: `current`,
+`stale`, `dead-binding`, `unresolvable`,
+`retired-with-cause`. Composition reads only named
+sources: the live chat census, the bindings registry,
+the seat-truth owners files, and the handler's own
+postings; run-record caller attribution is corroboration
+only — it can support a verdict when its resolution
+agrees with the binding, and its absence never marks a
+handler stale or dead. A verdict older than two
+reconcile cycles renders `stale` regardless of content;
+evidence windows are short for programme seats and long
+for lanes, because a quiet lane is not a dead one. A
+handler no source covers is `unresolvable`, never
+interpolated: no chat id, lane, or venue is invented to
+fill a row.
+
+Residue — bindings and owners rows naming deleted or
+superseded seats — leaves by a recorded disposition,
+never a guess and never an open-ended escalation of rows
+whose seats are already known gone: each row is retired
+with a cause from the fixed vocabulary (`seat-deleted`,
+`superseded-by <handle>`, `lane-dissolved`), the cause
+carried verbatim in the served record thereafter, and
+the reconciler reports the row resolved, not drift. A
+row whose cause cannot be stated from the record stays
+`unresolvable` and is named once, with its evidence.
+
 ## Retiring the status-code transport
 
 No thread posts an attention status code, and no thread

@@ -24,6 +24,8 @@
 
 - Verify the shape can complete its own matrix before starting: the venue answers, one lane is staffed per in-scope surface, the browser launches on the venue, and the serve route serves the target build end to end — one route loads with real data. A shape that fails any of these is refused and reported as a run-shape failure: the run does not start, and no verdict issues from it.
 
+- Name the machine for every measure: rendered measures are machine-dependent — the same tree can read harsher on one machine than on another — so the contract records which machine produced each measure, and a verdict never rests on measures from unnamed machines.
+
 - An incomplete matrix is never cured by disclosure: a run launched in a shape known to be incompletable — a single lane against a multi-surface matrix, a local host that kills the browser under load — has failed at the shape, not at coverage, and naming the unrun cells in prose does not convert that failure into a partial result. Unrun cells in a run that started in a valid shape are handled by the verdict computation, not by refusal.
 
 ## Grade evidence by level
@@ -37,6 +39,8 @@
 - Level D: source, lint, build, and unit-test output — hypotheses and regression support only, never proof of appearance or behaviour.
 
 - Count a screenshot as evidence only if you opened and inspected it in this run: a file that exists but was never looked at has no evidence value, and a fresh empty state cannot verify a populated one.
+
+- Capture only settled, fully revealed content: before a screenshot or a media census, scroll every scrollable container through its full range and wait for rendered media to load — a capture of an unscrolled container manufactures findings (unloaded media read as missing) and hides real ones inside the container's own fold.
 
 - Ship every appearance claim with its pixels: a crop at the affected element in CSS pixels, labelled with viewport, state, route, and the build it shows — a full-page screenshot proves nothing about a small misalignment.
 
@@ -62,6 +66,28 @@
 
 - Propose a scanner or detector rule for every confirmed defect class that is mechanically detectable, so a class caught once by eye becomes a class caught forever by the gate.
 
+## Measure content truncation mechanically
+
+- Run a truncation measure as a named leg of the sweep, at every contract viewport: for every content-bearing text element — table cells, row titles and summaries, subtitles, labels, list-row text — compare the element's rendered content against its box. An element whose scroll width or height exceeds its client box while overflow is hidden, single-line-clamped, or line-clamped is truncated, and the leg's raw per-element output (element, viewport, content size, box size) attaches to the report.
+
+- Page-level geometry does not cover this measure: a truncated cell does not overflow the page, so an overflow or overlap leg stays green over a layout whose every content column is ellipsized — a dense data table shipped in exactly that state at phone width and passed a full critic run on this gap, its screenshots graded for layout while no leg measured whether the content could be read. An instrument boundary that excludes per-element content is recorded like any other, and the space outside it is this leg's.
+
+- Ellipsis of content-bearing text at any contract viewport is a blocking finding: content the surface exists to serve is fully rendered, reachable by an expansion in place, or not claimed rendered. A tooltip that only a hover reveals is not a recovery at a touch viewport. Decorative text and text the surface itself serves as a summary of a reachable whole are outside the measure; the element's role decides, never its styling.
+
+- Run the measure on production-shaped data — the hostile leg's longest real values: truncation is data-dependent, and short sample rows pass where real values clip.
+
+## Re-form data tables at narrow widths
+
+- A data table at phone width re-forms structurally: each item becomes its own row (grouped rows whose parts are separate elements), or the surface compacts to a summary — a count or state line that expands in place. Compressing the desktop table until its columns ellipsize is not a re-form, and an ellipsized column is not a compaction form.
+
+- Horizontal scroll is legitimate only as a chosen, recorded pattern for comparison-shaped data: the table scrolls inside its own container and the page never scrolls sideways, the identifier column stays stuck in view, a visible cue shows that more columns exist, and no cell's own content is clipped — the scroll moves whole columns into view; it never hides part of a cell.
+
+- Priority columns are a variant of the summary form: a column dropped at narrow width stays reachable from its row (an expansion in place, or the record's own view). A column that vanishes with no path to its data is truncation by another name and is measured as such.
+
+- The summary form has a shape of its own: a summary surface — a chip, a header element, a compacted row — carries the item's identity and at most one state, and every remaining attribute takes its own labelled row when the summary expands. A character-joined attribute string is not a summary; it is the joined form under a summary's name, and it is measured as a separation defect, not a compaction.
+
+- The contract records which form each in-scope table takes at phone width; a table with no recorded form is judged against the default — re-form, or compact to a summary.
+
 ## Review the rendered page, route by route
 
 - Inspect every in-scope route at each contract viewport — the default matrix is a small phone (~390px), a tablet (~768px), and a desktop (~1440px) — including the sections below the fold.
@@ -72,7 +98,7 @@
 
 - Judge composition, spacing rhythm, overlap and overflow, typography, and image quality on the rendered pixels, in both themes wherever the product has two — dark mode is its own pass with its own contrast pairs, never a toggle screenshot.
 
-- Measure, never estimate, the numeric bars: text contrast at least 4.5:1 (3:1 for large text and for non-text UI contrast), primary-action targets at least 24×24 CSS px with mobile primary actions expected at 44×44, and no horizontal overflow or obscured content at any named viewport.
+- Measure, never estimate, the numeric bars: text contrast at least 4.5:1 (3:1 for large text and for non-text UI contrast), primary-action targets at least 24×24 CSS px with mobile primary actions expected at 44×44, and no horizontal overflow or obscured content at any named viewport. The target census counts every anchor and button, class-carrying or bare — a bare element is still a target, and an uncounted population is an enumeration gap.
 
 ## Compare against the approved design, not the build's own baseline
 
@@ -88,7 +114,7 @@
 
 - Accept a flow only by walking it end to end as each persona the contract names — including the staff and admin sides where they exist — performing the real job (book, pay, reschedule, dispatch) in a real browser, and recording where friction appears.
 
-- Walk the primary flow by keyboard alone at least once: tab order must be logical, focus must be visible, and focus must never be entirely hidden behind sticky headers, banners, or overlays.
+- Walk the primary flow by keyboard alone at least once: tab order must be logical, focus must be visible, and focus must never be entirely hidden behind sticky headers, banners, or overlays. Read occlusion at the settled position, after any animated scroll completes — a mid-scroll read prices positions the user never lands on.
 
 - Trigger every relevant control: a visible signifier is not proof of a handler, and a dead click is confirmed only by clicking.
 
@@ -116,7 +142,7 @@
 
 - Census leg — action affordances: within any card, row set, or sheet, actions of the same class render the same affordance; a navigation action styled as a bare text link beside a button-styled commit action is a finding, as is any same-class pair a user has to read twice to tell apart.
 
-- Census leg — empty-state layout stability: render every form and card twice, empty and filled, and compare control positions between the two renders; any control that moves, resizes, or changes row when a field is blank is a finding — layout is graded on the empty render as strictly as on the filled one, because first use is always empty.
+- Census leg — empty-state layout stability: render every form and card twice, empty and filled, and measure the control-position diff between the two renders; any control that moves, resizes, or changes row when a field is blank is a finding — layout is graded on the empty render as strictly as on the filled one, because first use is always empty.
 
 - Census leg — sheet conformance: exactly one sheet implementation serves every surface; measure each sheet against it — top-corner radius, grab handle, padding rhythm — and exercise every sheet with content tall enough to outgrow the viewport: a sheet that cannot scroll internally, or that traps or cuts off an entry, is a finding.
 
@@ -124,13 +150,17 @@
 
 - Census leg — header actions: no full-size button shares a line with a section or page header; a header's actions live in a defined slot at icon or small-button size, or on their own row below the header — a button jammed against a heading is a finding even when nothing overflows.
 
-- Census leg — duplicate labels: within one menu, sheet, or page, identical visible labels must name the same destination or action; two different destinations sharing one label is a finding, and the census lists every label collision it finds, not just the first.
+- Census leg — duplicate labels: within one menu, sheet, or page, identical visible labels must name the same destination or action; two different destinations sharing one label is a finding, and the census lists every label collision it finds, not just the first. The census keys on the accessible name: distinct destinations that share one visible name are cured on the accessible name (visible text unchanged), and a surface whose accessible names do not carry the destination is the finding.
 
 - Census leg — control chrome, extended: the browser-default lens covers every control class, not only tables — segmented toggles, previous/today/next navigation groups, selects, and file inputs at every calendar, editor, and settings surface are the design system's control at the standard size; a default-looking control, or a bespoke control at a non-standard size, is a finding.
 
 - Census leg — parameter completeness: a row, chip, or label that names a state whose meaning depends on parameters shows the parameters — a behaviour named "extended break" with no date range on the row, a limit with no number, a schedule with no hours is a finding: the name alone is not the state.
 
+- Census leg — served currency verdicts: a registry surface's rows carry their served currency verdict (the backend's per-row freshness record: binding state, verdict, reconcile age, last evidence); a row indistinguishable between a live binding and a dead one — same rendering for a handler bound to a live seat and one bound to a superseded or deleted chat — is a finding, as is any currency the row composes client-side instead of rendering from the served record.
+
 - Census leg — form structure: a multi-section form reads as grouped sections — dividers or visible grouping, one section vocabulary, and a per-section state summary (set, not set, needs attention) visible without opening the section; a stack of undifferentiated bars with no grouping and no state is a finding even when every field inside it works.
+
+- Census leg — editor form: an editor opens in the sheet/drawer pattern, never as an inline expansion that lengthens the page beneath it; and the same job takes the same form on every surface that offers it — one surface sheeting an editor while a sibling surface inlines its own copy of the same editor is a finding pair, judged against the pattern, not against whichever surface was built first. Geometry legs cannot see this class — an inline editor that grows the page is geometrically valid — so the leg compares forms, and a divergence is a blocking finding under the no-growth-by-expansion rule.
 
 - Coverage rule for the census: every admin and settings surface is exercised at phone width as well as desktop; a surface visited only at desktop width is unexercised for this census and is reported that way. Horizontal overflow at phone width is measured by the mechanical sweep's geometry leg — cite its output here rather than re-measuring it.
 
@@ -164,13 +194,23 @@
 
 - Add the environment stresses: 200% zoom or equivalent reflow, reduced-motion preference honoured, and a slow-load state that cannot be mistaken for a dead page.
 
+## Grade by purpose
+
+- The contract names each surface's purpose — operator console or customer-facing — and the run grades each surface under its purpose's profile on top of the universal core. A surface with no named purpose is graded on the core alone, and the missing purpose is recorded.
+
+- The universal core binds every surface, no exceptions: no truncation of content-bearing text; structural separation — items own a row each or the surface compacts to a summary, and items are never joined into one character-separated string; a summary never repeats its title; buttons never truncate their labels; exactly one prominent act per view; the numeric bars (contrast, target sizes, no horizontal overflow or obscured content at a named viewport); both themes judged as their own passes; the keyboard walk with visible, settled, unoccluded focus; honest absence — a surface with nothing to serve renders the absence, never an invented form; no explanatory prose; findings reported as classes with full occurrence lists; closure only on same-target re-run evidence; the closed verdict vocabulary and its caps.
+
+- Operator consoles — work tools for dense, repeated, expert use — add: the row anatomy for dense data at phone width (grouped rows, title and meta as separate elements, per-item actions sized to their row, trailing status and affordance on the title's line); parameter completeness — a row naming a state whose meaning depends on parameters shows the parameters, because the operator acts on them; per-section state summaries on grouped forms, readable without opening the section; control chrome at the standard size across every control class, under density; empty-state stability measured on the operational forms; parity against the approved spec record. The side is judged on scan efficiency — whether an expert reads state at a glance — not on minimising step count.
+
+- Customer-facing surfaces — public, first use, trust and conversion — add: journey interaction cost on the primary flow, including the keyboard walk's stop count to the primary actions and a skip affordance where that walk is long; accessible-name distinctness where distinct destinations share one visible name, above all on marketing surfaces; hostile grown copy exercised over the full persona journey, not a single route; parity against the surface's committed reference set. Parameter completeness and per-section state summaries do not bind here in the operator sense: served labels are judged as a customer reads them — plainly printed, each qualifying fact stated once — not as an operator reading parameters.
+
 ## Apply severity, hard blocks, and the closed verdict
 
 - Rate every finding on one unified severity scale: Blocker (the task cannot complete, a false success, a destructive or misleading action, a severe accessibility failure, or a layout break hiding controls), Major (a core task, recovery path, or critical control unusable, or a major mismatch against the approved design), Moderate (user-visible drift, an inconsistent state, a responsive defect), Minor (polish).
 
 - Block the release on any unresolved Blocker or Major, and on Moderates that sit in a primary flow or on a primary task; three or more Moderates on one route also block that route.
 
-- Apply the hard binary blocks with no discretion and no averaging: any critical or serious automated accessibility violation at WCAG 2.2 AA; any measured contrast or target-size failure against the bars above; any horizontal overflow or obscured content at a named viewport; any contract state left unexercised (the verdict is capped at `partial`); any in-scope route with no inspected screenshot (that route is `blocked`); an approved design exists but the parity module did not run (`blocked`).
+- Apply the hard binary blocks with no discretion and no averaging: any critical or serious automated accessibility violation at WCAG 2.2 AA; any measured contrast or target-size failure against the bars above; any horizontal overflow or obscured content at a named viewport; any content-bearing text truncated at a contract viewport under the truncation measure; any contract state left unexercised (the verdict is capped at `partial`); any in-scope route with no inspected screenshot (that route is `blocked`); an approved design exists but the parity module did not run (`blocked`).
 
 - Compute the verdict from the run's matrix record, never narrate it: the record lists every contract cell — route × viewport × state × appearance, plus each census leg, journey, and hostile leg — marked exercised with inspected evidence, exercised without inspection, or unrun, and it is attached to the report as a run artefact.
 
