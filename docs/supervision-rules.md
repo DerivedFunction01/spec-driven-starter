@@ -218,7 +218,77 @@ ceiling, and any proposed shortcut names what it
 surrenders. Duration claimed for serial-by-default work,
 polling intervals, re-running from zero, lanes queued
 behind sessions, manufactured approvals, or transport
-round-trips is a justification in no class. An item that
+round-trips is a justification in no class.
+
+A plan's duration is its wall-clock: the critical path
+through its steps under their declared fan-out, never
+the serial sum of its step estimates. A step under a
+declared fan-out prices at its longest lane's
+wall-clock, not its lanes summed. A summed serial figure
+presented as a plan's size — in a headline, a ruling, or
+a report — is a mispricing of the same class as an
+unjustified overrun: it is the slack a reader waits
+through.
+
+Once a census or inventory of an edit surface exists,
+its edits price per item at the minutes scale the
+inventory makes possible — a declaration plus a call, a
+guard, a swap, each priced as the item it is. Pricing
+inventoried mechanical edits as craft work is a
+mispricing: the inventory is what the price is made
+from.
+
+The over-hour classes have boundaries, and size alone
+meets none of them. Novel work is work whose design has
+no existing shape in the codebase to copy and whose
+failure modes cannot be enumerated in advance;
+deterministic design with known edge cases, a pattern
+of record, or an inventory is not novel, however large.
+Deep research is investigation whose extent cannot be
+bounded in advance because the answer is not in the
+codebase or its docs. Language-model-bound work is work
+whose duration is set by generation or reading volume
+at its measured rate. An over-hour claim that does not
+meet its class's boundary is a mispricing, and the
+entry's why-not-lower addresses the boundary, not the
+size.
+
+Migration-class work — inventoried code edits over a
+known surface — fits a one-hour wall-clock cap for its
+edit phase, after initial dummy testing on the known
+edge cases; where the work cannot fit at
+minutes-per-edit pricing, the lane split widens until
+it does, lanes being capacity-bound, not seat-bound.
+Residue that cannot price as an edit is named as
+not-an-edit — a decision to take, a semantics
+requirement discharged in the design step — never
+absorbed into an edit estimate.
+
+Proof is priced by the failure mode's direction. For a
+continuously-used system whose failure modes are loud —
+a refusal, never a silent wrong action — dummy testing
+against the contract is the primary proof, and
+exhaustive up-front discovery is over-priced: residue
+surfaces on first real use and is fixed then. Static
+discovery is priced only for silent-direction changes,
+where behaviour alters with no loud signal at the point
+of change.
+
+Prices stated in rulings and decisions — a build price
+attached to an option, a token's discharge price — obey
+the same discipline as step estimates: wall-clock under
+the declared split, per-item against an inventory where
+one exists, and an over-hour class only at its boundary.
+
+The numeric anchors in this passage — the minutes
+scale, the one-hour cap, the justification threshold —
+carry their measured basis in the estimate evidence
+register (`docs/estimate-evidence-register.md`). An
+anchor with no basis recorded there is unbacked, and an
+unbacked anchor is struck or marked, never silently
+carried.
+
+An item that
 passes its estimate without completing is overdue: the
 owning thread actuates on it — re-estimates it with the
 reason stated, staffs it, or escalates it — rather than
