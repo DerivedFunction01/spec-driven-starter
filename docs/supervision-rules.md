@@ -933,6 +933,14 @@ proof the budget is small. Process sharding multiplies a
 per-process claim rather than dividing it; machine
 sharding divides the container count, not the claim.
 
+The declaration a venue checks before dispatch states
+the claim in countable terms: workers × (the library
+base at its stamped caps + the per-connection pools at
+their stamped thread counts) + a controller and
+subprocess allowance. Each term is measurable, and the
+stamped counts are the ones the job's environment and
+its own factories actually apply.
+
 Venue state is classified on a generic contract, the same
 for every venue kind: idle, advancing, saturated, wedged.
 Sampled CPU-time progression and pids against the
