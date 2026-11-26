@@ -230,6 +230,39 @@ a report — is a mispricing of the same class as an
 unjustified overrun: it is the slack a reader waits
 through.
 
+Work prices by category; the category carries the
+number, and a step prices by naming its category. The
+fast categories are the default register for plan work.
+Inventoried mechanical edit — a declaration plus a call,
+a guard, a swap, over a censused surface: minutes per
+item. Deterministic design and build — new code or text
+whose shape follows a pattern of record, its edge cases
+enumerable in advance: tens of minutes. Proof run —
+dummy testing, gate and verification runs over a known
+corpus: minutes, set by the corpus and the venue.
+Coordination and fan-in — union formation, gate draws,
+landings: minutes to tens of minutes. Generation- or
+reading-bound work: its duration is computed, volume
+over the served rate, never guessed. Each category's
+typical duration carries its measured basis in the
+estimate evidence register; a category whose duration
+has no basis recorded there is unbacked and is marked
+as such, never silently carried.
+
+The slow register — the benchmark class — is one
+category among them: genuinely novel research, hard
+open-ended debugging, frontier problems with no known
+shape. It is not the default register for plan work,
+and it carries no typical duration: a price in it is
+argued per step. A step enters it only with its
+justification, at the boundaries below; a step priced
+in the slow register without that justification is the
+overestimate defect in its categorical form. Bounded
+investigation — a question whose answer sits in the
+codebase or its docs, its extent estimable — prices in
+the fast categories; only research whose extent cannot
+be bounded in advance enters the slow register.
+
 Once a census or inventory of an edit surface exists,
 its edits price per item at the minutes scale the
 inventory makes possible — a declaration plus a call, a
@@ -238,7 +271,8 @@ inventoried mechanical edits as craft work is a
 mispricing: the inventory is what the price is made
 from.
 
-The over-hour classes have boundaries, and size alone
+The slow register's boundaries — the over-hour classes
+have boundaries, and size alone
 meets none of them. Novel work is work whose design has
 no existing shape in the codebase to copy and whose
 failure modes cannot be enumerated in advance;

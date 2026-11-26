@@ -55,6 +55,44 @@ the owner's standing threshold. No measured basis is
 recorded for the value itself; it is marked unbacked
 here rather than given an invented one.
 
+## Categories and their bases
+
+**Inventoried mechanical edit — minutes per item.**
+Basis: the minutes-per-edit anchor above (internal
+actuals; whole-issue agent runtimes as the outer bound).
+
+**Deterministic design and build — tens of minutes.**
+Basis: internal actuals — this programme's landed
+single-module builds with their tests (a scanner module
+with its test file, a plan-check module) complete in
+tens of minutes including gate cycles; the whole-issue
+agent runtimes above bound the class from outside.
+Covers design whose shape follows a pattern of record
+with enumerable edge cases; it is the category the
+argument-parser plan's declaration format belongs to.
+
+**Proof run — minutes, set by the corpus and the
+venue.** Basis: internal actuals — measured gate runs
+(docs-scoped 7–15 s; a 282-test leg in 143 s on 2
+workers; venue gates in minutes). Dummy testing and
+verification runs price here.
+
+**Coordination and fan-in — minutes to tens of
+minutes.** Basis: internal actuals — union formation
+and landing cycles in the programme's run records.
+
+**Generation- or reading-bound — computed.** Basis:
+the served-rate anchor above; the duration is the
+volume divided by the rate, stated with the volume.
+
+**Slow register (benchmark class) — no typical
+duration; marked unbacked.** METR's horizons measure
+what agents can complete at a reliability level, not a
+typical duration for a step, and no internal actual
+prices this class typically: its prices are argued per
+step at the boundary test. The absence of a number here
+is the register's honest state, not an omission.
+
 ## Sources
 
 - METR, Task-Completion Time Horizons of Frontier AI
