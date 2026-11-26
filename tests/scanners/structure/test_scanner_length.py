@@ -100,6 +100,23 @@ class LengthScannerTests(unittest.TestCase):
             self.assertEqual(len(findings), 1)
             self.assertEqual(findings[0].rule, "length/file-length")
 
+    def test_over_cap_shell_script_is_a_finding(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "ops/trim.sh", "echo x\n" * (MAX_LINES + 1))
+            findings = scan(Path(tmp))
+            self.assertEqual(len(findings), 1)
+            self.assertEqual(findings[0].rule, "length/file-length")
+            self.assertEqual(findings[0].path, "ops/trim.sh")
+            self.assertEqual(findings[0].severity, SEVERITY_ERROR)
+
+    def test_band_shell_script_is_notice_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tmp, "ops/trim.sh", "echo x\n" * (CREEP_LINES + 10))
+            findings = scan(Path(tmp))
+            self.assertEqual(len(findings), 1)
+            self.assertEqual(findings[0].rule, "length/creep-band")
+            self.assertEqual(findings[0].severity, SEVERITY_NOTICE)
+
 
 @unittest.skipUnless(shutil.which("git"), "git not on PATH")
 class LengthScannerGitTests(unittest.TestCase):
