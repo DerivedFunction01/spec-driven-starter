@@ -74,6 +74,31 @@ class PathDisciplineScannerTests(unittest.TestCase):
         source = "from pathlib import Path\n\nROOT = Path(__file__).parents[1]\n"
         self.assertEqual(scan_tree({"tests/test_model.py": source}), [])
 
+    def test_hardcoded_path_literal_in_shell_is_a_finding(self):
+        source = '#!/usr/bin/env bash\nexport PATH="/usr/local/bin:/usr/bin:/bin"\n'
+        findings = scan_tree({"ops/serve.sh": source})
+        self.assertEqual(len(findings), 1)
+        self.assertEqual(findings[0].rule, "path-discipline/hardcoded-path")
+        self.assertEqual(findings[0].severity, SEVERITY_ERROR)
+
+    def test_bare_path_assignment_in_shell_is_a_finding(self):
+        source = "PATH=/usr/bin:/bin\nmake\n"
+        findings = scan_tree({"ops/build.sh": source})
+        self.assertEqual(len(findings), 1)
+        self.assertEqual(findings[0].rule, "path-discipline/hardcoded-path")
+
+    def test_path_augmentation_referencing_inherited_is_clean(self):
+        source = 'export PATH="$HOME/.local/bin:$PATH"\n'
+        self.assertEqual(scan_tree({"ops/serve.sh": source}), [])
+
+    def test_paths_shell_anchor_is_clean(self):
+        source = 'export PATH="/usr/local/bin:/usr/bin:/bin"\n'
+        self.assertEqual(scan_tree({"ops/paths.sh": source}), [])
+
+    def test_shell_under_tests_is_out_of_scope(self):
+        source = 'export PATH="/usr/local/bin:/usr/bin:/bin"\n'
+        self.assertEqual(scan_tree({"tests/fixtures/run.sh": source}), [])
+
 
 if __name__ == "__main__":
     unittest.main()

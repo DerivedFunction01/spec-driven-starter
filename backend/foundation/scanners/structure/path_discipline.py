@@ -1,8 +1,8 @@
 """Path-discipline scanner: path derivation has one spine.
 
 Text-level scan in the superapp leg's form: root climbs,
-cwd roots, and hardcoded home roots outside the paths
-spine are findings. Declarations below are data.
+cwd roots, hardcoded home roots, and hardcoded PATH
+literals in shell outside the paths spine are findings.
 """
 
 from __future__ import annotations
@@ -15,7 +15,7 @@ from backend.foundation.scanners.base import (
     Finding,
     Scanner,
 )
-from backend.foundation.scanners.files import python_files, rel
+from backend.foundation.scanners.files import python_files, rel, walk_tracked
 
 EXCLUDED_PATH = "backend/foundation/scanners/structure/path_discipline.py"
 EXCLUDED_PREFIX = "tests/scanners/structure/test_scanner_path_discipline"
@@ -29,6 +29,7 @@ DIRNAME = re.compile(r"dirname\s*\(")
 JOIN_SEGMENT = re.compile(r"[\"']\.\.[\"']")
 CWD_ROOT = re.compile(r"os\.getcwd\(\)|Path\.cwd\(\)")
 HARDCODED_ROOT = re.compile(r"[\"']" + "/home/")
+PATH_ASSIGN = re.compile(r"^\s*(?:export\s+)?PATH\s*=\s*(\"[^\"]*\"|'[^']*'|\S+)")
 
 PATHS_MODULE_NAMES = ("paths.py", "paths.sh")
 
@@ -95,6 +96,17 @@ def _scan_text(text: str) -> list[tuple[int, str]]:
     return rows
 
 
+def _scan_shell_text(text: str) -> list[tuple[int, str]]:
+    """Hardcoded PATH literals: an assignment restating PATH
+    from literals alone, never referencing the inherited one."""
+    rows: list[tuple[int, str]] = []
+    for i, line in enumerate(text.splitlines()):
+        match = PATH_ASSIGN.match(line)
+        if match and "$PATH" not in match.group(1) and "${PATH}" not in match.group(1):
+            rows.append((i + 1, "hardcoded-path"))
+    return rows
+
+
 def _declared_kind(relpath: str) -> str | None:
     for decl in EXCEPTIONS:
         path = decl["path"]
@@ -107,25 +119,28 @@ def _declared_kind(relpath: str) -> str | None:
     return None
 
 
+def _error_message(finding_kind: str) -> str:
+    if finding_kind == "hardcoded-path":
+        return (
+            "hardcoded PATH assignment literal outside the shared "
+            "environment anchor; source the anchor (paths.sh), or "
+            "declare the file in the scanner's exception data"
+        )
+    return (
+        f"{finding_kind} derivation outside a paths "
+        "module; derive it in the paths spine, or "
+        "declare it in the scanner's exception data"
+    )
+
+
 def scan(root: Path) -> list[Finding]:
     findings: list[Finding] = []
     found_in: dict[str, list[str]] = {}
     scanned: set[str] = set()
-    for path in python_files(root):
-        relpath = rel(root, path)
-        if relpath == EXCLUDED_PATH or relpath.startswith(EXCLUDED_PREFIX):
-            continue
-        if relpath.startswith(TEST_PREFIX):
-            continue
-        if relpath.rsplit("/", 1)[-1] in PATHS_MODULE_NAMES:
-            continue
-        scanned.add(relpath)
-        try:
-            text = path.read_text(encoding="utf-8")
-        except (OSError, UnicodeDecodeError):
-            continue
+
+    def record(relpath: str, rows: list[tuple[int, str]]) -> None:
         kind = _declared_kind(relpath)
-        for lineno, finding_kind in _scan_text(text):
+        for lineno, finding_kind in rows:
             found_in.setdefault(relpath, []).append(finding_kind)
             if kind is None:
                 findings.append(
@@ -134,11 +149,7 @@ def scan(root: Path) -> list[Finding]:
                         rule=f"path-discipline/{finding_kind}",
                         path=relpath,
                         line=lineno,
-                        message=(
-                            f"{finding_kind} derivation outside a paths "
-                            "module; derive it in the paths spine, or "
-                            "declare it in the scanner's exception data"
-                        ),
+                        message=_error_message(finding_kind),
                     )
                 )
             else:
@@ -152,6 +163,33 @@ def scan(root: Path) -> list[Finding]:
                         severity=SEVERITY_NOTICE,
                     )
                 )
+
+    for path in python_files(root):
+        relpath = rel(root, path)
+        if relpath == EXCLUDED_PATH or relpath.startswith(EXCLUDED_PREFIX):
+            continue
+        if relpath.startswith(TEST_PREFIX):
+            continue
+        if relpath.rsplit("/", 1)[-1] in PATHS_MODULE_NAMES:
+            continue
+        scanned.add(relpath)
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            continue
+        record(relpath, _scan_text(text))
+    for path in walk_tracked(root, (".sh",)):
+        relpath = rel(root, path)
+        if relpath.startswith(TEST_PREFIX):
+            continue
+        if relpath.rsplit("/", 1)[-1] in PATHS_MODULE_NAMES:
+            continue
+        scanned.add(relpath)
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            continue
+        record(relpath, _scan_shell_text(text))
     for decl in EXCEPTIONS:
         covered = [
             relpath

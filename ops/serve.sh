@@ -10,9 +10,8 @@
 #
 # Test seams (env): FIELDKIT_UNIT_DIR, FIELDKIT_SYSTEMCTL.
 set -euo pipefail
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
 OPS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$OPS_DIR/paths.sh"
 ROOT="$(dirname "$OPS_DIR")"
 PYTHON="$ROOT/var/venv/bin/python"
 [[ -x "$PYTHON" ]] || PYTHON="$(command -v python3)"

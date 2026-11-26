@@ -14,9 +14,8 @@
 #             print the three-state vocabulary "missing",
 #             "stale" or "current", always exit 0.
 set -euo pipefail
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$SCRIPT_DIR/paths.sh"
 ROOT="$(dirname "$SCRIPT_DIR")"
 CONF="$SCRIPT_DIR/unit.conf"
 if [[ ! -f "$CONF" ]]; then

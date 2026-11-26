@@ -43,9 +43,8 @@
 # FIELDKIT_PROBE_SECS (hard probe budget, default 10),
 # FIELDKIT_EPISODE_SECS (episode-cap window, default 900).
 set -uo pipefail
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
 OPS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$OPS_DIR/paths.sh"
 ROOT="$(dirname "$OPS_DIR")"
 PYTHON="$ROOT/var/venv/bin/python"
 [[ -x "$PYTHON" ]] || PYTHON="$(command -v python3)"

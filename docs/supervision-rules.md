@@ -909,6 +909,24 @@ that survives stating means the work moves to the
 full-capability tier instead. No-venue: the local machine
 offers no tier choice, and nothing is owed.
 
+A venue's finite capacities — its pid and thread budget,
+its concurrent connections, its sessions — are declared
+in its definition, not discovered at runtime. A job sizes
+its parallelism (worker pools, thread pools, connection
+use) to a share of the declared budget; a consumer that
+cannot state its footprint against the budget is not
+ready to fire on a shared venue.
+
+Venue state is classified on a generic contract, the same
+for every venue kind: idle, advancing, saturated, wedged.
+Sampled CPU-time progression and pids against the
+declared budget are its instruments. The classification
+actuates: a wedged run is reaped at its timeout and
+killed on frozen evidence, the evidence going to the
+owning lane; dispatch holds at saturation; idle capacity
+is surfaced to staffing. Diagnosis is the runner's,
+automatic — no venue's state waits on a manual check.
+
 ## Status vocabulary
 
 A status report is grouped, never a bare code: it carries

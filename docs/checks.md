@@ -114,7 +114,7 @@ standing; with no list, it reports nothing.
 | value_source | no document restates a source constant: the length cap, the sample port (the README quickstart keeps one literal), or a field-vitals threshold — docs state the rule and name the source |
 | restatement | no sentence of ten words or more is restated across tracked documents — one home per rule, the second document carries its delta or a pointer; fenced specimens are not read, and deliberate duplication is named in the scanner's exception registry |
 | time_ownership | date/time derivations (parse, normalize, format, epoch, homed now wrappers) live in the one module the scanner's family map names; foreign calendar machinery and sliced instant fields outside the home are findings, and a sanctioned copy that stops matching its shape fails as stale |
-| path_discipline | climbs to a root, cwd-derived roots, and home-anchored literal roots occur only inside a paths module or under a declaration carried in the scanner's data; a declaration whose file lost the pattern fails as stale |
+| path_discipline | climbs to a root, cwd-derived roots, and home-anchored literal roots occur only inside a paths module or under a declaration carried in the scanner's data; a declaration whose file lost the pattern fails as stale; a hardcoded PATH assignment literal in tracked shell is a finding — scripts source the tree's one environment anchor |
 | writer_uniqueness | writes that truncate a state-shaped target and hand-rolled stage-then-rename sequences occur only at the designated writer home or under a declared seam; a seam whose file lost the pattern fails as stale |
 | adapter_mirror | every class implementing the store protocol defines the protocol's whole method set, which the scanner reads from the protocol class itself; the population is every module in the adapter tier, derived from the tree — no module is declared; partial implementations need an allowlist entry, and an entry covering a class that now mirrors fully fails as stale |
 | folder_density | no folder over the direct-child file cap the scanner's constant sets — every folder and every tracked file of any kind counts by default, with no coverage register; the band below the cap lists on every run as a notice, and a band folder grown past its committed `HEAD` count is a finding. Compliance is achieved by grouping: a family that would push a folder over the cap gets its own grouped home along the module's real seams. The band is a warning state on the way to a grouping, never a steady state to park in; scattering a family's files across folders to stay under a count is the same workaround under another shape — a parked band folder and a scattered placement are both findings in substance, cured by grouping, not by placement |
@@ -357,6 +357,20 @@ not an external reference, and docs and data are outside
 the leg's population. Repositories are referenced through
 registry/config data, never through literals in code.
 With no set, the leg reports nothing.
+
+## Instance content in data populations
+
+Tracked fixtures, job definitions, registers, and seed or
+sample data carry generic placeholders only.
+Instance-shaped content in those populations — a real
+mailbox, a real run record, an instance's names and
+facts — is a finding of the same class as a literal in
+code, convicted by the same legs: the provisioned
+denylist and repo set, the path anchors, and the
+credential shapes all scan those populations, and no
+fixture, register, or seed population is exempt from a
+text scanner's population. A bare export of the tree,
+read cold, yields no profile of any instance or person.
 
 ## Example configs — patterns noted, not implemented
 
