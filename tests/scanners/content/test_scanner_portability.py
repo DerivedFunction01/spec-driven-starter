@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
+from backend.foundation.scanners.content import portability
 from backend.foundation.scanners.content.portability import scan
 
 
@@ -156,6 +157,32 @@ class PortabilityRepoSetTests(unittest.TestCase):
             ):
                 findings = scan(Path(tmp))
             self.assertEqual(rules(findings), ["portability/external-repo-ref"])
+
+    def test_declared_carrier_directive_exempts_the_name(self):
+        source = (
+            "# portability-exception: other-repo — programme declarations\n"
+            "PROGRAMMES = ('other-repo',)\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            self.provision(tmp)
+            write(tmp, "registry.py", source)
+            with mock.patch.object(
+                portability, "EXCEPTION_FILES", ("registry.py",)
+            ):
+                findings = scan(Path(tmp))
+            self.assertEqual(findings, [])
+
+    def test_directive_in_a_non_registry_file_does_not_exempt(self):
+        source = (
+            "# portability-exception: other-repo — programme declarations\n"
+            "TARGET = 'other-repo'\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            self.provision(tmp)
+            write(tmp, "tool.py", source)
+            findings = scan(Path(tmp))
+            self.assertIn("portability/external-repo-ref", rules(findings))
+            self.assertIn("portability/exception-misuse", rules(findings))
 
 
 if __name__ == "__main__":

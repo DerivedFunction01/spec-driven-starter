@@ -368,7 +368,14 @@ another repository in the set is an error finding (rule
 not an external reference, and docs and data are outside
 the leg's population. Repositories are referenced through
 registry/config data, never through literals in code.
-With no set, the leg reports nothing.
+The one exception is a declared carrier: a data carrier
+homed in a code file — a registry module whose data is
+repository names — is named in the scanner's exception
+registry and declares each name by directive, one exact
+string and its reason; a directive in any other file is
+misuse and itself a finding. Fixtures and sample data
+fall under the data-population rule: specimens are
+placeholder-shaped. With no set, the leg reports nothing.
 
 ## Instance content in data populations
 

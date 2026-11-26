@@ -186,7 +186,7 @@ def _repo_ref_findings(root: Path) -> list[Finding]:
     """Tracked code naming another repository in the provisioned set.
 
     The repo's own name is not external; docs and data are
-    outside the leg's population.
+    outside the population, declared carriers exempt.
     """
     names = [name for name in _load_repo_set(root) if name != root.name]
     if not names:
@@ -203,8 +203,11 @@ def _repo_ref_findings(root: Path) -> list[Finding]:
         lines = _read_lines(path)
         if lines is None:
             continue
+        exceptions = _declared_exceptions(relpath, lines)
         for lineno, line in enumerate(lines, start=1):
             for match in pattern.finditer(line):
+                if match.group(0) in exceptions:
+                    continue
                 findings.append(
                     Finding(
                         scanner="portability",
