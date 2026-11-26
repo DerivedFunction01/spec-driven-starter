@@ -326,12 +326,18 @@ single env var and that single default path are the whole
 provisioning surface. A subsystem or component env alias
 naming its own list copy is a divergence to collapse, not
 a second form — every consumer in the repo resolves the
-same one list. Collapsing divergent lists takes their
-union as the converged content basis: no literal is
-dropped by a collapse, and a literal leaves the list only
-by a deliberate removal, never by convergence. The list
-is per-repo: each repo provisions the literals its own
-tree must not carry. With a list provisioned, every hit is
+same one list. The lists split by ground: a generic-ground
+list is homed once, on the ground the generic trees share,
+and inherited by the repos on that ground; a repo-specific
+list is that repo's own layer over the ground. The end
+state is the layered form, not one flat list applied to
+every tree. Collapsing divergent lists takes their union
+as the interim content basis: no literal is dropped by a
+collapse, and a literal leaves a list only by a deliberate
+removal, never by convergence. A repo's own layer may
+allow its own instance name — the ban binds generic and
+platform trees against instance literals, not the
+instance's own home. With a list provisioned, every hit is
 an error finding: rule, path, line — the literal and the
 line's content are never printed, and the list file itself
 is never scanned. With no list, the scanner reports nothing
