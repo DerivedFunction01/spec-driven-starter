@@ -321,7 +321,17 @@ literal per line (blank lines and `#` comments ignored).
 Resolution: the file named by `STARTER_DENYLIST_FILE` wins —
 set but unreadable resolves to no list and does **not** fall
 back; otherwise the default `var/config/denylist.txt`
-applies when present. With a list provisioned, every hit is
+applies when present. The convention is one per repo: that
+single env var and that single default path are the whole
+provisioning surface. A subsystem or component env alias
+naming its own list copy is a divergence to collapse, not
+a second form — every consumer in the repo resolves the
+same one list. Collapsing divergent lists takes their
+union as the converged content basis: no literal is
+dropped by a collapse, and a literal leaves the list only
+by a deliberate removal, never by convergence. The list
+is per-repo: each repo provisions the literals its own
+tree must not carry. With a list provisioned, every hit is
 an error finding: rule, path, line — the literal and the
 line's content are never printed, and the list file itself
 is never scanned. With no list, the scanner reports nothing
