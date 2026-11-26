@@ -917,6 +917,22 @@ use) to a share of the declared budget; a consumer that
 cannot state its footprint against the budget is not
 ready to fire on a shared venue.
 
+Sizing counts every pool the job brings: its declared
+workers and the thread pools its libraries create at
+startup, capped in the job's environment where the
+venue's declared budget requires it — a pool sized to
+the host's core count alone is not sized. A consumer
+whose startup claim is a large fraction of a shared
+venue's budget is a defect in the consumer: the claim is
+measured by census of the holding process (thread names,
+wait state, creation pattern) and cured at the consumer —
+engine pool caps or the suite's own executor sizing —
+before any rise of the venue's declared budget is
+entertained; idle pools are neither legitimate work nor
+proof the budget is small. Process sharding multiplies a
+per-process claim rather than dividing it; machine
+sharding divides the container count, not the claim.
+
 Venue state is classified on a generic contract, the same
 for every venue kind: idle, advancing, saturated, wedged.
 Sampled CPU-time progression and pids against the
