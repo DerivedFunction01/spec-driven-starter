@@ -326,12 +326,18 @@ single env var and that single default path are the whole
 provisioning surface. A subsystem or component env alias
 naming its own list copy is a divergence to collapse, not
 a second form — every consumer in the repo resolves the
-same one list. The lists split by ground: a generic-ground
-list is homed once, on the ground the generic trees share,
-and inherited by the repos on that ground; a repo-specific
-list is that repo's own layer over the ground. The end
-state is the layered form, not one flat list applied to
-every tree. Collapsing divergent lists takes their union
+same one list. The lists split by ground. The platform
+list belongs to the platform ground — the spec and the
+platform trees it grounds — and is homed there for
+platform trees; it is not a content tree's list. A
+repo-specific layer is provisioned for that repo's own
+gates, minimal and named per repo: the layer carries the
+personal-identifying literals (the owner's name,
+mailboxes) that the shape scanners do not cover — most
+other coverage duplicates the scanners, and the
+denylist's residual role in the generic form is exactly
+that uncovered class. The end state is the layered form,
+not one flat list applied to every tree. Collapsing divergent lists takes their union
 as the interim content basis: no literal is dropped by a
 collapse, and a literal leaves a list only by a deliberate
 removal, never by convergence. A repo's own layer may
