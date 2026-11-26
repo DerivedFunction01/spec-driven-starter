@@ -179,7 +179,18 @@ the supervision cadence, never a separate manual act, and
 a missed ping raises the lane's row at once. Renew: at
 the estimate's end the lane renews with a new estimate or
 terminates; the record shows estimate against actual and
-the renewal count. Terminate: only on an explicit,
+the renewal count.
+
+The measured record is the next estimate's analogy base:
+landing records, per-phase prices, and fire statistics —
+which phases consumed the wall-clock, which fires never
+reached a verdict, what a formation of this shape cost
+last time — are priced into the next estimate of the
+same class, in every work form. An estimate that ignores
+a measured sink of its own class repeats it; the
+evidence register that holds the measurements is the
+pattern library's recorded form, and pricing from it is
+the loop that keeps the library current. Terminate: only on an explicit,
 checkable condition drawn from the queue's marker
 vocabulary — never by silence, by expiry, or on the
 lane's own say-so; an expired declaration with no renewal
@@ -721,6 +732,15 @@ execute is completed by naming the executing lane when the
 offer is taken up; an offer taken up in two places executes
 on the first claim.
 
+Formations are bounded by construction: worktrees and
+branches are commissioned per formation group against a
+current base — the rows of a group share one worktree and
+its transport — never one long-lived worktree per row or
+per base. Parallel worktrees on diverging bases
+manufacture composition collisions at landing; a
+formation that outgrows its group's bound splits by
+file-set, not by row.
+
 Prerequisites are data, not prose. Every step carries a
 machine-readable block declaring the todos it mints and
 the prerequisites those todos carry — todo ids anywhere
@@ -796,7 +816,12 @@ on it; gating each delta separately and then re-running
 the overlapping tests on the union is double work.
 Formation hash-verification stays — it is what makes the
 pre-state known; per-delta gates remain only for deltas
-whose pre-state is not yet known.
+whose pre-state is not yet known. The union is also the
+dispatch default, not only the landing form: work
+standing in a gate queue is dispatched as one union fire
+by the dispatcher itself, and the fire's record names
+its constituents — per-item gate queues are abolished,
+not merely discouraged.
 
 A full run is a proof instrument, not a landing gate:
 where one is owed it runs last, and even it may skip
@@ -821,6 +846,49 @@ Markdown carries no gate beyond the scanners that read
 it: a markdown step lands on scanner-clean — or on
 nothing, where no scanner reads the file — and never
 queues behind test runs or gate draws.
+
+A gate job runs its scoped check once. A second run
+happens only as a re-proof: once, inside the same fire,
+on a red verdict — never as a standing double run, whose
+measured catch rate is zero. The verdict the record
+carries is the fire's single run, or the re-proof's where
+one ran.
+
+Fires dispatch only over the runner's authorized routes,
+and every fire's record carries its outcome class:
+`manifest` (the job's own declaration failed validation
+before transport), `transport`, `launch`,
+`dispatch-blocked` (no route could fire it), `ran-red`,
+`ran-green`. The manifest is validated before transport,
+so a malformed job dies at the cheapest phase and is
+priced there. A fire that produced no verdict is read
+from its class, never retried blind: an identical re-fire
+is the defect class the standing forms already name.
+Dispatching around the runner — a bare direct execution
+of the job's payload — is the anti-form: it produces no
+record, no class, and no verdict the supervision measure
+can read.
+
+These disciplines bind where there is no plan file,
+through the planless form's own instruments. On a defect
+register, the row's staffing and formation fields carry
+the formation bound and the union form, its gate and
+resolution fields carry the fire's accounting, and its
+closed rows are the priced history the next estimate
+reads. In a goal file's standing execution form, the
+recurring-defect classes carry the same disciplines as
+standing dispositions with instance counts, and the
+supervision measure verifies what the shared records can
+see. A mechanical refusal that attaches to a plan's step
+blocks — a plan gate's formation check — has no planless
+reach; its contract twin, the grouping act at staffing
+and the standing form itself, is the carrier in both
+planless forms, and the record names that asymmetry
+rather than papering over it. Wall-clock counters read
+the home repo's landing records; another form's phase
+accounting stands in its own records — the register
+row's closure fields, the lane's state record — until a
+record family covers it.
 
 ## Venue use
 
