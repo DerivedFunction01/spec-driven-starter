@@ -1095,6 +1095,34 @@ a follow-up, improvement, or consolidation proposed in
 prose alone does not exist, and a prose-only offer is a
 reporting defect.
 
+A lane's stop is a claim, read from its stated cause. A
+stop whose stated cause matches a ruled agent-clearable
+class is void as a stop: the supervising sweep applies
+the class's standing disposition in the same pass that
+detects the stop, and the stop never becomes an owner
+item. The class register is closed: a class enters it
+only by an owner ruling, recorded with its matching
+form, its disposition, and its proof. The register
+itself is deployment data, held beside the supervising
+machinery in the form this text fixes; its content
+changes only by the ruling that admits a class. The
+ruled dispositions are the standing forms — an
+execution-risk flag re-routes its flagged output in the
+same movement and the lane continues; an agent-clearable
+wait clears within the original approved scope; a missed
+progress interval staffs its successor in the same
+movement. Actuation requires a positive exact match of
+the stated cause against a register form; an
+unrecognized cause surfaces and is never actuated on a
+guess. The hard-stop register bounds the mechanism
+absolutely: a stated cause naming a hard-stop class is
+refused before any class match is attempted, so no
+actuation path exists from an owner-class stop. Every
+actuation carries its proof — the lane's next conforming
+progress record naming the disposition's effect — and an
+unmet proof escalates; it never retries silently, and it
+never converts the stop into an owner item.
+
 ## Handler freshness
 
 A handler registry's rows carry a served currency
