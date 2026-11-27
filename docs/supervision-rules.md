@@ -1123,6 +1123,33 @@ progress record naming the disposition's effect — and an
 unmet proof escalates; it never retries silently, and it
 never converts the stop into an owner item.
 
+## The record never verifies itself
+
+An owner-block claim is verified against owner traffic
+and the hard-stop register only. The claiming lane's own
+records — its status records, its checkpoints, and every
+cadence copy of them — are the claim restating itself
+and carry no evidentiary weight, however many files
+repeat them. The default verdict on an owner-block claim
+is false: it is true only when it cites the owner's
+actual message, identified by thread and time, and that
+citation verifies against owner traffic the system
+holds, or when it names a hard-stop-floor act that
+exists. An uncited or unverifiable claim is void on
+detection: the lane resumes under standing authorization
+in the same pass, the frozen interval is priced and
+recorded as a defect against the stamping seat, and the
+voiding is never posed to the owner as a question nor
+left standing as true pending review. A stop's state
+string parses by exact match against the canonical
+status vocabulary; a near-miss string is an unrecognized
+signal that escalates to judgment, never a guess toward
+an owner block, and an absent or corrupt signal never
+reads as one. A struck classification restated as
+present-tense fact in derived or standing context is the
+same void claim, not corroboration, and is struck or
+flagged in the same pass that voids the claim.
+
 ## Handler freshness
 
 A handler registry's rows carry a served currency
