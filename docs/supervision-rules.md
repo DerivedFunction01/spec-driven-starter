@@ -721,10 +721,7 @@ the run records: the tick's state carries only the
 latest checkpoint per lane, no history, so it is
 not a tick-served field.
 
-The scheduler-registry progress entries are retired
-with this section: the tick's armed rows are the
-check, and the workbench only deletes lingering
-entries. The limits are the hard-stop floor
+The tick's armed rows are the check. The limits are the hard-stop floor
 (Hard-stop floor): never push, never send anything
 external, never approve a hard stop, never start
 or kill a session.
@@ -1157,15 +1154,11 @@ the reconciler reports the row resolved, not drift. A
 row whose cause cannot be stated from the record stays
 `unresolvable` and is named once, with its evidence.
 
-## Retiring the status-code transport
+## State is measured from records
 
-No thread posts an attention status code, and no thread
-is asked for one either: the transport is removed, not
-shimmed — the command-line verb, the client call, the
-server route, and the ingest writer are deleted, and a
-call to any of them is an error, never a silent no-op.
-Staleness is computed, never requested: every
-programme's state measures from records alone.
+No thread posts a status, and none is asked for one:
+every programme's state is computed from its records
+alone — staleness is computed, never requested.
 
 The record sources, one per question. Topics come from
 the registry's programme declarations plus the armed
@@ -1175,32 +1168,20 @@ statuses, checkpoint stamps, and worktree presence: a
 programme is complete only when its armed entries are
 terminal and no worktree stands unlanded. Blocked
 claims come from blocked todos: the todo's status is
-`blocked`, its basis is in
-its body, and its citation is a body line naming the
-owner's message thread and the time — a claim without
-one is unverified, never a state. Owner-waiting
-declarations come from the work-record goal store,
-where they already stand as a sticky field. Armed work
-with no checkpoint is unsupervised work, measured from
-the checkpoint stamps, not from any post naming the
-todo. The serial-plan row is retired: the plan-frontier
-shortfall row subsumes it, measuring declared fan-out
-against the actual in-flight set.
+`blocked`, its basis is in its body, and its citation
+is a body line naming the owner's message thread and
+the time — a claim without one is unverified, never a
+state. Owner-waiting declarations come from the
+work-record goal store, where they stand as a sticky
+field. Armed work with no checkpoint is unsupervised
+work, measured from the checkpoint stamps, not from
+any post naming the todo. The plan-frontier shortfall
+is measured from the declared fan-out against the
+actual in-flight set.
 
-The surfaces that read records alone once the transport
-is retired are the sends ledger — the steers and
-escalations the tick sends — and the staffing rows the
-measure serves.
-
-Named remainder, not silently left: the digest's
-historical rendering of posted records and the waits
-engine's terminal-code facts still read the store's
-existing status records — no new posts arrive — and
-the goal record's own post store is an adjacent
-surface with its own writer rules. The status
-vocabulary above remains the language of those
-historical records and the waits engine; it no longer
-describes anything a thread posts.
+The surfaces that read records alone are the sends
+ledger — the steers and escalations the tick sends —
+and the staffing rows the measure serves.
 
 ## Surface structure
 
