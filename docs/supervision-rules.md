@@ -1335,6 +1335,21 @@ not generalization. Tracked form holds only what a fresh
 instance would hold; instance data lives in the
 deployment's untracked overlay.
 
+Tracked surfaces are register-required: where a tracked
+tree holds a set of entries a loader or gate acts on, a
+tracked register names every member with its class, and
+a scanner checks the set against the register exactly,
+in both directions — an unregistered member fails, and a
+register entry with no member fails. What the machinery
+writes (run logs, run records, generated instance files)
+is never tracked, and its write surfaces carry ignore
+rules a scanner verifies by probe: an uncovered write
+surface is a finding in itself, because auto-commit and
+ordinary adds are how ignored-in-intent files become
+tracked in fact. Instance data lives in the deployment's
+untracked overlay, never in the register, which carries
+ids and classes in generic form only.
+
 Test-tree mirroring: the test tree mirrors the source tree
 package for package, so a test file sits at the same
 relative path as the module it covers — one test file per
