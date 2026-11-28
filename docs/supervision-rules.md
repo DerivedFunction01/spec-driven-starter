@@ -1326,6 +1326,15 @@ consumes is not a fixture and lives beside its owning
 module in the package. Generated test outputs use
 transient paths, never the repository tree.
 
+Captured material generalizes at capture: a fixture,
+seed, or example drawn from a live programme's records
+carries specimen programmes, jobs, figures, and balances
+from the moment it is written — renaming the caller while
+keeping the programme's shapes, or shifting its dates, is
+not generalization. Tracked form holds only what a fresh
+instance would hold; instance data lives in the
+deployment's untracked overlay.
+
 Test-tree mirroring: the test tree mirrors the source tree
 package for package, so a test file sits at the same
 relative path as the module it covers — one test file per
