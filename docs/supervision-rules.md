@@ -19,6 +19,19 @@ capacity rule binds vacuously. The same text is correct in
 both worlds, and in any other venue shape (hosted sessions,
 container instances) that fills the roles.
 
+The same split governs tooling. A rule states the check
+and the act, never the instrument: the conditions a
+validation refuses, the read a measure takes, and the
+record an act writes are the rule, stated in full, and a
+deployment's binding names the instruments that perform
+them — a checker, a viewer, a sweep's sender. Where no
+instrument exists, the agent performs the check by hand
+from the stated conditions, and the verdict is the same.
+Machine-form blocks in a plan or a record — its step and
+question sentinels — are data for the instruments: where
+none runs they are inert, left standing, and the prose
+carrying the same content is complete without them.
+
 ## The inline class
 
 Four classes bind mid-task, unprompted; they are the inline
@@ -576,9 +589,9 @@ threads.
 
 ## Gap closure
 
-The sweep that closes gaps is the tick itself: its
-measure classes live in the workbench as their
-permanent home, and the workbench is their sender.
+The sweep that closes gaps is the supervising sweep
+itself: the classes below are its measure classes, and
+the sweep is their sender.
 A gap is a measured condition, never a thread's
 self-report — the records that constitute it are the
 work record's todo files and checkpoint stamps, the
@@ -645,7 +658,7 @@ citation lands, and escalates under the programme's
 declared escalation bound like every other class. A
 clean completed run never raises it; a non-terminal
 record is the orphan class's ground, not this
-one's. The tick is the class's only consumer — no
+one's. The sweep is the class's only consumer — no
 per-programme watcher and no second surfacing
 surface is built for it. Attribution is by caller,
 and a programme whose runs ride a caller that is
@@ -658,7 +671,7 @@ claims complete whose commits are not on main. The
 claim is a progress-checkpoint line naming the commit
 beside a completion word — a build stated complete, a
 gate stated passed — and the measure is ancestry: the
-tick checks the named commit against main, never the
+sweep checks the named commit against main, never the
 claim's own word. A gate verdict is not a landing,
 and a branch push is not one either: the transport
 branch is the landing vehicle, not the landing. A
@@ -678,7 +691,7 @@ recorded "built, unlanded", and "complete" and
 "completed" in a checkpoint are reserved for
 landed-on-main — a checkpoint that spends the closing
 words on branch state manufactures the completion the
-tick then believes.
+sweep then believes.
 
 The actuator ladder, in order; a message alone is
 the weakest form and never counts as the act by
@@ -717,11 +730,11 @@ spent doing nothing while work stood open — that
 number trending to zero is the sweep's success
 measure. The fraction is computed at report time
 from the todo files' full checkpoint history plus
-the run records: the tick's state carries only the
+the run records: the sweep's state carries only the
 latest checkpoint per lane, no history, so it is
-not a tick-served field.
+not a sweep-served field.
 
-The tick's armed rows are the check. The limits are the hard-stop floor
+The sweep's armed rows are the check. The limits are the hard-stop floor
 (Hard-stop floor): never push, never send anything
 external, never approve a hard stop, never start
 or kill a session.
@@ -781,16 +794,16 @@ the prerequisites those todos carry — todo ids anywhere
 under the same goal — and its fan-out or its serial
 exception. Succession is read from the declared
 prerequisites, never from plan order or numbering.
-Adoption validates the plan first (wb plan-check: no
+Adoption validates the plan first — no
 prose-only steps, no undeclared prerequisites, no
-dangling or cross-goal edges, no cycles) and arms the
+dangling or cross-goal edges, no cycles — and arms the
 initial frontier in the adoption act: every todo whose
 prerequisites already read satisfied is stamped armed,
 so the full parallel start is exposed at adoption, not
 discovered as work lands. A todo's move to done
 re-evaluates the goal's graph in the same act and arms
 what it completes. What stands armed and unstaffed is
-read from the one evaluator (wb due), never re-derived
+read from the one evaluator, never re-derived
 from plan prose by a watcher.
 
 Serial-plan detection at adoption: fan-out is measured
@@ -1180,7 +1193,7 @@ is measured from the declared fan-out against the
 actual in-flight set.
 
 The surfaces that read records alone are the sends
-ledger — the steers and escalations the tick sends —
+ledger — the steers and escalations the sweep sends —
 and the staffing rows the measure serves.
 
 ## Surface structure

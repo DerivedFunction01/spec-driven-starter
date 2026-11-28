@@ -18,7 +18,7 @@
 
 ## Run in the standing shape
 
-- The run's shape is part of the contract, recorded beside the scope: browser-driven legs execute on the project's parallel compute venue (Colab sessions where the project runs them), never on the local host while that venue is up; one audit lane per app or surface, the lanes running in parallel; screenshot evidence driven by Playwright or the project's named equivalent at desktop (~1440px), phone (~390px), and tablet (~768px) widths; both themes or appearances judged wherever the product has two.
+- The run's shape is part of the contract, recorded beside the scope: browser-driven legs execute on the project's parallel compute venue, never on the local host while that venue is up; one audit lane per app or surface, the lanes running in parallel; screenshot evidence driven by Playwright or the project's named equivalent at desktop (~1440px), phone (~390px), and tablet (~768px) widths; both themes or appearances judged wherever the product has two.
 
 - A commission that arrives in another shape is re-formed to the standing shape before the run starts: venue, lane split, widths, and appearances are requirements, not preferences, and a lane never quietly substitutes a smaller shape it can staff for the shape the contract names.
 

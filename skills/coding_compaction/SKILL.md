@@ -42,7 +42,7 @@
 
 - Distinguish verified outcomes from inferences and carry inferences forward labeled as inferences.
 
-- When the work is tracked in bundle todo files (the workbench viewer's live-work-tracking model), the Work State cites the bundle and its todo ids with their current statuses: the todo files are the live record, and the compaction points at them rather than re-deriving progress from the transcript.
+- When the work is tracked in bundle todo files (the bundle-todo live-work-tracking model), the Work State cites the bundle and its todo ids with their current statuses: the todo files are the live record, and the compaction points at them rather than re-deriving progress from the transcript.
 
 ## Write densely and factually
 

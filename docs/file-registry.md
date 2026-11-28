@@ -123,8 +123,8 @@ work, or would surface late enough to cost more than
 the registration. Candidates named as examples — not a
 list in force:
 
-- The workbench's todo files, whose truncation has
-  already read as invalid downstream.
+- The todo files of the work-tracking system, whose
+  truncation has already read as invalid downstream.
 - The caller registry a venue's wrappers resolve
   attribution against.
 - The venue's lease and run records, which its recovery

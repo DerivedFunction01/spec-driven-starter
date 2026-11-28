@@ -1,7 +1,7 @@
 # Plan template
 
-Plans live in the plans directory named by `workbench.yaml`,
-one file per plan, named with a date prefix and a slug. Copy
+Plans live in the plans directory the repo's registration
+names, one file per plan, named with a date prefix and a slug. Copy
 this skeleton.
 
 ```text
